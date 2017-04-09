@@ -1,0 +1,122 @@
+unit EmpresaCorrente;
+
+interface
+
+uses
+   SysUtils, Conexao, SqlExpr, BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TEmpresaCorrente = Class
+    private
+      FId          : Integer;
+      FRSocial     : String;
+      FFantasia    : String;
+      FNomeFicticio: String;
+      FEndereco    : String;
+      FComplemento : String;
+      FNumero      : String;
+      FBairro      : String;
+      FIdCidade    : Integer;
+      FEstado      : String;
+      FCEP         : String;
+      FIdTelefone  : String;
+      FEmail       : String;
+      FPIS         : Currency;
+      FCOFINS      : Currency;
+      FVlrFrete    : Currency;
+    public
+      procedure CarregarEmpresaCorrente;
+
+      property Id          : Integer  read FId           write FId;
+      property RSocial     : String   read FRSocial      write FRSocial;
+      property Fantasia    : String   read FFantasia     write FFantasia;
+      property NomeFicticio: String   read FNomeFicticio write FNomeFicticio;
+      property Endereco    : String   read FEndereco     write FEndereco;
+      property Complemento : String   read FComplemento  write FComplemento;
+      property Numero      : String   read FNumero       write FNumero;
+      property Bairro      : String   read FBairro       write FBairro;
+      property IdCidade    : Integer  read FIdCidade     write FIdCidade;
+      property Estado      : String   read FEstado       write FEstado;
+      property CEP         : String   read FCEP          write FCEP;
+      property IdTelefone  : String   read FIdTelefone   write FIdTelefone;
+      property Email       : String   read FEmail        write FEmail;
+      property PIS         : Currency read FPIS          write FPIS;
+      property COFINS      : Currency read FCOFINS       write FCOFINS;
+      property VlrFrete    : Currency read FVlrFrete     write FVlrFrete;
+  end;
+
+var
+  Empresa_Corrente: TEmpresaCorrente;
+
+implementation
+
+{ TEmpresaCorrente }
+
+procedure TEmpresaCorrente.CarregarEmpresaCorrente;
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VQry := ConexaoDBX.BuildQry();
+  try
+    try
+      VSql :=
+        ' select ' +
+        '    emp_id_pk, ' +
+        '    emp_rsocial, ' +
+        '    emp_fantasia, ' +
+        '    emp_nome_ficticio, ' +
+        '    emp_endereco, ' +
+        '    emp_complemento, ' +
+        '    emp_numero, ' +
+        '    emp_bairro, ' +
+        '    emp_id_cidade_fk, ' +
+        '    emp_estado, ' +
+        '    emp_cep, ' +
+        '    emp_id_telefone_fk, ' +
+        '    emp_email, ' +
+        '    emp_pis, ' +
+        '    emp_cofins, ' +
+        '    emp_vlr_frete ' +
+        ' from empresa ' +
+        ' where ' +
+        '    emp_id_pk = %d' ;
+
+      VSql := Format(VSql, [Self.FId]);
+
+      VQry.Close;
+      VQry.CommandText := VSql;
+      VQry.Open;
+      try
+        if VQry.IsEmpty then
+          raise Exception.Create('Empresa não encotrada.');
+
+        Self.FId           := VQry.Params[0].AsInteger;
+        Self.FRSocial      := VQry.Params[1].AsString;
+        Self.FFantasia     := VQry.Params[1].AsString;
+        Self.FNomeFicticio := VQry.Params[2].AsString;
+        Self.FEndereco     := VQry.Params[3].AsString;
+        Self.FComplemento  := VQry.Params[4].AsString;
+        Self.FNumero       := VQry.Params[5].AsString;
+        Self.FBairro       := VQry.Params[6].AsString;
+        Self.FIdCidade     := VQry.Params[7].AsInteger;
+        Self.FEstado       := VQry.Params[8].AsString;
+        Self.FCEP          := VQry.Params[9].AsString;
+        Self.FIdTelefone   := VQry.Params[10].AsString;
+        Self.FEmail        := VQry.Params[11].AsString;
+        Self.FPIS          := VQry.Params[12].AsCurrency;
+        Self.FCOFINS       := VQry.Params[13].AsCurrency;
+        Self.FVlrFrete     := VQry.Params[14].AsCurrency;
+      finally
+        VQry.Close;
+      end;
+
+    except on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+end.

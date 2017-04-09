@@ -1,0 +1,59 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 150
+  Width = 567
+  object DataSetProvider1: TDataSetProvider
+    Left = 176
+    Top = 24
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 304
+    Top = 24
+  end
+  object dst_PlanoConta: TSQLDataSet
+    CommandText = 
+      'select * from plano_conta'#13#10'where'#13#10'   plano_conta.pc_codconta = :' +
+      'pc_codconta'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pc_codconta'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dst_PlanoContaPC_CODCONTA: TIntegerField
+      FieldName = 'PC_CODCONTA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PlanoContaPC_DESCRICAO: TStringField
+      FieldName = 'PC_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dst_PlanoContaPC_TIPO: TStringField
+      FieldName = 'PC_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PlanoContaPC_INDRELATORIORESULTADO: TIntegerField
+      FieldName = 'PC_INDRELATORIORESULTADO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PlanoContaPC_BITATIVO: TIntegerField
+      FieldName = 'PC_BITATIVO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PlanoContaPC_CODCONTAPAI: TIntegerField
+      FieldName = 'PC_CODCONTAPAI'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+end

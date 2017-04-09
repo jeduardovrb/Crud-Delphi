@@ -1,0 +1,11 @@
+unit sConstantes;
+
+interface
+
+const
+  VERSAO_DO_SISTEMA_GESTAO: String = '2.0';
+  CLIENTE_FIDELIDADE: Integer = 1;
+
+implementation
+
+end.

@@ -1,0 +1,60 @@
+unit uFrmCadCliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Form_Modelo, Data.FMTBcd, System.ImageList, Vcl.ImgList, Datasnap.DBClient,
+  Datasnap.Provider, Data.DB, Data.SqlExpr, System.Actions, Vcl.ActnList, Vcl.ComCtrls, Vcl.ToolWin, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids, uDM_Conexao, uDM_Cliente, Vcl.Mask, Vcl.DBCtrls;
+
+type
+  TfrmCadCliente = class(TfrmForm_Modelo)
+    DBGrid1: TDBGrid;
+    dst_LocalizarCODIGO: TIntegerField;
+    dst_LocalizarRSOCIAL: TStringField;
+    dst_LocalizarCIDADE: TIntegerField;
+    dst_LocalizarNOME: TStringField;
+    cds_LocalizarCODIGO: TIntegerField;
+    cds_LocalizarRSOCIAL: TStringField;
+    cds_LocalizarCIDADE: TIntegerField;
+    cds_LocalizarNOME: TStringField;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label3: TLabel;
+    DBEdit2: TDBEdit;
+    Label4: TLabel;
+    DBEdit3: TDBEdit;
+    Label5: TLabel;
+    DBEdit4: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCadCliente: TfrmCadCliente;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmCadCliente.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+
+  FreeAndNil(dm_Cliente);
+end;
+
+procedure TfrmCadCliente.FormCreate(Sender: TObject);
+begin
+  dm_Cliente := Tdm_Cliente.Create(Self);
+
+  inherited;
+
+end;
+
+end.

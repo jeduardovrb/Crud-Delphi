@@ -1,0 +1,22 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 150
+  Width = 493
+  object dst_Pesquisar: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   tipo_produtos.tp_id_pk,'#13#10'   tipo_produtos.tp_nome'#13#10'fr' +
+      'om tipo_produtos'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 48
+    Top = 48
+  end
+  object dsp_Pesquisar: TDataSetProvider
+    DataSet = dst_Pesquisar
+    UpdateMode = upWhereKeyOnly
+    Left = 168
+    Top = 48
+  end
+end

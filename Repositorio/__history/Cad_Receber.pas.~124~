@@ -1,0 +1,586 @@
+unit Cad_Receber;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls, BuilderLogDialogo,
+  sEnumerados, Logger, Grids, DBGrids, sFuncoes, dtm_Receber, Mask, DBCtrls, dtm_CarregarDados, Pesquisar, ScreenTips,
+  JvExMask, JvToolEdit, JvDBControls, sException, JvExStdCtrls, JvCombobox, Empresa_Corrente, DBClient, TratamentoErro,
+  Conexao, dtm_Pesquisar, FMTBcd, Provider, SqlExpr;
+
+type
+  TfrmCad_Receber = class(TfrmForm_Modelo)
+    dbgReceber: TDBGrid;
+    gbReceber: TGroupBox;
+    lblId: TLabel;
+    lblNrDocumento: TLabel;
+    dbeDocumento: TDBEdit;
+    lblDtEmissao: TLabel;
+    Label5: TLabel;
+    lblBaixar: TLabel;
+    lblVlrTitulo: TLabel;
+    dbeVlrTitulo: TDBEdit;
+    lblVlrJuros: TLabel;
+    dbeVlrJuros: TDBEdit;
+    lblVlrDesc: TLabel;
+    dbeDesconto: TDBEdit;
+    lblVlrRecebido: TLabel;
+    dbeRecebimento: TDBEdit;
+    lblIdCliente: TLabel;
+    dbeIdCliente: TDBEdit;
+    lblHistTitulos: TLabel;
+    lblIdPlano: TLabel;
+    dbeIdPlano: TDBEdit;
+    dbtId: TDBText;
+    dbmmHistorico: TDBMemo;
+    dbtNmCliente: TDBText;
+    dbtNmPlano: TDBText;
+    ScreenTipsManager: TScreenTipsManager;
+    JvDBDateEdit1: TJvDBDateEdit;
+    JvDBDateEdit2: TJvDBDateEdit;
+    JvDBDateEdit3: TJvDBDateEdit;
+    Label3: TLabel;
+    cbPago: TJvComboBox;
+    lblDataEmissaoInicio: TLabel;
+    lblDataVencimentoInicio: TLabel;
+    lblDataPagamento: TLabel;
+    edtDtInicioEmissao: TJvDateEdit;
+    edtDtEmissaoFim: TJvDateEdit;
+    edtDtVenctoInicio: TJvDateEdit;
+    edtDtVenctoFim: TJvDateEdit;
+    edtDtPagtoInicio: TJvDateEdit;
+    edtDtPagtoFim: TJvDateEdit;
+    btnGrupo: TBitBtn;
+    lblCliIdInterno: TLabel;
+    dbeCliInterno: TDBEdit;
+    procedure dbgReceberDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure dbeIdClienteExit(Sender: TObject);
+    procedure dbeIdClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure dbeIdPlanoExit(Sender: TObject);
+    procedure dbeIdPlanoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure actDeletarExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure actVisualizarExecute(Sender: TObject);
+    procedure btnBaixarClick(Sender: TObject);
+    procedure btnEstornoClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure btnGrupoClick(Sender: TObject);
+    procedure dbeCliInternoExit(Sender: TObject);
+  private
+    function GetPago: String;
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+    procedure CarregarNomeCliente;
+    procedure CarregarNomePlano;
+    procedure BaixarTitulos;
+    procedure EstornoTitulos;
+    procedure Localizar(APEmpresa: Boolean); override;
+    procedure Sumarizar;
+    procedure CarregarIdInternoCliente;
+  end;
+
+var
+  frmCad_Receber: TfrmCad_Receber;
+
+implementation
+
+uses Cad_PlanoConta;
+
+{$R *.dfm}
+
+{ TfrmCad_Receber }
+
+procedure TfrmCad_Receber.CarregarNomePlano;
+begin
+  try
+    if Dts.DataSet.FieldByName('cr_id_plano').AsInteger > 0 then
+    begin
+      dm_CarregarDados.CarregarPlanoConta(StrToInt(dbeIdPlano.Text));
+      dbtNmPlano.Caption := dm_CarregarDados.dst_CarregarPlanoContaPC_DESCRICAO.AsString;
+    end;
+  finally
+    dm_CarregarDados.dst_CarregarPlanoConta.Close();
+  end;
+end;
+
+procedure TfrmCad_Receber.dbeCliInternoExit(Sender: TObject);
+begin
+  inherited;
+
+  if Trim(dbeCliInterno.Text) <> EmptyStr then
+  begin
+    dm_CarregarDados.CarregarClienteInterno(StrToInt(Trim(dbeCliInterno.Text)));
+    dbtNmCliente.Caption := dm_CarregarDados.dst_CarregarClienteInternoPES_RSOCIAL.AsString;
+    Dts.DataSet.FieldByName('cr_id_cliente').AsInteger :=
+      dm_CarregarDados.dst_CarregarClienteInternoPES_ID.AsInteger;
+  end
+end;
+
+procedure TfrmCad_Receber.dbeIdClienteExit(Sender: TObject);
+begin
+  inherited;
+  if Length(Trim(dbeIdCliente.Text)) > 0 then
+  begin
+    try
+      Self.CarregarNomeCliente();
+    except
+      on E: Exception do
+        TFuncoes.SetFocusCampoObrigatorio('CLIENTE', E.Message, dbeIdCliente);
+    end;
+  end
+  else
+    dbtNmCliente.Caption := EmptyStr;
+
+  if Trim(dbeIdCliente.Text) <> EmptyStr then
+  begin
+    dm_CarregarDados.CarregarCliente(StrToInt(Trim(dbeIdCliente.Text)));
+    dbtNmCliente.Caption := dm_CarregarDados.dst_CarregarClientePES_RSOCIAL.AsString;
+    Dts.DataSet.FieldByName('cr_id_cliente_interno').AsInteger :=
+      dm_CarregarDados.dst_CarregarClientePES_ID_INTERNO.AsInteger;
+  end
+end;
+
+procedure TfrmCad_Receber.dbeIdClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    pessoa.pes_id_interno, ' +
+        '    pessoa.pes_rsocial, ' +
+        '    pessoa.pes_cnpj_cpf ' +
+        '    pessoa.pes_id, ' +
+        ' from pessoa ' +
+        '    inner join cliente on (pessoa.pes_id = cliente.cli_id_pessoa) ' +
+        ' where ' +
+        '    pessoa.pes_tp_cadastro = ''C'' and ' +
+        '    pessoa.pes_id = -1';
+
+      frmPesquisar.FiltroSql := ' and pessoa.pes_tp_cadastro = ''C'' ';
+
+      frmPesquisar.CamposNomeExibicao.Add('Id. Interno');
+      frmPesquisar.CamposNomeExibicao.Add('Nome');
+      frmPesquisar.CamposNomeExibicao.Add('CPF/CNPJ');
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+
+      frmPesquisar.ShowModal();
+
+      if frmPesquisar.Id > 0 then
+        Dts.DataSet.FieldByName('cr_id_cliente').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Receber.dbeIdPlanoExit(Sender: TObject);
+begin
+  inherited;
+  if Length(Trim(dbeIdPlano.Text)) > 0 then
+  begin
+    try
+      Self.CarregarNomePlano();
+    except
+      on E: Exception do
+        TFuncoes.SetFocusCampoObrigatorio('PLANO', E.Message, dbeIdCliente);
+    end;
+  end
+  else
+    dbtNmPlano.Caption := EmptyStr;
+end;
+
+procedure TfrmCad_Receber.dbeIdPlanoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    plano_conta.pc_codconta, ' +
+        '    plano_conta.pc_descricao  ' +
+        ' from plano_conta ' +
+        ' where ' +
+        '   plano_conta.pc_codconta = -1';
+
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+      frmPesquisar.CamposNomeExibicao.Add('Nome do Plano');
+
+      frmPesquisar.ShowModal();
+
+      if frmPesquisar.Id > 0 then
+        Dts.DataSet.FieldByName('cr_id_plano').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Receber.actAlterarExecute(Sender: TObject);
+begin
+  Self.Alterar(True);
+
+end;
+
+procedure TfrmCad_Receber.actDeletarExecute(Sender: TObject);
+begin
+  //inherited;
+  Self.Delete(True);
+
+end;
+
+procedure TfrmCad_Receber.actVisualizarExecute(Sender: TObject);
+begin
+  Self.Visualizar(True);
+
+end;
+
+procedure TfrmCad_Receber.BaixarTitulos;
+begin
+  try
+    if not DtsLocalizar.DataSet.IsEmpty then
+    begin
+      try
+     // while not DtsLocalizar.DataSet.Eof do
+        begin
+          Dts.DataSet.Close;
+          TClientDataSet(Dts.DataSet).Params[0].AsInteger := EmpresaCorrente.Id;
+          TClientDataSet(Dts.DataSet).Params[1].AsInteger := DtsLocalizar.DataSet.Fields[0].AsInteger;
+          Dts.DataSet.Open;
+
+          ConexaoDBX.InicializaTransacaoBD();
+
+          Dts.DataSet.Edit;
+          Dts.DataSet.FieldByName('cr_vl_recebido').AsCurrency := Dts.DataSet.FieldByName('cr_vl_titulo').AsCurrency;
+          Dts.DataSet.FieldByName('cr_dt_baixa').AsDateTime    := Date;
+          Dts.DataSet.FieldByName('cr_situacao').AsString      := 'S';
+          Dts.DataSet.FieldByName('cr_tit_em_aberto').AsString := 'N';
+
+          if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+          ConexaoDBX.CommitTransacaoBD();
+        end;
+      finally
+        begin
+          TClientDataSet(Dts.DataSet).Close;
+          Self.Localizar(True);
+          Self.Sumarizar();
+        end;
+      end;
+    end;
+  except
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Receber.CarregarIdInternoCliente;
+begin
+  if Dts.DataSet.FieldByName('cr_id_cliente').AsInteger > 0 then
+  begin
+    dm_CarregarDados.CarregarCliente(Dts.DataSet.FieldByName('cr_id_cliente').AsInteger);
+
+    dbeCliInterno.Text := dm_CarregarDados.dst_CarregarClientePES_ID_INTERNO.AsString;
+  end;
+end;
+
+procedure TfrmCad_Receber.CarregarNomeCliente;
+begin
+  try
+    if Dts.DataSet.FieldByName('cr_id_cliente').AsInteger > 0 then
+    begin
+      dm_CarregarDados.CarregarCliente(StrToInt(dbeIdCliente.Text));
+      dbtNmCliente.Caption := dm_CarregarDados.dst_CarregarClientePES_RSOCIAL.AsString;
+    end;
+  finally
+    dm_CarregarDados.dst_CarregarCliente.Close();
+  end;
+end;
+
+procedure TfrmCad_Receber.dbgReceberDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_Receber.EstornoTitulos;
+begin
+  try
+    if not DtsLocalizar.DataSet.IsEmpty then
+    begin
+      try
+    //  while not DtsLocalizar.DataSet.Eof do
+        begin
+          Dts.DataSet.Close;
+          TClientDataSet(Dts.DataSet).Params[0].AsInteger := EmpresaCorrente.Id;
+          TClientDataSet(Dts.DataSet).Params[1].AsInteger := DtsLocalizar.DataSet.Fields[0].AsInteger;
+          Dts.DataSet.Open;
+
+          ConexaoDBX.InicializaTransacaoBD();
+
+          Dts.DataSet.Edit;
+          Dts.DataSet.FieldByName('cr_vl_recebido').Value      := Null;
+          Dts.DataSet.FieldByName('cr_dt_baixa').Value         := Null;
+          Dts.DataSet.FieldByName('cr_situacao').AsString      := 'N';
+          Dts.DataSet.FieldByName('cr_tit_em_aberto').AsString := 'S';
+
+          if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+          ConexaoDBX.CommitTransacaoBD();
+        end;
+      finally
+        begin
+          TClientDataSet(Dts.DataSet).Close;
+          Self.Localizar(True);
+          Self.Sumarizar();
+        end;
+      end;
+    end;
+  except
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end
+end;
+
+procedure TfrmCad_Receber.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_CarregarDados);
+  FreeAndNil(dm_Recebimento);
+end;
+
+procedure TfrmCad_Receber.FormCreate(Sender: TObject);
+begin
+  dm_Recebimento := Tdm_Recebimento.Create(nil);
+  dm_CarregarDados := Tdm_CarregarDados.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Nome do cliente');
+  FCamposNomeExibicao.Add('Id do cliente');
+  FCamposNomeExibicao.Add('Documento');
+  FCamposNomeExibicao.Add('Plano de Conta');
+  FCamposNomeExibicao.Add('Valor');
+  FCamposNomeExibicao.Add('Pago');
+end;
+
+procedure TfrmCad_Receber.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  Self.cbPago.ItemIndex := 2;
+
+  if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+  begin
+    lblCliIdInterno.Visible := True;
+    dbeCliInterno.Visible := True;
+    dbgReceber.Columns[2].Visible := True;
+    dbgReceber.Columns[3].Visible := False;
+  end
+  else
+  begin
+    lblCliIdInterno.Visible := False;
+    dbeCliInterno.Visible := False;
+    dbgReceber.Columns[2].Visible := False;
+    dbgReceber.Columns[3].Visible := True;
+  end;
+
+end;
+
+function TfrmCad_Receber.GetPago: String;
+begin
+  case cbPago.ItemIndex of
+    0: Result := '';
+    1: Result := ' and (ct_receber.CR_SITUACAO = ''S'') ';
+    2: Result := ' and (ct_receber.CR_SITUACAO = ''N'') ';
+  end;
+end;
+
+procedure TfrmCad_Receber.IniciarFields;
+begin
+  FNomeDoFormulario := 'recebimento';
+  FNomeTabela := 'CT_RECEBER';
+  FComponenteFoco := dbeDocumento;
+  FDbgCadastro := dbgReceber;
+
+  FSqlDefault :=
+    ' select ' +
+    '   ct_receber.cr_id, ' +
+    '   pessoa.pes_rsocial, ' +
+    '   ct_receber.cr_id_cliente, ' +
+    '   ct_receber.cr_id_cliente_interno, ' +
+    '   ct_receber.cr_docto, ' +
+    '   plano_conta.pc_descricao, ' +
+    '   ct_receber.cr_vl_titulo, ' +
+    '   ct_receber.cr_situacao ' +
+    ' from ct_receber ' +
+    '    left outer join pessoa on (ct_receber.cr_id_cliente = pessoa.pes_id) ' +
+    '    left outer join plano_conta on (ct_receber.cr_id_plano = plano_conta.pc_codconta) ' +
+    ' where ' +
+    '    ct_receber.cr_id = -1';
+end;
+
+procedure TfrmCad_Receber.Localizar(APEmpresa: Boolean);
+var
+  VMontarSql: String;
+  VCampo: String;
+begin
+  VMontarSql := EmptyStr;
+
+  VCampo := FMapCampo.Items[cbxField.ItemIndex];
+
+  try
+    if APEmpresa then
+      begin
+        VMontarSql := ' where upper(' + VCampo + ')' + ' like ' + ' upper( ' +
+        QuotedStr(edtValor.Text + '%') + ') and (ct_receber.cr_id_empresa = ' + IntToStr(EmpresaCorrente.Id) + GetPago + ') ';
+
+        if (edtDtInicioEmissao.Date > 0) and (edtDtEmissaoFim.Date > 0) then
+          VMontarSql := VMontarSql + 'and (ct_receber.cr_dt_emissao between ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtInicioEmissao.Date)) + ' and ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtEmissaoFim.Date)) + ' ) ';
+
+        if (edtDtVenctoInicio.Date > 0) and (edtDtVenctoFim.Date > 0) then
+          VMontarSql := VMontarSql + 'and (ct_receber.cr_dt_vcto between ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtVenctoInicio.Date)) + ' and ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtVenctoFim.Date)) + ' ) ';
+
+        if (edtDtPagtoInicio.Date > 0) and (edtDtPagtoFim.Date > 0) then
+          VMontarSql := VMontarSql + 'and (cr_dt_baixa between ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtPagtoInicio.Date)) + ' and ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtPagtoFim.Date)) + ' ) ';
+
+        VMontarSql := VMontarSql + ' order by ' + VCampo;
+      end
+      else
+      begin
+        VMontarSql := ' where upper(' + VCampo + ')' + ' like ' + ' upper( ' +
+        QuotedStr(edtValor.Text + '%') + ') order by ' + VCampo;
+      end;
+
+    dm_Pesquisar.cds_Pesquisar.Data :=
+      Self.FPersistencia.ExecutarConsulta(TFuncoes.MontarSqlComponente(Self.FSqlDefault) + VMontarSql);
+
+    TFloatField(DtsLocalizar.DataSet.FieldByName('cr_vl_titulo')).DisplayFormat := '#,##0.00';
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Receber.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := EmpresaCorrente.Id;
+
+  try
+    Dts.DataSet.FieldByName('cr_id').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    Dts.DataSet.FieldByName('cr_id_empresa').AsInteger   := FIdEmpresa;
+    Dts.DataSet.FieldByName('cr_situacao').AsString      := 'N';
+    Dts.DataSet.FieldByName('cr_tit_em_aberto').AsString := 'S';
+    Dts.DataSet.FieldByName('cr_dt_emissao').AsDateTime  := Date;
+    Dts.DataSet.FieldByName('cr_dt_vcto').AsDateTime     := Date + EmpresaCorrente.Parametro.QtdePrazoDias;
+    Dts.DataSet.FieldByName('cr_id_plano').AsInteger     :=  EmpresaCorrente.Parametro.PlanoContaVenda;
+    Dts.DataSet.FieldByName('cr_docto').AsInteger        :=  Dts.DataSet.FieldByName('cr_id').AsInteger;
+    Self.CarregarNomePlano();
+
+    FId := Dts.DataSet.FieldByName('cr_id').AsInteger;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Receber.Sumarizar;
+var
+  VTotal: Currency;
+begin
+  while not DtsLocalizar.DataSet.Eof do
+  begin
+    VTotal := 0;
+
+    VTotal := VTotal + DtsLocalizar.DataSet.FieldByName('cr_vl_titulo').AsCurrency;
+
+    DtsLocalizar.DataSet.Next;
+  end;
+ // dbtValor.Caption := FormatFloat('0.00', VTotal);
+end;
+
+procedure TfrmCad_Receber.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  TFuncoes.SetFocusCampoObrigatorio('CLIENTE', MensagemErro, dbeIdCliente);
+  TFuncoes.SetFocusCampoObrigatorio('PLANO', MensagemErro, dbeIdPlano);
+end;
+
+procedure TfrmCad_Receber.ValidarCamposObrigatorios;
+begin
+  if Trim(Dts.DataSet.FieldByName('cr_id_cliente').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "cliente" é de preenchimento Obrigatório.');
+
+  if Trim(Dts.DataSet.FieldByName('cr_id_plano').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "plano de conta" é de preenchimento Obrigatório.');
+end;
+
+procedure TfrmCad_Receber.btnBaixarClick(Sender: TObject);
+begin
+  inherited;
+
+  Self.BaixarTitulos();
+end;
+
+procedure TfrmCad_Receber.btnEstornoClick(Sender: TObject);
+begin
+  inherited;
+
+  Self.EstornoTitulos();
+end;
+
+procedure TfrmCad_Receber.btnGrupoClick(Sender: TObject);
+begin
+  inherited;
+
+  Application.CreateForm(TfrmCad_PlanoConta, frmCad_PlanoConta);
+  try
+    frmCad_PlanoConta.ShowModal;
+
+    Dts.DataSet.FieldByName('cr_id_plano').AsInteger := frmCad_PlanoConta.IdPlanoConta;
+    dbeIdPlano.SetFocus;
+  finally
+    frmCad_PlanoConta.Release;
+  end;
+end;
+
+procedure TfrmCad_Receber.btnPesquisarClick(Sender: TObject);
+begin
+  Self.Localizar(True);
+
+  Self.dbgReceber.SetFocus;
+end;
+
+initialization
+  RegisterClass(TfrmCad_Receber);
+
+end.

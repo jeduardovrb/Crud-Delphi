@@ -1,0 +1,38 @@
+unit dtm_PlanoConta;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  Tdm_PlanoConta = class(TDataModule)
+    dsp_PlanoConta: TDataSetProvider;
+    cds_PlanoConta: TClientDataSet;
+    dst_PlanoConta: TSQLDataSet;
+    dst_PlanoContaPC_CODCONTA: TIntegerField;
+    dst_PlanoContaPC_DESCRICAO: TStringField;
+    dst_PlanoContaPC_TIPO: TStringField;
+    dst_PlanoContaPC_INDRELATORIORESULTADO: TIntegerField;
+    dst_PlanoContaPC_BITATIVO: TIntegerField;
+    dst_PlanoContaPC_CODCONTAPAI: TIntegerField;
+    cds_PlanoContaPC_CODCONTA: TIntegerField;
+    cds_PlanoContaPC_DESCRICAO: TStringField;
+    cds_PlanoContaPC_TIPO: TStringField;
+    cds_PlanoContaPC_INDRELATORIORESULTADO: TIntegerField;
+    cds_PlanoContaPC_BITATIVO: TIntegerField;
+    cds_PlanoContaPC_CODCONTAPAI: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_PlanoConta: Tdm_PlanoConta;
+
+implementation
+
+{$R *.dfm}
+
+end.

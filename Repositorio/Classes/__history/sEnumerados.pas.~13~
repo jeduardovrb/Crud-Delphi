@@ -1,0 +1,24 @@
+unit sEnumerados;
+
+interface
+
+type
+  TTipoPessoa = (tpIndefinido, tpFisico, tpJuridico);
+
+  TTipoEndereco = (teIndefinido, teResidencia, teCobranca, teEntrega, teOutro);
+
+  TIconeLog = (ilogIndefinido, ilogInformacao, ilogAtencao, ilogErro);
+
+  TTipoProduto = (tproIndefinido, tproProduto, tproLente);
+
+  TAcao = (acNone, acIncluir, acAlterar, acExcluir, acVisualizar, acEfetivar,
+           acReprocessar, acDesbloquear, acCancelar, acDevolver);
+
+  TStatusNota = (snIndefinido = 0, snProgramado = 1, snFaturado = 2, snCancelado = 3, snBloqueado = 4, snOutrosFaturamentos = 5,
+                 snIncluindo = 6, snInutilizado = 8, snAguardandoProcessamentoEcf = 9, snExcluido = 10, snPendenteEnvio = 11,
+                 snPendenteRetorno = 12, snDenegada = 13);
+
+  TTipoMovimentoNF = (tmnfIndefinido, tmnfEntrada, tmnfSaida);
+implementation
+
+end.

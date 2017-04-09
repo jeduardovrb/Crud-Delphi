@@ -1,0 +1,172 @@
+unit dtm_Fornecedor;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DB, Provider, DBClient, SqlExpr, dtm_Conexao, TratamentoErro;
+
+type
+  Tdm_Fornecedor = class(TDataModule)
+    dst_PessoaEndereco: TSQLDataSet;
+    dst_PessoaEnderecoPE_ID_PESSOA: TIntegerField;
+    dst_PessoaEnderecoPE_TIPO: TSmallintField;
+    dst_PessoaEnderecoPE_ENDERECO: TStringField;
+    dst_PessoaEnderecoPE_NUMERO: TStringField;
+    dst_PessoaEnderecoPE_COMPLEMENTO: TStringField;
+    dst_PessoaEnderecoPE_BAIRRO: TStringField;
+    dst_PessoaEnderecoPE_ID_CIDADE: TIntegerField;
+    dst_PessoaEnderecoPE_CEP: TStringField;
+    dst_PessoaEnderecoPE_CONTATO: TStringField;
+    dst_PessoaEnderecoCID_NOME: TStringField;
+    dst_PessoaEnderecoCID_ESTADO: TStringField;
+    dst_PessoaEnderecoPE_NM_TIPO: TStringField;
+    cds_PessoaEndereco: TClientDataSet;
+    cds_PessoaEnderecoPE_ID_PESSOA: TIntegerField;
+    cds_PessoaEnderecoPE_TIPO: TSmallintField;
+    cds_PessoaEnderecoPE_ENDERECO: TStringField;
+    cds_PessoaEnderecoPE_NUMERO: TStringField;
+    cds_PessoaEnderecoPE_COMPLEMENTO: TStringField;
+    cds_PessoaEnderecoPE_BAIRRO: TStringField;
+    cds_PessoaEnderecoPE_ID_CIDADE: TIntegerField;
+    cds_PessoaEnderecoPE_CEP: TStringField;
+    cds_PessoaEnderecoPE_CONTATO: TStringField;
+    cds_PessoaEnderecoCID_NOME: TStringField;
+    cds_PessoaEnderecoCID_ESTADO: TStringField;
+    cds_PessoaEnderecoPE_NM_TIPO: TStringField;
+    dts_LinkPessoa: TDataSource;
+    dst_PessoaTelefone: TSQLDataSet;
+    dst_PessoaTelefonePT_ID_PESSOA: TIntegerField;
+    dst_PessoaTelefonePT_TIPO: TSmallintField;
+    dst_PessoaTelefonePT_NM_TIPO: TStringField;
+    dst_PessoaTelefonePT_NUMERO: TStringField;
+    dst_PessoaTelefonePT_CONTATO: TStringField;
+    cds_PessoaTelefone: TClientDataSet;
+    cds_PessoaTelefonePT_ID_PESSOA: TIntegerField;
+    cds_PessoaTelefonePT_TIPO: TSmallintField;
+    cds_PessoaTelefonePT_NM_TIPO: TStringField;
+    cds_PessoaTelefonePT_NUMERO: TStringField;
+    cds_PessoaTelefonePT_CONTATO: TStringField;
+    dst_Pessoa: TSQLDataSet;
+    dst_PessoaPES_ID: TIntegerField;
+    dst_PessoaPES_EMP: TSmallintField;
+    dst_PessoaPES_TP_PESSOA: TStringField;
+    dst_PessoaPES_SITUACAO: TStringField;
+    dst_PessoaPES_RSOCIAL: TStringField;
+    dst_PessoaPES_FANTASIA: TStringField;
+    dst_PessoaPES_CNPJ_CPF: TStringField;
+    dst_PessoaPES_INSC_RG: TStringField;
+    dst_PessoaPES_RG_ORG_EXPEDIDOR: TStringField;
+    dst_PessoaPES_RG_DT_EXPEDICAO: TDateField;
+    dst_PessoaPES_TP_SANGUINEO: TStringField;
+    dst_PessoaPES_DT_NASCIMENTO: TDateField;
+    dst_PessoaPES_TP_CADASTRO: TStringField;
+    dsp_Pessoa: TDataSetProvider;
+    cds_Pessoa: TClientDataSet;
+    dst_Email: TSQLDataSet;
+    dst_EmailPEM_ID_PESSOA: TIntegerField;
+    dst_EmailPEM_SEQ: TSmallintField;
+    dst_EmailPEM_EMAIL: TStringField;
+    cdsEmail: TClientDataSet;
+    cdsEmailPEM_ID_PESSOA: TIntegerField;
+    cdsEmailPEM_SEQ: TSmallintField;
+    cdsEmailPEM_EMAIL: TStringField;
+    cds_PessoaPES_ID: TIntegerField;
+    cds_PessoaPES_EMP: TSmallintField;
+    cds_PessoaPES_TP_PESSOA: TStringField;
+    cds_PessoaPES_SITUACAO: TStringField;
+    cds_PessoaPES_RSOCIAL: TStringField;
+    cds_PessoaPES_FANTASIA: TStringField;
+    cds_PessoaPES_CNPJ_CPF: TStringField;
+    cds_PessoaPES_INSC_RG: TStringField;
+    cds_PessoaPES_RG_ORG_EXPEDIDOR: TStringField;
+    cds_PessoaPES_RG_DT_EXPEDICAO: TDateField;
+    cds_PessoaPES_TP_SANGUINEO: TStringField;
+    cds_PessoaPES_DT_NASCIMENTO: TDateField;
+    cds_PessoaPES_TP_CADASTRO: TStringField;
+    cds_Pessoadst_Email: TDataSetField;
+    cds_Pessoadst_PessoaTelefone: TDataSetField;
+    cds_Pessoadst_PessoaEndereco: TDataSetField;
+    dst_Fornecedor: TSQLDataSet;
+    cds_Fornecedor: TClientDataSet;
+    cds_Pessoadst_Fornecedor: TDataSetField;
+    cds_FornecedorFOR_ID_PESSOA: TIntegerField;
+    cds_FornecedorFOR_TP_CADASTRO: TStringField;
+    cds_FornecedorFOR_DT_CADASTRO: TDateField;
+    cds_FornecedorFOR_DT_RECADASTRO: TDateField;
+    cds_FornecedorFOR_ID_CTB: TIntegerField;
+    dst_FornecedorFOR_ID_PESSOA: TIntegerField;
+    dst_FornecedorFOR_TP_CADASTRO: TStringField;
+    dst_FornecedorFOR_DT_CADASTRO: TDateField;
+    dst_FornecedorFOR_DT_RECADASTRO: TDateField;
+    dst_FornecedorFOR_ID_CTB: TIntegerField;
+    dst_PessoaEnderecoPE_SEQ: TIntegerField;
+    cds_PessoaEnderecoPE_SEQ: TIntegerField;
+    dst_PessoaTelefonePT_SEQ: TIntegerField;
+    cds_PessoaTelefonePT_SEQ: TIntegerField;
+    dst_IdInternoFornecedor: TSQLDataSet;
+    dsp_IdInternoFornecedor: TDataSetProvider;
+    cds_IdInternoForncedor: TClientDataSet;
+    dst_IdInternoFornecedorPES_ID: TIntegerField;
+    dst_IdInternoFornecedorPES_EMP: TSmallintField;
+    dst_IdInternoFornecedorPES_TP_CADASTRO: TStringField;
+    dst_IdInternoFornecedorPES_TP_PESSOA: TStringField;
+    dst_IdInternoFornecedorPES_SITUACAO: TStringField;
+    dst_IdInternoFornecedorPES_RSOCIAL: TStringField;
+    dst_IdInternoFornecedorPES_FANTASIA: TStringField;
+    dst_IdInternoFornecedorPES_CNPJ_CPF: TStringField;
+    dst_IdInternoFornecedorPES_INSC_RG: TStringField;
+    dst_IdInternoFornecedorPES_RG_ORG_EXPEDIDOR: TStringField;
+    dst_IdInternoFornecedorPES_RG_DT_EXPEDICAO: TDateField;
+    dst_IdInternoFornecedorPES_TP_SANGUINEO: TStringField;
+    cds_IdInternoForncedorPES_ID: TIntegerField;
+    cds_IdInternoForncedorPES_EMP: TSmallintField;
+    cds_IdInternoForncedorPES_TP_CADASTRO: TStringField;
+    cds_IdInternoForncedorPES_TP_PESSOA: TStringField;
+    cds_IdInternoForncedorPES_SITUACAO: TStringField;
+    cds_IdInternoForncedorPES_RSOCIAL: TStringField;
+    cds_IdInternoForncedorPES_FANTASIA: TStringField;
+    cds_IdInternoForncedorPES_CNPJ_CPF: TStringField;
+    cds_IdInternoForncedorPES_INSC_RG: TStringField;
+    cds_IdInternoForncedorPES_RG_ORG_EXPEDIDOR: TStringField;
+    cds_IdInternoForncedorPES_RG_DT_EXPEDICAO: TDateField;
+    cds_IdInternoForncedorPES_TP_SANGUINEO: TStringField;
+    dst_PessoaPES_ID_INTERNO: TIntegerField;
+    cds_PessoaPES_ID_INTERNO: TIntegerField;
+    dst_IdInternoFornecedorPES_ID_INTERNO: TIntegerField;
+    cds_IdInternoForncedorPES_ID_INTERNO: TIntegerField;
+    procedure cds_PessoaReconcileError(DataSet: TCustomClientDataSet; E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+  private
+
+  public
+    function GetIdInterno(): Integer;
+  end;
+
+var
+  dm_Fornecedor: Tdm_Fornecedor;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tdm_Fornecedor.cds_PessoaReconcileError(DataSet: TCustomClientDataSet; E: EReconcileError;
+  UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  TTratamentoErro.HandleReconcileError(E.Message, Action);
+end;
+
+function Tdm_Fornecedor.GetIdInterno: Integer;
+begin
+  try
+    cds_IdInternoForncedor.Close;
+    cds_IdInternoForncedor.Open;
+
+    cds_IdInternoForncedor.Last;
+
+    Result := cds_IdInternoForncedorPES_ID_INTERNO.AsInteger + 1;
+  except
+    raise;
+  end;
+end;
+
+end.

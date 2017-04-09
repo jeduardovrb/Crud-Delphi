@@ -1,0 +1,155 @@
+unit dtm_Pagar;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider, TratamentoErro,
+  frxClass, frxDBSet;
+
+type
+  Tdm_Pagar = class(TDataModule)
+    dsp_Pagar: TDataSetProvider;
+    cds_Pagar: TClientDataSet;
+    dst_Pagar: TSQLDataSet;
+    dst_PagarCP_ID: TIntegerField;
+    dst_PagarCP_ID_EMPRESA: TSmallintField;
+    dst_PagarCP_ID_FORNECEDOR: TIntegerField;
+    dst_PagarCP_DOCTO: TStringField;
+    dst_PagarCP_SITUACAO: TStringField;
+    dst_PagarCP_DT_MOVTO: TDateField;
+    dst_PagarCP_DT_EMISSAO: TDateField;
+    dst_PagarCP_DT_VCTO: TDateField;
+    dst_PagarCP_DT_BAIXA: TDateField;
+    dst_PagarCP_VL_TITULO: TFMTBCDField;
+    dst_PagarCP_VL_JUROS: TFMTBCDField;
+    dst_PagarCP_VL_DESC: TFMTBCDField;
+    dst_PagarCP_VL_PAGO: TFMTBCDField;
+    dst_PagarCP_ID_FORMA_PGTO: TIntegerField;
+    dst_PagarCP_ID_NOTA: TIntegerField;
+    dst_PagarCP_ID_ANALITICO: TIntegerField;
+    dst_PagarCP_ID_PLANO: TIntegerField;
+    dst_PagarCP_HIST_TITULO: TStringField;
+    dst_PagarCP_AUTORIZADO_POR: TStringField;
+    dst_PagarCP_DT_CANCELAMENTO: TDateField;
+    dst_PagarCP_CANCELADO_POR: TStringField;
+    dst_PagarCP_TIT_EM_ABERTO: TStringField;
+    dst_PagarCP_ALTERADO_POR: TStringField;
+    dst_PagarCP_SEL: TStringField;
+    dst_PagarPES_RSOCIAL: TStringField;
+    dst_PagarPC_DESCRICAO: TStringField;
+    cds_PagarCP_ID: TIntegerField;
+    cds_PagarCP_ID_EMPRESA: TSmallintField;
+    cds_PagarCP_ID_FORNECEDOR: TIntegerField;
+    cds_PagarCP_DOCTO: TStringField;
+    cds_PagarCP_SITUACAO: TStringField;
+    cds_PagarCP_DT_MOVTO: TDateField;
+    cds_PagarCP_DT_EMISSAO: TDateField;
+    cds_PagarCP_DT_VCTO: TDateField;
+    cds_PagarCP_DT_BAIXA: TDateField;
+    cds_PagarCP_VL_TITULO: TFMTBCDField;
+    cds_PagarCP_VL_JUROS: TFMTBCDField;
+    cds_PagarCP_VL_DESC: TFMTBCDField;
+    cds_PagarCP_VL_PAGO: TFMTBCDField;
+    cds_PagarCP_ID_FORMA_PGTO: TIntegerField;
+    cds_PagarCP_ID_NOTA: TIntegerField;
+    cds_PagarCP_ID_ANALITICO: TIntegerField;
+    cds_PagarCP_ID_PLANO: TIntegerField;
+    cds_PagarCP_HIST_TITULO: TStringField;
+    cds_PagarCP_AUTORIZADO_POR: TStringField;
+    cds_PagarCP_DT_CANCELAMENTO: TDateField;
+    cds_PagarCP_CANCELADO_POR: TStringField;
+    cds_PagarCP_TIT_EM_ABERTO: TStringField;
+    cds_PagarCP_ALTERADO_POR: TStringField;
+    cds_PagarCP_SEL: TStringField;
+    cds_PagarPES_RSOCIAL: TStringField;
+    cds_PagarPC_DESCRICAO: TStringField;
+    dst_PagarCP_VL_RESTO: TFMTBCDField;
+    cds_PagarCP_VL_RESTO: TFMTBCDField;
+    dst_BaixarPagar: TSQLDataSet;
+    dsp_BaixarPagar: TDataSetProvider;
+    cds_BaixarPagar: TClientDataSet;
+    dst_BaixarPagarCP_ID: TIntegerField;
+    dst_BaixarPagarCP_ID_EMPRESA: TSmallintField;
+    dst_BaixarPagarCP_ID_FORNECEDOR: TIntegerField;
+    dst_BaixarPagarCP_DOCTO: TStringField;
+    dst_BaixarPagarCP_SITUACAO: TStringField;
+    dst_BaixarPagarCP_DT_MOVTO: TDateField;
+    dst_BaixarPagarCP_DT_EMISSAO: TDateField;
+    dst_BaixarPagarCP_DT_VCTO: TDateField;
+    dst_BaixarPagarCP_DT_BAIXA: TDateField;
+    dst_BaixarPagarCP_VL_TITULO: TFMTBCDField;
+    dst_BaixarPagarCP_VL_JUROS: TFMTBCDField;
+    dst_BaixarPagarCP_VL_DESC: TFMTBCDField;
+    dst_BaixarPagarCP_VL_PAGO: TFMTBCDField;
+    dst_BaixarPagarCP_ID_FORMA_PGTO: TIntegerField;
+    dst_BaixarPagarCP_ID_NOTA: TIntegerField;
+    dst_BaixarPagarCP_ID_ANALITICO: TIntegerField;
+    dst_BaixarPagarCP_ID_PLANO: TIntegerField;
+    dst_BaixarPagarCP_HIST_TITULO: TStringField;
+    dst_BaixarPagarCP_AUTORIZADO_POR: TStringField;
+    dst_BaixarPagarCP_DT_CANCELAMENTO: TDateField;
+    dst_BaixarPagarCP_CANCELADO_POR: TStringField;
+    dst_BaixarPagarCP_TIT_EM_ABERTO: TStringField;
+    dst_BaixarPagarCP_ALTERADO_POR: TStringField;
+    dst_BaixarPagarCP_SEL: TStringField;
+    dst_BaixarPagarPES_RSOCIAL: TStringField;
+    dst_BaixarPagarPC_DESCRICAO: TStringField;
+    dst_BaixarPagarCP_VL_RESTO: TFMTBCDField;
+    cds_BaixarPagarCP_ID: TIntegerField;
+    cds_BaixarPagarCP_ID_EMPRESA: TSmallintField;
+    cds_BaixarPagarCP_ID_FORNECEDOR: TIntegerField;
+    cds_BaixarPagarCP_DOCTO: TStringField;
+    cds_BaixarPagarCP_SITUACAO: TStringField;
+    cds_BaixarPagarCP_DT_MOVTO: TDateField;
+    cds_BaixarPagarCP_DT_EMISSAO: TDateField;
+    cds_BaixarPagarCP_DT_VCTO: TDateField;
+    cds_BaixarPagarCP_DT_BAIXA: TDateField;
+    cds_BaixarPagarCP_VL_TITULO: TFMTBCDField;
+    cds_BaixarPagarCP_VL_JUROS: TFMTBCDField;
+    cds_BaixarPagarCP_VL_DESC: TFMTBCDField;
+    cds_BaixarPagarCP_VL_PAGO: TFMTBCDField;
+    cds_BaixarPagarCP_ID_FORMA_PGTO: TIntegerField;
+    cds_BaixarPagarCP_ID_NOTA: TIntegerField;
+    cds_BaixarPagarCP_ID_ANALITICO: TIntegerField;
+    cds_BaixarPagarCP_ID_PLANO: TIntegerField;
+    cds_BaixarPagarCP_HIST_TITULO: TStringField;
+    cds_BaixarPagarCP_AUTORIZADO_POR: TStringField;
+    cds_BaixarPagarCP_DT_CANCELAMENTO: TDateField;
+    cds_BaixarPagarCP_CANCELADO_POR: TStringField;
+    cds_BaixarPagarCP_TIT_EM_ABERTO: TStringField;
+    cds_BaixarPagarCP_ALTERADO_POR: TStringField;
+    cds_BaixarPagarCP_SEL: TStringField;
+    cds_BaixarPagarPES_RSOCIAL: TStringField;
+    cds_BaixarPagarPC_DESCRICAO: TStringField;
+    cds_BaixarPagarCP_VL_RESTO: TFMTBCDField;
+    dst_RelatorioPagar: TSQLDataSet;
+    dst_RelatorioPagarCP_ID_FORNECEDOR: TIntegerField;
+    dst_RelatorioPagarPES_RSOCIAL: TStringField;
+    dst_RelatorioPagarCP_DT_EMISSAO: TDateField;
+    dst_RelatorioPagarCP_DT_VCTO: TDateField;
+    dst_RelatorioPagarCP_DT_BAIXA: TDateField;
+    dst_RelatorioPagarCP_VL_TITULO: TFMTBCDField;
+    frxDstRelatorioPagar: TfrxDBDataset;
+    frxRelatorioPagar: TfrxReport;
+    procedure cds_PagarReconcileError(DataSet: TCustomClientDataSet; E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Pagar: Tdm_Pagar;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tdm_Pagar.cds_PagarReconcileError(DataSet: TCustomClientDataSet; E: EReconcileError; UpdateKind: TUpdateKind;
+  var Action: TReconcileAction);
+begin
+  TTratamentoErro.HandleReconcileError(E.Message, Action);
+end;
+
+end.

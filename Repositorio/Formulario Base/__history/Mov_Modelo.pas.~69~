@@ -1,0 +1,405 @@
+unit Mov_Modelo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ActnList, ImgList, ComCtrls, ToolWin, ExtCtrls, StdCtrls, Grids,
+  DBGrids, FormBase, Buttons, ActnMan, ActnCtrls, ScreenTips,
+  PlatformDefaultStyleActnCtrls, DB, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinsDefaultPainters,
+  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit,
+  cxDBData, cxGridLevel, cxClasses, cxGridCustomView, cxGridCustomTableView,
+  cxGridTableView, cxGridDBTableView, cxGrid, sFuncoes, Conexao, DBClient, sException, TratamentoErro,
+  BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TfrmMov_Modelo = class(TForm)
+    pnlRodape: TPanel;
+    AbaItens: TPageControl;
+    Cadastro: TTabSheet;
+    Consulta: TTabSheet;
+    btnGravar: TBitBtn;
+    btnCancelar: TBitBtn;
+    pnlCabecalho: TPanel;
+    scbCabecalho: TScrollBox;
+    Dts: TDataSource;
+    DtsItens: TDataSource;
+    AcoesBotoesItens: TActionManager;
+    actNovoItem: TAction;
+    actAterarItem: TAction;
+    actDeletarItens: TAction;
+    actGravarItens: TAction;
+    actCancelarItens: TAction;
+    ScreenTipsManagerItens: TScreenTipsManager;
+    Images: TImageList;
+    ActionToolBar1: TActionToolBar;
+    AcaoBotoes: TActionManager;
+    actNovo: TAction;
+    actAlterar: TAction;
+    actDeletar: TAction;
+    actGravar: TAction;
+    actCancelar: TAction;
+    actPesquisar: TAction;
+    actImprimir: TAction;
+    actSair: TAction;
+    ScreenTipsManager: TScreenTipsManager;
+    ImagesItem: TImageList;
+    ControlBar1: TControlBar;
+    ActionToolBar2: TActionToolBar;
+    Panel1: TPanel;
+    btnConfirmarItem: TBitBtn;
+    btmCancelarItem: TBitBtn;
+    cxGrid: TcxGrid;
+    cxGridDBTableView1: TcxGridDBTableView;
+    cxGridLevel1: TcxGridLevel;
+    BitBtn1: TBitBtn;
+    procedure actNovoUpdate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure actNovoExecute(Sender: TObject);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure actDeletarExecute(Sender: TObject);
+    procedure actGravarExecute(Sender: TObject);
+    procedure actCancelarExecute(Sender: TObject);
+    procedure actPesquisarExecute(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure actSairExecute(Sender: TObject);
+    procedure actNovoItemExecute(Sender: TObject);
+    procedure actAterarItemExecute(Sender: TObject);
+    procedure actDeletarItensExecute(Sender: TObject);
+    procedure actGravarItensExecute(Sender: TObject);
+    procedure actCancelarItensExecute(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  protected
+    FNomeDoMovimento: String;
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; virtual;
+    procedure TratarExceptionCampoObrigatorio; virtual;
+    procedure PreenchimentoCamposDefaultNaInclusao; virtual;
+    procedure ValidarCamposObrigatoriosDoItem; virtual;
+    procedure TratarExceptionCampoObrigatorioDoItem; virtual;
+    procedure PreenchimentoCamposDefaultNaInclusaoDoItem; virtual;
+    procedure Novo; virtual;
+    procedure Alterar; virtual;
+    procedure Delete; virtual;
+    procedure Gravar; virtual;
+    procedure Cancelar; virtual;
+    procedure Pesquisar; virtual;
+    procedure Imprimir; virtual;
+    procedure NovoItem; virtual;
+    procedure AlterarItem; virtual;
+    procedure DeleteItem; virtual;
+    procedure GravarItem; virtual;
+    procedure CancelarItem; virtual;
+  end;
+
+var
+  frmMov_Modelo: TfrmMov_Modelo;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmMov_Modelo.actAlterarExecute(Sender: TObject);
+begin
+  Self.Alterar();
+end;
+
+procedure TfrmMov_Modelo.actAterarItemExecute(Sender: TObject);
+begin
+  Self.AlterarItem();
+end;
+
+procedure TfrmMov_Modelo.actCancelarExecute(Sender: TObject);
+begin
+  Self.Cancelar();
+end;
+
+procedure TfrmMov_Modelo.actCancelarItensExecute(Sender: TObject);
+begin
+  Self.CancelarItem();
+end;
+
+procedure TfrmMov_Modelo.actDeletarExecute(Sender: TObject);
+begin
+  Self.Delete();
+end;
+
+procedure TfrmMov_Modelo.actDeletarItensExecute(Sender: TObject);
+begin
+  Self.DeleteItem();
+end;
+
+procedure TfrmMov_Modelo.actGravarExecute(Sender: TObject);
+begin
+  Self.Gravar();
+end;
+
+procedure TfrmMov_Modelo.actGravarItensExecute(Sender: TObject);
+begin
+  Self.GravarItem();
+end;
+
+procedure TfrmMov_Modelo.actImprimirExecute(Sender: TObject);
+begin
+  Self.Imprimir();
+end;
+
+procedure TfrmMov_Modelo.actNovoItemExecute(Sender: TObject);
+begin
+  Self.NovoItem();
+end;
+
+procedure TfrmMov_Modelo.actNovoExecute(Sender: TObject);
+begin
+  Self.Novo();
+end;
+
+procedure TfrmMov_Modelo.actNovoUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Dts.State in [dsInactive, dsBrowse];
+end;
+
+procedure TfrmMov_Modelo.actPesquisarExecute(Sender: TObject);
+begin
+  Self.Pesquisar();
+end;
+
+procedure TfrmMov_Modelo.actSairExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmMov_Modelo.Alterar;
+begin
+  try
+    if not Dts.DataSet.IsEmpty then
+    begin
+      Dts.DataSet.Edit;
+    end;
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.AlterarItem;
+begin
+  try
+    if not DtsItens.DataSet.IsEmpty then
+    begin
+      AbaItens.ActivePage := Cadastro;
+      DtsItens.DataSet.Edit;
+    end;
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.BitBtn1Click(Sender: TObject);
+begin
+  LogErro := TLoggerErro.Create;
+  try
+     try
+        raise Exception.Create('Error Message');
+     except
+       on E: Exception do
+       begin
+         LogErro.NomeMetodo := 'Teste';
+         LogErro.Add(ClassName, E.Message);
+         TBuilderLogDialogo_v3.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+       end;
+     end;
+
+  except on E: Exception do
+    TBuilderLogDialogo_v3.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmMov_Modelo.Cancelar;
+begin
+  try
+    TClientDataSet(Dts.DataSet).CancelUpdates;
+    AbaItens.ActivePage := Consulta;
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.CancelarItem;
+begin
+  try
+   DtsItens.DataSet.Cancel;
+    AbaItens.ActivePage := Consulta;
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.Delete;
+begin
+  try
+    if not Dts.DataSet.IsEmpty then
+    begin
+    if TFuncoes.SolicitarConfirmacao('Deseja Excluir o movimento de ' + FNomeDoMovimento + ' ?') then
+    begin
+      ConexaoDBX.InicializaTransacaoBD();
+
+      Dts.DataSet.Delete;
+      if Dts.DataSet is TClientDataSet then
+        if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+          raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+      end;
+    end;
+
+    ConexaoDBX.CommitTransacaoBD();
+  except
+    ConexaoDBX.RollbackTransacaoBD();
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.DeleteItem;
+begin
+  try
+    if not DtsItens.DataSet.IsEmpty then
+    begin
+      if TFuncoes.SolicitarConfirmacao('Deseja Excluir o item da movimento de ' + FNomeDoMovimento + ' ?') then
+        Dts.DataSet.Delete;
+    end;
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmMov_Modelo.Gravar;
+begin
+  try
+    Self.ValidarCamposObrigatorios();
+
+    ConexaoDBX.InicializaTransacaoBD();
+
+    if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+      raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+    AbaItens.ActivePage := Consulta;
+
+    ConexaoDBX.CommitTransacaoBD();
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      Self.TratarExceptionCampoObrigatorio();
+
+      TFuncoes.ExibirMensagem(E.Message, 'Validação', MB_ICONWARNING);
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+
+      TFuncoes.ExibirMensagem('Ocorreu um erro inesperado no sistema. A ação será cancelada.' + sLineBreak + sLineBreak +
+        'Descrição do erro: ' + E.Message, MB_ICONERROR);
+
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmMov_Modelo.GravarItem;
+begin
+  try
+    Self.ValidarCamposObrigatoriosDoItem();
+    DtsItens.DataSet.Post;
+    AbaItens.ActivePage := Consulta;
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      Self.TratarExceptionCampoObrigatorioDoItem();
+
+      TFuncoes.ExibirMensagem(E.Message, 'Validação', MB_ICONWARNING);
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+
+      TFuncoes.ExibirMensagem('Ocorreu um erro inesperado no sistema. A ação será cancelada.' + sLineBreak + sLineBreak +
+        'Descrição do erro: ' + E.Message, MB_ICONERROR);
+
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmMov_Modelo.Imprimir;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.Novo;
+begin
+  try
+    Dts.DataSet.Append;
+    Self.PreenchimentoCamposDefaultNaInclusao();
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.NovoItem;
+begin
+  try
+    AbaItens.ActivePage := Cadastro;
+    Self.PreenchimentoCamposDefaultNaInclusaoDoItem();
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Modelo.Pesquisar;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.PreenchimentoCamposDefaultNaInclusao;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.PreenchimentoCamposDefaultNaInclusaoDoItem;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.TratarExceptionCampoObrigatorio;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.TratarExceptionCampoObrigatorioDoItem;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.ValidarCamposObrigatorios;
+begin
+
+end;
+
+procedure TfrmMov_Modelo.ValidarCamposObrigatoriosDoItem;
+begin
+
+end;
+
+end.

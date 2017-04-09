@@ -1,0 +1,11 @@
+object dm_Pesquisar: Tdm_Pesquisar
+  OldCreateOrder = False
+  Height = 109
+  Width = 425
+  object cds_Pesquisar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 32
+    Top = 24
+  end
+end

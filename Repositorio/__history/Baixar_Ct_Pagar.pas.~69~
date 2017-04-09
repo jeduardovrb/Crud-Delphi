@@ -1,0 +1,415 @@
+unit Baixar_Ct_Pagar;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ScreenTips, ActnList, DB, StdCtrls, JvExStdCtrls, JvCombobox, Grids,
+  DBGrids, Mask, JvExMask, JvToolEdit, Buttons, DBCtrls, ExtCtrls,
+  PersistenciaDBX, dtm_CarregarDados, dtm_Pagar, Empresa_Corrente, sException,
+  Conexao, DBClient, TratamentoErro, BuilderLogDialogo, sEnumerados, Logger,
+  sFuncoes, Pesquisar;
+
+type
+  TfrmBaixar_CtPagar = class(TForm)
+    pnlRodape: TPanel;
+    Label1: TLabel;
+    Label4: TLabel;
+    dbtValor: TDBText;
+    lblDtBaixar: TLabel;
+    btnBaixar: TBitBtn;
+    btnEstorno: TBitBtn;
+    edtValorReceber: TEdit;
+    edtDtBaixar: TJvDateEdit;
+    Panel1: TPanel;
+    Label3: TLabel;
+    Label2: TLabel;
+    lblDataEmissaoInicio: TLabel;
+    lblDataVencimentoInicio: TLabel;
+    lblDataPagamento: TLabel;
+    dbtNmFornecedor: TDBText;
+    cbPago: TJvComboBox;
+    edtIdForncedor: TEdit;
+    btnPesquisar: TBitBtn;
+    edtDtInicioEmissao: TJvDateEdit;
+    edtDtEmissaoFim: TJvDateEdit;
+    edtDtVenctoInicio: TJvDateEdit;
+    edtDtVenctoFim: TJvDateEdit;
+    edtDtPagtoInicio: TJvDateEdit;
+    edtDtPagtoFim: TJvDateEdit;
+    ActionList: TActionList;
+    actBaixar: TAction;
+    actEstorno: TAction;
+    actCancelar: TAction;
+    actLocalizar: TAction;
+    ScreenTipsManager: TScreenTipsManager;
+    dbgBaixarReceber: TDBGrid;
+    Dts: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure actBaixarExecute(Sender: TObject);
+    procedure actEstornoExecute(Sender: TObject);
+    procedure actLocalizarExecute(Sender: TObject);
+    procedure edtIdForncedorExit(Sender: TObject);
+    procedure edtIdForncedorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    FValorReceber : Currency;
+    FPersistencia : TPersistenciaDBX;
+
+    procedure CarregarNomeFornecedor;
+    procedure Sumarizar;
+    procedure TotalizarTitulos;
+    procedure ValidarBaixarRecebimento;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmBaixar_CtPagar: TfrmBaixar_CtPagar;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmBaixar_CtPagar }
+
+procedure TfrmBaixar_CtPagar.actBaixarExecute(Sender: TObject);
+begin
+  Self.FValorReceber := StrToCurr(Self.edtValorReceber.Text);
+  ValidarBaixarRecebimento();
+
+  try
+    if not Dts.DataSet.IsEmpty then
+    begin
+      if Trim(Dts.DataSet.FieldByName('cp_situacao').AsString) = 'N' then
+      begin
+        Dts.DataSet.Edit;
+        Dts.DataSet.FieldByName('cp_vl_titulo').AsCurrency   := Self.FValorReceber;
+        Dts.DataSet.FieldByName('cp_vl_pago').AsCurrency     := Self.FValorReceber;
+        Dts.DataSet.FieldByName('cp_dt_baixa').AsDateTime    := edtDtBaixar.Date;
+        Dts.DataSet.FieldByName('cp_situacao').AsString      := 'S';
+        Dts.DataSet.FieldByName('cp_tit_em_aberto').AsString := 'N';
+        Dts.DataSet.Post;
+      end
+      else
+      begin
+        Self.dbgBaixarReceber.SetFocus;
+        raise ECampoObrigatorioError.Create('Título já baixado.');
+      end;
+
+      ConexaoDBX.InicializaTransacaoBD();
+
+      if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+        raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+      ConexaoDBX.CommitTransacaoBD();
+      TClientDataSet(Dts.DataSet).Refresh;
+      Self.TotalizarTitulos();
+      Self.Sumarizar();
+    end
+    else
+    begin
+      Self.dbgBaixarReceber.SetFocus;
+      raise ECampoObrigatorioError.Create('Título não selecionado.');
+    end;
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      Self.edtValorReceber.SetFocus;
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmBaixar_CtPagar.actEstornoExecute(Sender: TObject);
+begin
+  try
+    if not Dts.DataSet.IsEmpty then
+    begin
+      try
+        if Trim(Dts.DataSet.FieldByName('cp_situacao').AsString) = 'S' then
+        begin
+          Dts.DataSet.Edit;
+          Dts.DataSet.FieldByName('cp_vl_pago').Value          := Null;
+          Dts.DataSet.FieldByName('cp_dt_baixa').Value         := Null;
+          Dts.DataSet.FieldByName('cp_situacao').AsString      := 'N';
+          Dts.DataSet.FieldByName('cp_tit_em_aberto').AsString := 'S';
+
+          ConexaoDBX.InicializaTransacaoBD();
+
+          if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+          TClientDataSet(Dts.DataSet).Refresh;
+          Self.TotalizarTitulos();
+          ConexaoDBX.CommitTransacaoBD();
+        end
+        else
+        begin
+          Self.dbgBaixarReceber.SetFocus;
+          raise ECampoObrigatorioError.Create('Título não baixado.');
+        end;
+      finally
+        TClientDataSet(Dts.DataSet).Refresh;
+        Self.Sumarizar();
+      end;
+    end
+    else
+    begin
+      Self.edtIdForncedor.SetFocus;
+      raise ECampoObrigatorioError.Create('Não existe registro para ser selecionado.');
+    end;
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+  end
+end;
+
+procedure TfrmBaixar_CtPagar.actLocalizarExecute(Sender: TObject);
+var
+  VSql: String;
+  VFiltro: String;
+begin
+  try
+    if (Trim(Self.edtIdForncedor.Text)) = EmptyStr then
+    begin
+      Self.edtIdForncedor.SetFocus;
+      raise Exception.Create('O Id. do Fornecedor é de preenchimento obrigatório.');
+    end;
+
+    VSql := TFuncoes.MontarSqlComponente(dm_Pagar.dst_BaixarPagar);
+
+    VFiltro := ' where (pessoa.pes_tp_cadastro = ''F'') and ' +
+      ' (ct_pagar.cp_id_empresa = ' + IntToStr(EmpresaCorrente.Id) + ') ';
+
+    if Length(Trim(Self.edtIdForncedor.Text)) > 0 then
+      VFiltro := VFiltro + 'and (ct_pagar.cp_id_fornecedor = ' + Trim(edtIdForncedor.Text) + ') ';
+
+    if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+    begin
+      dm_CarregarDados.CarregarFornecedorInterno(StrToInt(Trim(edtIdForncedor.Text)));
+
+      if Length(Trim(Self.edtIdForncedor.Text)) > 0 then
+      begin
+        VFiltro := VFiltro + 'and (ct_pagar.cp_id_fornecedor = '
+          + dm_CarregarDados.dst_CarregarFornecedorInternoPES_ID.AsString + ') ';
+      end;
+    end
+    else
+    begin
+      if Length(Trim(Self.edtIdForncedor.Text)) > 0 then
+      VFiltro := VFiltro + 'and (ct_pagar.cp_id_fornecedor = ' + Trim(edtIdForncedor.Text) + ') ';
+    end;
+
+    case Self.cbPago.ItemIndex of
+      0: VFiltro := VFiltro + '';
+      1: VFiltro := VFiltro + ' and (ct_pagar.cp_situacao = ''S'') ';
+      2: VFiltro := VFiltro + ' and (ct_pagar.cp_situacao = ''N'') ';
+    end;
+
+    if (edtDtInicioEmissao.Date > 0) and (edtDtEmissaoFim.Date > 0) then
+      VFiltro := VFiltro + 'and (ct_pagar.cp_dt_emissao between ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtInicioEmissao.Date)) + ' and ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtEmissaoFim.Date)) + ' ) ';
+
+    if (edtDtVenctoInicio.Date > 0) and (edtDtVenctoFim.Date > 0) then
+      VFiltro := VFiltro + 'and (ct_pagar.cp_dt_vcto between ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtVenctoInicio.Date)) + ' and ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtVenctoFim.Date)) + ' ) ';
+
+    if (edtDtPagtoInicio.Date > 0) and (edtDtPagtoFim.Date > 0) then
+      VFiltro := VFiltro + 'and (ct_pagar.cp_dt_baixa between ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtPagtoInicio.Date)) + ' and ' + QuotedStr(FormatDateTime('dd.mm.yyyy', Self.edtDtPagtoFim.Date)) + ' ) ';
+
+    dm_Pagar.cds_BaixarPagar.Close;
+    dm_Pagar.dst_BaixarPagar.CommandText := VSql + VFiltro;
+    dm_Pagar.cds_BaixarPagar.Open;
+
+    TFloatField(Dts.DataSet.FieldByName('cp_vl_titulo')).DisplayFormat := '#,##0.00';
+
+    Self.dbgBaixarReceber.SetFocus;
+
+    Self.TotalizarTitulos();
+    Self.Sumarizar();
+  except
+  on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmBaixar_CtPagar.CarregarNomeFornecedor;
+begin
+  try
+    if Length(Trim(edtIdForncedor.Text)) > 0 then
+    begin
+      if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+      begin
+        dm_CarregarDados.CarregarFornecedorInterno(StrToInt(edtIdForncedor.Text));
+        dbtNmFornecedor.Caption := dm_CarregarDados.dst_CarregarFornecedorInternoPES_RSOCIAL.AsString;
+      end
+      else
+      begin
+        dm_CarregarDados.CarregarCliente(StrToInt(edtIdForncedor.Text));
+        dbtNmFornecedor.Caption := dm_CarregarDados.dst_CarregarClientePES_RSOCIAL.AsString;
+      end;
+    end;
+  finally
+    dm_CarregarDados.dst_CarregarFornecedor.Close();
+  end;
+end;
+
+procedure TfrmBaixar_CtPagar.edtIdForncedorExit(Sender: TObject);
+begin
+  if Length(Trim(edtIdForncedor.Text)) > 0 then
+  begin
+    try
+      Self.CarregarNomeFornecedor();
+    except
+      on E: Exception do
+        TFuncoes.SetFocusCampoObrigatorio('CLIENTE', E.Message, edtIdForncedor);
+    end;
+  end
+  else
+    dbtNmFornecedor.Caption := EmptyStr;
+end;
+
+procedure TfrmBaixar_CtPagar.edtIdForncedorKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    pessoa.pes_id_interno, ' +
+        '    pessoa.pes_rsocial, ' +
+        '    pessoa.pes_cnpj_cpf, ' +
+        '    pessoa.pes_id ' +
+        ' from pessoa ' +
+        '    inner join fornecedor on (pessoa.pes_id = fornecedor.for_id_pessoa) ' +
+        ' where ' +
+        '    pessoa.pes_tp_cadastro = ''F'' and ' +
+        '    pessoa.pes_id = -1';
+
+      frmPesquisar.CamposNomeExibicao.Add('Id. Interno');
+      frmPesquisar.CamposNomeExibicao.Add('Nome');
+      frmPesquisar.CamposNomeExibicao.Add('CPF/CNPJ');
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+
+      frmPesquisar.ShowModal();
+
+
+      Self.edtIdForncedor.Text := IntToStr(frmPesquisar.Id);
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmBaixar_CtPagar.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  FreeAndNil(FPersistencia);
+  FreeAndNil(dm_CarregarDados);
+  FreeAndNil(dm_Pagar);
+end;
+
+procedure TfrmBaixar_CtPagar.FormCreate(Sender: TObject);
+begin
+  dm_Pagar           := Tdm_Pagar.Create(nil);
+  dm_CarregarDados   := Tdm_CarregarDados.Create(nil);
+  Self.FPersistencia := TPersistenciaDBX.Create;
+
+  Self.cbPago.ItemIndex := 2;
+end;
+
+procedure TfrmBaixar_CtPagar.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmBaixar_CtPagar.FormShow(Sender: TObject);
+begin
+  Self.edtDtBaixar.Date := Date;
+end;
+
+procedure TfrmBaixar_CtPagar.Sumarizar;
+begin
+  FValorReceber := 0;
+
+  FValorReceber := FValorReceber + Dts.DataSet.FieldByName('cp_vl_titulo').AsCurrency;
+
+  Self.edtValorReceber.Text := FormatFloat('0.00', FValorReceber);
+end;
+
+procedure TfrmBaixar_CtPagar.TotalizarTitulos;
+var
+  VTotalizar: Currency;
+begin
+  VTotalizar := 0;
+
+  Dts.DataSet.DisableControls;
+  try
+    Dts.DataSet.First;
+    while not Dts.DataSet.Eof do
+    begin
+      VTotalizar := VTotalizar + Dts.DataSet.FieldByName('cp_vl_titulo').AsCurrency;
+
+      Dts.DataSet.Next;
+    end;
+  finally
+    Dts.DataSet.EnableControls;
+  end;
+
+  Dts.DataSet.First;
+  dbtValor.Caption := FormatFloat('0.00', VTotalizar);
+end;
+
+procedure TfrmBaixar_CtPagar.ValidarBaixarRecebimento;
+begin
+  if edtValorReceber.Text = EmptyStr then
+  begin
+    edtValorReceber.SetFocus;
+    raise ECampoObrigatorioError.Create('O campo Valor a Receber e de preenchimento obrigatório.');
+  end;
+
+  if edtDtBaixar.Date = 0 then
+  begin
+    edtDtBaixar.SetFocus;
+    raise ECampoObrigatorioError.Create('O campo data da baixa e de preenchimento obrigatório.');
+  end;
+
+  if Self.FValorReceber > dm_Pagar.cds_BaixarPagarCP_VL_TITULO.AsCurrency then
+  begin
+    edtValorReceber.SetFocus;
+    raise ECampoObrigatorioError.Create('O campo valor a receber e maior que o valor do titulo. Verifique!');
+  end;
+end;
+
+initialization
+  RegisterClass(TfrmBaixar_CtPagar);
+
+end.

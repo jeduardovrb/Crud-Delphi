@@ -1,0 +1,34 @@
+unit FormBase;
+
+interface
+
+uses
+  Forms, Classes, Windows;
+
+type
+  TFormBase = class(TForm)
+  protected
+    procedure keyDown(var key: Word; Shift: TShiftState); override;
+  public
+    constructor Create(Aowner: TComponent);
+  end;
+
+implementation
+
+{ TFormBase }
+
+constructor TFormBase.Create(Aowner: TComponent);
+begin
+  inherited Create(Aowner);
+  KeyPreview := True;
+end;
+
+procedure TFormBase.keyDown(var key: Word; Shift: TShiftState);
+begin
+  if key = VK_Return then
+    SelectNext(ActiveControl, True, True)
+  else
+    inherited;
+end;
+
+end.

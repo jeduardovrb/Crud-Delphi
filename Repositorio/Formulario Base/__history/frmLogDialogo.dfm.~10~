@@ -1,0 +1,128 @@
+object LogDialogo: TLogDialogo
+  Left = 0
+  Top = 0
+  BorderIcons = []
+  BorderStyle = bsSingle
+  Caption = 'LogDialogo'
+  ClientHeight = 335
+  ClientWidth = 438
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlFundo: TPanel
+    Left = 0
+    Top = 0
+    Width = 438
+    Height = 335
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitLeft = 24
+    ExplicitTop = 8
+    object bvlMemoLog: TBevel
+      Left = 3
+      Top = 150
+      Width = 433
+      Height = 179
+    end
+    object imgAtencao: TImage
+      Left = 383
+      Top = 30
+      Width = 48
+      Height = 48
+      Stretch = True
+    end
+    object imgInformacao: TImage
+      Left = 383
+      Top = 30
+      Width = 48
+      Height = 48
+      Stretch = True
+    end
+    object imgErro: TImage
+      Left = 383
+      Top = 30
+      Width = 48
+      Height = 48
+      Stretch = True
+    end
+    object memLog: TMemo
+      Left = 5
+      Top = 151
+      Width = 428
+      Height = 177
+      Color = clWhite
+      ReadOnly = True
+      ScrollBars = ssVertical
+      TabOrder = 3
+    end
+    object memErro: TMemo
+      Left = 3
+      Top = 10
+      Width = 374
+      Height = 103
+      Color = clWhite
+      ReadOnly = True
+      ScrollBars = ssVertical
+      TabOrder = 0
+    end
+    object btnFechar: TBitBtn
+      Left = 362
+      Top = 119
+      Width = 71
+      Height = 25
+      Caption = 'OK'
+      DoubleBuffered = True
+      Glyph.Data = {
+        36030000424D3603000000000000360000002800000010000000100000000100
+        18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFFFCFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFF48884B4B994EFBFFFCFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF47854952CC5B77EE813F
+        8740FAFFFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFF4380453CC14560FE6F69FF7858F065328535F8FEF9FFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF457E4529B3354FE95E78EF8479F28458
+        F5674AE7562D8030F8FDF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF487D49
+        29A33553D75F88E4918EE5969FEAA571E77C4AE7593FD64C29772CF6FBF7FFFF
+        FFFFFFFFFFFFFFFFFFFF5E90605EB4676FD1799DDFA398DF9F2C8831398C3E99
+        E5A069DB7439D84931C23D256D27F6FAF6FFFFFFFFFFFFFFFFFFEAF4EB529757
+        B5DDBAA9DAAE36933CC5EBC8F9FDFA419B47A5E2AA60D06A28C93722B02F2665
+        27F7F9F7FFFFFFFFFFFFFFFFFFEBF7EC429748449548BEE7C1FFFFFFFFFFFFF3
+        FBF43C9642B3E3B755C46015B72513A320266428F6F8F6FFFFFFFFFFFFFFFFFF
+        ECF8EDCBECCEFFFFFFFFFFFFFFFFFFFFFFFFF4FBF539903EB4DCB751B25A069E
+        140B9517306A32EFF4F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFF4FAF43B9041B6D7B9529F5A3A99414993514E7D4EFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4FBF43C9142BAD7
+        BD569E5D4B814CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFF4FBF4409145538B54FFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFD
+        FBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = btnFecharClick
+    end
+    object btnDetalhar: TBitBtn
+      Left = 232
+      Top = 119
+      Width = 106
+      Height = 25
+      Caption = 'Exibir Detalhes >>'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = btnDetalharClick
+    end
+  end
+end

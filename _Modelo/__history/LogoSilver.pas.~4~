@@ -1,0 +1,32 @@
+unit LogoSilver;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, jpeg, ExtCtrls;
+
+type
+  TfrmLogoSilver = class(TForm)
+    Image1: TImage;
+    Timer1: TTimer;
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLogoSilver: TfrmLogoSilver;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmLogoSilver.Timer1Timer(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

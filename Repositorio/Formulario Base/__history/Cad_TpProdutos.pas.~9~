@@ -1,0 +1,60 @@
+unit Cad_TpProdutos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Cad_Modelo, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinsDefaultPainters,
+  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit, DB,
+  cxDBData, ActnList, ScreenTips, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons,
+  ExtCtrls, cxGridLevel, cxClasses, cxGridCustomView, cxGridCustomTableView,
+  cxGridTableView, cxGridDBTableView, cxGrid;
+
+type
+  TfrmCad_TpProduto = class(TfrmCad_Modelo)
+    procedure FormCreate(Sender: TObject);
+  private
+
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio; override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+  end;
+
+var
+  frmCad_TpProduto: TfrmCad_TpProduto;
+
+implementation
+
+uses dtmTpProduto;
+
+{$R *.dfm}
+
+{ TfrmCad_Modelo1 }
+
+procedure TfrmCad_TpProduto.FormCreate(Sender: TObject);
+begin
+  inherited;
+  dm_TpProtudo := Tdm
+end;
+
+procedure TfrmCad_TpProduto.PreenchimentoCamposDefaultNaInclusao;
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_TpProduto.TratarExceptionCampoObrigatorio;
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_TpProduto.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+end.

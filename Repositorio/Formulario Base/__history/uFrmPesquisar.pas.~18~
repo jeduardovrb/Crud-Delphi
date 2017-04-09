@@ -1,0 +1,142 @@
+unit uFrmPesquisar;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons, ExtCtrls,
+  DBClient, Provider, SqlExpr, Generics.Collections, Grids, DBGrids, DB, Data.FMTBcd, uDM_Conexao;
+
+type
+  TfrmPesquisar = class(TForm)
+    ds_Localizar: TDataSource;
+    cds_Localizar: TClientDataSet;
+    dst_Localizar: TSQLDataSet;
+    cbxField: TComboBox;
+    lblCampos: TLabel;
+    Label2: TLabel;
+    edtValor: TEdit;
+    btnPesquisar: TBitBtn;
+    OK: TBitBtn;
+    dsp_Localizar: TDataSetProvider;
+    procedure OKClick(Sender: TObject);
+    procedure gdDadosPesquisaDBTableView1DblClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure dbgPesquisarDblClick(Sender: TObject);
+    procedure edtValorChange(Sender: TObject);
+  private
+    FId: Integer;
+    FIndiceId: Integer;
+  protected
+    FSql: String;
+    FFiltroSql: String;
+  public
+    procedure Localizar; virtual;
+    procedure Confirmar; virtual;
+    procedure CarregarComboBoxPesquisa;
+
+    property Id       : Integer     read FId                 write FId;
+    property FiltroSql: String      read FFiltroSql          write FFiltroSql;
+    property IndeceId : Integer     read FIndiceId           write FIndiceId;
+  end;
+
+var
+  frmPesquisar: TfrmPesquisar;
+
+implementation
+
+uses
+  uEnumerados, sFuncoes; {$R *.dfm}
+
+{ TfrmPes_ }
+
+procedure TfrmPesquisar.Confirmar;
+begin
+  Self.FId := cds_Localizar.Fields[FIndiceId].AsInteger;
+
+  Close();
+end;
+
+procedure TfrmPesquisar.dbgPesquisarDblClick(Sender: TObject);
+begin
+  Self.Confirmar();
+end;
+
+procedure TfrmPesquisar.edtValorChange(Sender: TObject);
+begin
+  Self.Localizar();
+end;
+
+procedure TfrmPesquisar.btnPesquisarClick(Sender: TObject);
+begin
+  Self.Localizar();
+end;
+
+procedure TfrmPesquisar.CarregarComboBoxPesquisa;
+var
+  I: Integer;
+begin
+  for I := 0 to Pred(cds_Localizar.FieldCount) do
+    cbxField.Items.Add(cds_Localizar.Fields[I].DisplayLabel);
+end;
+
+procedure TfrmPesquisar.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  cds_Localizar.Close();
+end;
+
+procedure TfrmPesquisar.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    Close();
+  end;
+end;
+
+procedure TfrmPesquisar.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmPesquisar.FormShow(Sender: TObject);
+begin
+  FIndiceId := 0;
+end;
+
+procedure TfrmPesquisar.gdDadosPesquisaDBTableView1DblClick(Sender: TObject);
+begin
+  Self.Confirmar();
+end;
+
+procedure TfrmPesquisar.Localizar();
+var
+  VMontarSql: String;
+  VCampo: String;
+begin
+  VMontarSql := EmptyStr;
+
+  VCampo := cds_Localizar.Fields[cbxField.ItemIndex].FieldName;
+
+  VMontarSql := ' where upper(' + VCampo + ')' + ' like ' + ' upper( ' +
+  QuotedStr(edtValor.Text + '%') + ') ' + Self.FFiltroSql + ' order by ' + VCampo;
+
+
+  cds_Localizar.Close;
+  dst_Localizar.CommandText := TFuncoes.MontarSqlComponente(dst_Localizar) + VMontarSql;
+  cds_Localizar.Open;
+end;
+
+procedure TfrmPesquisar.OKClick(Sender: TObject);
+begin
+  Self.Confirmar();
+end;
+
+end.

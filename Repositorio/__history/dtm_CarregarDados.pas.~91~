@@ -1,0 +1,459 @@
+unit dtm_CarregarDados;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, Empresa_Corrente, DBClient, Provider, DBCtrls;
+
+type
+  Tdm_CarregarDados = class(TDataModule)
+    dst_CarregarGrupoProduto: TSQLDataSet;
+    dst_CarregarSubGrupoProduto: TSQLDataSet;
+    dst_CarregarCidade: TSQLDataSet;
+    dst_CarregarGrupoProdutoGRU_ID: TIntegerField;
+    dst_CarregarGrupoProdutoGRU_DESCRICAO: TStringField;
+    dst_CarregarSubGrupoProdutoSUBGRU_ID: TIntegerField;
+    dst_CarregarSubGrupoProdutoSUBGRU_DESCRICAO: TStringField;
+    dst_CarregarCidadeCID_ID: TIntegerField;
+    dst_CarregarCidadeCID_NOME: TStringField;
+    dst_CarregarCliente: TSQLDataSet;
+    dst_CarregarClientePES_ID: TIntegerField;
+    dst_CarregarProduto: TSQLDataSet;
+    dst_CarregarProdutoPRO_ID_PK: TIntegerField;
+    dst_CarregarProdutoPRO_TIPO: TStringField;
+    dst_CarregarProdutoPRO_EAN: TStringField;
+    dst_CarregarProdutoPRO_NOME: TStringField;
+    dst_CarregarProdutoPRO_UNIDADE: TStringField;
+    dst_CarregarProdutoPRO_VL_COMPRA: TFMTBCDField;
+    dst_CarregarProdutoPRO_VL_VENDA: TFMTBCDField;
+    dst_CarregarPlanoConta: TSQLDataSet;
+    dst_CarregarPlanoContaPC_CODCONTA: TIntegerField;
+    dst_CarregarPlanoContaPC_DESCRICAO: TStringField;
+    dst_CarregarFornecedor: TSQLDataSet;
+    dst_CarregarFornecedorPES_ID: TIntegerField;
+    dst_CarregarFornecedorPES_RSOCIAL: TStringField;
+    dst_CarregarCondPagamento: TSQLDataSet;
+    dst_CarregarCondPagamentoCPA_ID: TIntegerField;
+    dst_CarregarCondPagamentoCPA_DESCRICAO: TStringField;
+    dst_CarregarFormaPagto: TSQLDataSet;
+    dst_CarregarFormaPagtoPP_ID: TIntegerField;
+    dst_CarregarFormaPagtoPP_DESCRICAO: TStringField;
+    dst_CarregarClientePE_ENDERECO: TStringField;
+    dst_CarregarClientePE_NUMERO: TStringField;
+    dst_CarregarClientePE_COMPLEMENTO: TStringField;
+    dst_CarregarClientePE_BAIRRO: TStringField;
+    dst_CarregarClienteCLI_FIDELIDADE: TIntegerField;
+    dst_CarregarClientePE_SEQ: TIntegerField;
+    dst_CarregarEndereco: TSQLDataSet;
+    dst_CarregarEnderecoPES_ID: TIntegerField;
+    dst_CarregarEnderecoPES_RSOCIAL: TStringField;
+    dst_CarregarEnderecoPE_ENDERECO: TStringField;
+    dst_CarregarEnderecoPE_NUMERO: TStringField;
+    dst_CarregarEnderecoPE_COMPLEMENTO: TStringField;
+    dst_CarregarEnderecoPE_BAIRRO: TStringField;
+    dst_CarregarEnderecoPE_SEQ: TIntegerField;
+    dst_CarregarEnderecoCLI_FIDELIDADE: TIntegerField;
+    dst_CarregarCreditoCliente: TSQLDataSet;
+    dst_CarregarCreditoClienteCCF_ID_CLIENTE: TIntegerField;
+    dst_CarregarCreditoClienteCCF_ID_EMPRESA: TIntegerField;
+    dst_CarregarCreditoClienteCCF_VLR_CREDITO_ENTREGA: TFMTBCDField;
+    dst_CarregarCreditoClienteCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField;
+    dst_CarregarCreditoClienteCCF_VLR_CREDITO: TFMTBCDField;
+    dsp_DadosPessoaTelefone: TDataSetProvider;
+    cds_DadosPessoaTelefone: TClientDataSet;
+    cds_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField;
+    cds_DadosPessoaTelefonePT_TIPO: TSmallintField;
+    cds_DadosPessoaTelefonePT_NM_TIPO: TStringField;
+    cds_DadosPessoaTelefonePT_NUMERO: TStringField;
+    cds_DadosPessoaTelefonePT_CONTATO: TStringField;
+    cds_DadosPessoaTelefonePT_SEQ: TIntegerField;
+    dst_DadosPessoaTelefone: TSQLDataSet;
+    dst_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField;
+    dst_DadosPessoaTelefonePT_TIPO: TSmallintField;
+    dst_DadosPessoaTelefonePT_NM_TIPO: TStringField;
+    dst_DadosPessoaTelefonePT_NUMERO: TStringField;
+    dst_DadosPessoaTelefonePT_CONTATO: TStringField;
+    dst_DadosPessoaTelefonePT_SEQ: TIntegerField;
+    dst_CarregarFormaPagtoPP_COM_ENTRADA: TStringField;
+    dst_CarregarFormaPagtoPP_NM_APRESENTACAO: TStringField;
+    dst_CarregarFormaPagtoPP_QT_PARCELAS: TSmallintField;
+    dst_CtReceber: TSQLDataSet;
+    dst_CtReceberCR_ID_EMPRESA: TSmallintField;
+    dst_CtReceberCR_ID: TIntegerField;
+    dst_CtReceberCR_DOCTO: TStringField;
+    dst_CtReceberCR_TIPO: TStringField;
+    dst_CtReceberCR_TIPO_OLD: TStringField;
+    dst_CtReceberCR_SITUACAO: TStringField;
+    dst_CtReceberCR_DT_EMISSAO: TDateField;
+    dst_CtReceberCR_DT_VCTO: TDateField;
+    dst_CtReceberCR_DT_VCTO_ORIGINAL: TDateField;
+    dst_CtReceberCR_DT_VCTO_PRORR_1: TDateField;
+    dst_CtReceberCR_DT_BAIXA: TDateField;
+    dst_CtReceberCR_DT_LIQUIDACAO: TDateField;
+    dst_CtReceberCR_VL_TITULO: TFMTBCDField;
+    dst_CtReceberCR_VL_JUROS: TFMTBCDField;
+    dst_CtReceberCR_VL_DESC: TFMTBCDField;
+    dst_CtReceberCR_VL_RECEBIDO: TFMTBCDField;
+    dst_CtReceberCR_ID_CLIENTE: TIntegerField;
+    dst_CtReceberCR_ID_VENDA: TIntegerField;
+    dst_CtReceberCR_ID_CARGA: TIntegerField;
+    dst_CtReceberCR_ID_NOTA: TIntegerField;
+    dst_CtReceberCR_NR_NFISCAL: TIntegerField;
+    dst_CtReceberCR_ID_FORMA_PGTO: TIntegerField;
+    dst_CtReceberCR_ID_PLANO: TIntegerField;
+    dst_CtReceberCR_ID_VENDEDOR: TIntegerField;
+    dst_CtReceberCR_TP_EC_COB: TStringField;
+    dst_CtReceberCR_ID_EC_COB: TIntegerField;
+    dst_CtReceberCR_DT_EC_COB: TDateField;
+    dst_CtReceberCR_HIST_TITULO: TStringField;
+    dst_CtReceberCR_DP_IMP: TStringField;
+    dst_CtReceberCR_BL_IMP: TStringField;
+    dst_CtReceberCR_SIT: TStringField;
+    dst_CtReceberCR_COMPOSICAO_DIVIDA: TStringField;
+    dst_CtReceberCR_TIT_PROTESTADO: TStringField;
+    dst_CtReceberCR_TIT_EM_ABERTO: TStringField;
+    dst_CtReceberCR_VL_REC_BANCO: TFMTBCDField;
+    dst_CtReceberCR_ID_CONTA_CORRENTE: TIntegerField;
+    dst_CtReceberCR_NR_DOCTO_BANCARIO: TStringField;
+    dst_CtReceberCR_DT_PROTESTO: TDateField;
+    dst_CtReceberCR_DT_PROGRAMACAO: TDateField;
+    dst_CtReceberCR_ALTERADO_POR: TStringField;
+    dst_CtReceberCR_ID_TP_COBRANCA: TIntegerField;
+    dst_CtReceberCR_ID_TP_COBRANCA_OLD: TIntegerField;
+    dst_CtReceberCR_BANCO_ENCARREGADO_COBRANCA: TStringField;
+    dst_CtReceberCR_DT_CANCELAMENTO: TSQLTimeStampField;
+    dst_CtReceberCR_CANCELADO_POR: TStringField;
+    dst_CtReceberCR_NR_RESUMO_VENDA: TIntegerField;
+    dst_CtReceberCR_INSERT_DATE: TSQLTimeStampField;
+    dst_CtReceberCR_INSERT_USER: TStringField;
+    dst_CtReceberCR_UPDATE_DATE: TSQLTimeStampField;
+    dst_CtReceberCR_UPDATE_USER: TStringField;
+    dst_CtReceberCR_SEL: TStringField;
+    dst_CtReceberCR_VL_RESTO: TFMTBCDField;
+    dsp_CtReceber: TDataSetProvider;
+    cds_CtReceber: TClientDataSet;
+    cds_CtReceberCR_ID_EMPRESA: TSmallintField;
+    cds_CtReceberCR_ID: TIntegerField;
+    cds_CtReceberCR_DOCTO: TStringField;
+    cds_CtReceberCR_TIPO: TStringField;
+    cds_CtReceberCR_TIPO_OLD: TStringField;
+    cds_CtReceberCR_SITUACAO: TStringField;
+    cds_CtReceberCR_DT_EMISSAO: TDateField;
+    cds_CtReceberCR_DT_VCTO: TDateField;
+    cds_CtReceberCR_DT_VCTO_ORIGINAL: TDateField;
+    cds_CtReceberCR_DT_VCTO_PRORR_1: TDateField;
+    cds_CtReceberCR_DT_BAIXA: TDateField;
+    cds_CtReceberCR_DT_LIQUIDACAO: TDateField;
+    cds_CtReceberCR_VL_TITULO: TFMTBCDField;
+    cds_CtReceberCR_VL_JUROS: TFMTBCDField;
+    cds_CtReceberCR_VL_DESC: TFMTBCDField;
+    cds_CtReceberCR_VL_RECEBIDO: TFMTBCDField;
+    cds_CtReceberCR_ID_CLIENTE: TIntegerField;
+    cds_CtReceberCR_ID_VENDA: TIntegerField;
+    cds_CtReceberCR_ID_CARGA: TIntegerField;
+    cds_CtReceberCR_ID_NOTA: TIntegerField;
+    cds_CtReceberCR_NR_NFISCAL: TIntegerField;
+    cds_CtReceberCR_ID_FORMA_PGTO: TIntegerField;
+    cds_CtReceberCR_ID_PLANO: TIntegerField;
+    cds_CtReceberCR_ID_VENDEDOR: TIntegerField;
+    cds_CtReceberCR_TP_EC_COB: TStringField;
+    cds_CtReceberCR_ID_EC_COB: TIntegerField;
+    cds_CtReceberCR_DT_EC_COB: TDateField;
+    cds_CtReceberCR_HIST_TITULO: TStringField;
+    cds_CtReceberCR_DP_IMP: TStringField;
+    cds_CtReceberCR_BL_IMP: TStringField;
+    cds_CtReceberCR_SIT: TStringField;
+    cds_CtReceberCR_COMPOSICAO_DIVIDA: TStringField;
+    cds_CtReceberCR_TIT_PROTESTADO: TStringField;
+    cds_CtReceberCR_TIT_EM_ABERTO: TStringField;
+    cds_CtReceberCR_VL_REC_BANCO: TFMTBCDField;
+    cds_CtReceberCR_ID_CONTA_CORRENTE: TIntegerField;
+    cds_CtReceberCR_NR_DOCTO_BANCARIO: TStringField;
+    cds_CtReceberCR_DT_PROTESTO: TDateField;
+    cds_CtReceberCR_DT_PROGRAMACAO: TDateField;
+    cds_CtReceberCR_ALTERADO_POR: TStringField;
+    cds_CtReceberCR_ID_TP_COBRANCA: TIntegerField;
+    cds_CtReceberCR_ID_TP_COBRANCA_OLD: TIntegerField;
+    cds_CtReceberCR_BANCO_ENCARREGADO_COBRANCA: TStringField;
+    cds_CtReceberCR_DT_CANCELAMENTO: TSQLTimeStampField;
+    cds_CtReceberCR_CANCELADO_POR: TStringField;
+    cds_CtReceberCR_NR_RESUMO_VENDA: TIntegerField;
+    cds_CtReceberCR_INSERT_DATE: TSQLTimeStampField;
+    cds_CtReceberCR_INSERT_USER: TStringField;
+    cds_CtReceberCR_UPDATE_DATE: TSQLTimeStampField;
+    cds_CtReceberCR_UPDATE_USER: TStringField;
+    cds_CtReceberCR_SEL: TStringField;
+    cds_CtReceberCR_VL_RESTO: TFMTBCDField;
+    dst_CarregarCidadeCID_ESTADO: TStringField;
+    dst_CarregarProdutoInterno: TSQLDataSet;
+    dst_CarregarProdutoInternoPRO_ID_PK: TIntegerField;
+    dst_CarregarProdutoInternoPRO_TIPO: TStringField;
+    dst_CarregarProdutoInternoPRO_EAN: TStringField;
+    dst_CarregarProdutoInternoPRO_NOME: TStringField;
+    dst_CarregarProdutoInternoPRO_UNIDADE: TStringField;
+    dst_CarregarProdutoInternoPRO_VL_COMPRA: TFMTBCDField;
+    dst_CarregarProdutoInternoPRO_VL_VENDA: TFMTBCDField;
+    dst_CarregarClienteInterno: TSQLDataSet;
+    dst_CarregarClienteInternoPES_ID: TIntegerField;
+    dst_CarregarClienteInternoPES_RSOCIAL: TStringField;
+    dst_CarregarClienteInternoPE_ENDERECO: TStringField;
+    dst_CarregarClienteInternoPE_NUMERO: TStringField;
+    dst_CarregarClienteInternoPE_COMPLEMENTO: TStringField;
+    dst_CarregarClienteInternoPE_BAIRRO: TStringField;
+    dst_CarregarClienteInternoPE_SEQ: TIntegerField;
+    dst_CarregarClienteInternoCLI_FIDELIDADE: TIntegerField;
+    dst_CarregarFornecedorInterno: TSQLDataSet;
+    dst_CarregarFornecedorInternoPES_ID: TIntegerField;
+    dst_CarregarFornecedorInternoPES_RSOCIAL: TStringField;
+    dst_CarregarClienteInternoPES_ID_INTERNO: TIntegerField;
+    dst_CarregarClientePES_ID_INTERNO: TIntegerField;
+    dst_CarregarFornecedorInternoPES_ID_INTERNO: TIntegerField;
+    dst_CarregarFornecedorPES_ID_INTERNO: TIntegerField;
+    dst_CarregarProdutoInternoPRO_ID_INTERNO: TIntegerField;
+    dst_CarregarProdutoPRO_ID_INTERNO: TIntegerField;
+    dst_CarregarClientePES_RSOCIAL: TStringField;
+    dst_Cliente: TSQLDataSet;
+    dst_ClientePES_ID: TIntegerField;
+    dst_ClientePES_RSOCIAL: TStringField;
+    dst_ClientePE_ENDERECO: TStringField;
+    dst_ClientePE_NUMERO: TStringField;
+    dst_ClientePE_COMPLEMENTO: TStringField;
+    dst_ClientePE_BAIRRO: TStringField;
+    dst_ClientePE_SEQ: TIntegerField;
+    dst_ClienteCLI_FIDELIDADE: TIntegerField;
+    dst_ClientePES_ID_INTERNO: TIntegerField;
+    Dsp_Cliente: TDataSetProvider;
+    cds_Cliente: TClientDataSet;
+    cds_ClientePES_ID: TIntegerField;
+    cds_ClientePES_RSOCIAL: TStringField;
+    cds_ClientePE_ENDERECO: TStringField;
+    cds_ClientePE_NUMERO: TStringField;
+    cds_ClientePE_COMPLEMENTO: TStringField;
+    cds_ClientePE_BAIRRO: TStringField;
+    cds_ClientePE_SEQ: TIntegerField;
+    cds_ClienteCLI_FIDELIDADE: TIntegerField;
+    cds_ClientePES_ID_INTERNO: TIntegerField;
+  private
+    { Private declarations }
+  public
+    procedure CarregarGrupoDeProdutos(AIdGrupo: Integer);
+    procedure CarregarSubGrupoDeProdutos(AIdSubGrupo: Integer);
+    procedure CarregarCidade(AIdCidade: Integer);
+    procedure CarregarCliente(AIdCliente: Integer);
+    procedure CarregarClienteInterno(AIdCliente: Integer);
+    procedure CarregarFornecedor(AIdFornecedor: Integer);
+    procedure CarregarFornecedorInterno(AIdFornecedor: Integer);
+    procedure CarregarProduto(AIdProduto: Integer; AEdit: TDBEdit);
+    procedure CarregarPlanoConta(AIdPlano: Integer);
+    procedure CarregarCondPagto(AIdCPA: Integer);
+    procedure CarregarFormaPagto(AIdPPA: Integer);
+    procedure CarregarEndereco(AIdPessoa, AIdSeq: Integer);
+    procedure CarregarCreditoCliente(AIdPessoa: Integer);
+    procedure CarregarFinanceiro(AIdVenda: Integer);
+    procedure CarregarProdutoInterno(AIdProdutoInterno: Integer);
+
+    function IsExisteProdutoInterno(AIdProdutoInterno: Integer): Boolean;
+    function IsExisteClienteInterno(AId: Integer): Boolean;
+    function IsExisteForncedorInterno(AId: Integer): Boolean;
+    function GetIdClienteInterno(AId: Integer): Integer;
+  end;
+
+var
+  dm_CarregarDados: Tdm_CarregarDados;
+
+implementation
+
+{$R *.dfm}
+
+{ Tdm_CarregarDados }
+
+procedure Tdm_CarregarDados.CarregarCidade(AIdCidade: Integer);
+begin
+  dst_CarregarCidade.Close();
+  dst_CarregarCidade.Params[0].AsInteger := AIdCidade;
+  dst_CarregarCidade.Open();
+
+  if dst_CarregarCidade.IsEmpty then
+    raise Exception.Create('Cadastro de cidade não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarCliente(AIdCliente: Integer);
+begin
+  dst_CarregarCliente.Close();
+  dst_CarregarCliente.Params[0].AsInteger := AIdCliente;
+  dst_CarregarCliente.Open();
+
+  if dst_CarregarCliente.IsEmpty then
+    raise Exception.Create('Cadastro de cliente não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarClienteInterno(AIdCliente: Integer);
+begin
+  dst_CarregarClienteInterno.Close();
+  dst_CarregarClienteInterno.Params[0].AsInteger := AIdCliente;
+  dst_CarregarClienteInterno.Open();
+
+  if dst_CarregarClienteInterno.IsEmpty then
+    raise Exception.Create('Cadastro de cliente não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarCondPagto(AIdCPA: Integer);
+begin
+  dst_CarregarCondPagamento.Close();
+  dst_CarregarCondPagamento.Params[0].AsInteger := AIdCPA;
+  dst_CarregarCondPagamento.Open();
+
+  if dst_CarregarCondPagamento.IsEmpty then
+    raise Exception.Create('Cadastro de condição de pagamento não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarCreditoCliente(AIdPessoa: Integer);
+begin
+  dst_CarregarCreditoCliente.Close;
+  dst_CarregarCreditoCliente.Params[0].AsInteger := AIdPessoa;
+  dst_CarregarCreditoCliente.Params[1].AsInteger := EmpresaCorrente.Id;
+  dst_CarregarCreditoCliente.Open;
+end;
+
+procedure Tdm_CarregarDados.CarregarEndereco(AIdPessoa, AIdSeq: Integer);
+begin
+  dst_CarregarEndereco.Close;
+  dst_CarregarEndereco.Params[0].AsInteger := AIdPessoa;
+  dst_CarregarEndereco.Params[1].AsInteger := AIdSeq;
+  dst_CarregarEndereco.Open;
+
+  if dst_CarregarEndereco.IsEmpty then
+    raise Exception.Create('Cadastro de endereço não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarFinanceiro(AIdVenda: Integer);
+begin
+  cds_CtReceber.Close;
+  dst_CtReceber.Params[0].AsInteger := EmpresaCorrente.Id;
+  dst_CtReceber.Params[1].AsInteger := AIdVenda;
+  cds_CtReceber.Open;
+
+end;
+
+procedure Tdm_CarregarDados.CarregarFormaPagto(AIdPPA: Integer);
+begin
+  dst_CarregarFormaPagto.Close();
+  dst_CarregarFormaPagto.Params[0].AsInteger := AIdPPA;
+  dst_CarregarFormaPagto.Open();
+
+  if dst_CarregarFormaPagto.IsEmpty then
+    raise Exception.Create('Cadastro de plano de pagamento não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarFornecedor(AIdFornecedor: Integer);
+begin
+  dst_CarregarFornecedor.Close();
+  dst_CarregarFornecedor.Params[0].AsInteger := AIdFornecedor;
+  dst_CarregarFornecedor.Open();
+
+  if dst_CarregarFornecedor.IsEmpty then
+    raise Exception.Create('Cadastro de fornecedor não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarFornecedorInterno(AIdFornecedor: Integer);
+begin
+  dst_CarregarFornecedorInterno.Close();
+  dst_CarregarFornecedorInterno.Params[0].AsInteger := AIdFornecedor;
+  dst_CarregarFornecedorInterno.Open();
+
+  if dst_CarregarFornecedorInterno.IsEmpty then
+    raise Exception.Create('Cadastro de fornecedor não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarGrupoDeProdutos(AIdGrupo: Integer);
+begin
+  dst_CarregarGrupoProduto.Close();
+  dst_CarregarGrupoProduto.Params[0].AsInteger := AIdGrupo;
+  dst_CarregarGrupoProduto.Open();
+
+  if dst_CarregarGrupoProduto.IsEmpty then
+    raise Exception.Create('Cadastro de grupo de produto não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarPlanoConta(AIdPlano: Integer);
+begin
+  dst_CarregarPlanoConta.Close();
+  dst_CarregarPlanoConta.Params[0].AsInteger := AIdPlano;
+  dst_CarregarPlanoConta.Open();
+
+  if dst_CarregarPlanoConta.IsEmpty then
+    raise Exception.Create('Cadastro de plano de conta não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarProduto(AIdProduto: Integer; AEdit: TDBEdit);
+begin
+  dst_CarregarProduto.Close();
+  dst_CarregarProduto.Params[0].AsInteger := AIdProduto;
+  dst_CarregarProduto.Open();
+
+  if dst_CarregarProduto.IsEmpty then
+  begin
+    AEdit.SetFocus;
+    raise Exception.Create('Cadastro de produto não encontrado.');
+  end;
+end;
+
+procedure Tdm_CarregarDados.CarregarProdutoInterno(AIdProdutoInterno: Integer);
+begin
+  dst_CarregarProdutoInterno.Close();
+  dst_CarregarProdutoInterno.Params[0].AsInteger := AIdProdutoInterno;
+  dst_CarregarProdutoInterno.Open();
+
+  if dst_CarregarProdutoInterno.IsEmpty then
+    raise Exception.Create('Cadastro de produto não encontrado.');
+end;
+
+procedure Tdm_CarregarDados.CarregarSubGrupoDeProdutos(AIdSubGrupo: Integer);
+begin
+  dst_CarregarSubGrupoProduto.Close();
+  dst_CarregarSubGrupoProduto.Params[0].AsInteger := AIdSubGrupo;
+  dst_CarregarSubGrupoProduto.Open();
+
+  if dst_CarregarSubGrupoProduto.IsEmpty then
+    raise Exception.Create('Cadastro de subgrupo de produto não encontrado.');
+end;
+
+function Tdm_CarregarDados.GetIdClienteInterno(AId: Integer): Integer;
+begin
+  try
+    CarregarCliente(AId);
+    Result := dm_CarregarDados.dst_CarregarClientePES_ID_INTERNO.AsInteger;
+  except
+    raise;
+  end;
+end;
+
+function Tdm_CarregarDados.IsExisteClienteInterno(AId: Integer): Boolean;
+begin
+  dst_CarregarClienteInterno.Close;
+  dst_CarregarClienteInterno.Params[0].AsInteger := AId;
+  dst_CarregarClienteInterno.Open;
+
+  Result := not dst_CarregarClienteInterno.IsEmpty;
+end;
+
+function Tdm_CarregarDados.IsExisteForncedorInterno(AId: Integer): Boolean;
+begin
+  dst_CarregarFornecedorInterno.Close;
+  dst_CarregarFornecedorInterno.Params[0].AsInteger := AId;
+  dst_CarregarFornecedorInterno.Open;
+
+  Result := not dst_CarregarFornecedorInterno.IsEmpty;
+end;
+
+function Tdm_CarregarDados.IsExisteProdutoInterno(
+  AIdProdutoInterno: Integer): Boolean;
+begin
+  dst_CarregarProdutoInterno.Close();
+  dst_CarregarProdutoInterno.Params[0].AsInteger := AIdProdutoInterno;
+  dst_CarregarProdutoInterno.Open();
+
+  Result := not dst_CarregarProdutoInterno.IsEmpty;
+end;
+
+end.

@@ -1,0 +1,107 @@
+unit Cad_Usuario;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ScreenTips, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls, dtm_Usuario,
+  BuilderLogDialogo, sEnumerados, Logger, Mask, DBCtrls, dtm_Pesquisar, Grids, DBGrids;
+
+type
+  TfrmCad_Usuario = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    gbUsuario: TGroupBox;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBText1: TDBText;
+    dbeNome: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    dbgUsuario: TDBGrid;
+    procedure actImprimirExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_Usuario: TfrmCad_Usuario;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmCad_Usuario.actImprimirExecute(Sender: TObject);
+begin
+  //inherited;
+
+end;
+
+procedure TfrmCad_Usuario.FormCreate(Sender: TObject);
+begin
+  dm_Usuario := Tdm_Usuario.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Nome');
+  FCamposNomeExibicao.Add('Login');
+
+end;
+
+procedure TfrmCad_Usuario.IniciarFields;
+begin
+  FNomeDoFormulario := 'Usuário';
+  FNomeTabela := 'USUARIO';
+  FComponenteFoco := dbeNome;
+  FDbgCadastro := dbgUsuario;
+
+  FSqlDefault :=
+    ' select ' +
+    '    USU_ID, ' +
+    '    USU_NOME, ' +
+    '    USU_LOGIN ' +
+    ' from USUARIO ' +
+    ' where ' +
+    '    USU_ID = -1 ';
+end;
+
+procedure TfrmCad_Usuario.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('usu_id').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    FId := Dts.DataSet.FieldByName('usu_id').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Usuario.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_Usuario.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+end.

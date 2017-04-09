@@ -1,0 +1,238 @@
+unit Imp_Rel_CtPagar;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, JvExStdCtrls, JvCombobox, Mask, JvExMask,
+  JvToolEdit, Buttons, sFuncoes, dtm_CarregarDados, dtm_Pagar, Pesquisar,
+  Empresa_Corrente, BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TfrmImp_CtPagar = class(TForm)
+    lblDtInicial: TLabel;
+    lblDtFim: TLabel;
+    lblTipoVenda: TLabel;
+    btnConfirmar: TBitBtn;
+    edtDtInicio: TJvDateEdit;
+    edtDtFim: TJvDateEdit;
+    cbSituacao: TJvComboBox;
+    Label1: TLabel;
+    cbTipoRelacao: TJvComboBox;
+    Label2: TLabel;
+    edtIdForncedor: TEdit;
+    dbtNmFornecedor: TDBText;
+    procedure edtIdForncedorExit(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure edtIdForncedorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnConfirmarClick(Sender: TObject);
+  private
+    procedure CarregarNomeFornecedor;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmImp_CtPagar: TfrmImp_CtPagar;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmImp_CtPagar.btnConfirmarClick(Sender: TObject);
+var
+  VSql: String;
+begin
+  VSql :=
+    ' select ' +
+    '    ct_pagar.cp_id_fornecedor, ' +
+    '    ct_pagar.cp_id_fornecedor_interno, ' +
+    '    pessoa.pes_rsocial, ' +
+    '    ct_pagar.cp_dt_emissao, ' +
+    '    ct_pagar.cp_dt_vcto, ' +
+    '    ct_pagar.cp_dt_baixa, ' +
+    '    ct_pagar.cp_vl_titulo ' +
+    ' from ct_pagar ' +
+    '    left outer join pessoa on (ct_pagar.cp_id_fornecedor = pessoa.pes_id) ' +
+    ' where ' +
+    '    (ct_pagar.cp_id_empresa = ' + IntToStr(EmpresaCorrente.Id) + ' ) ' ;
+
+    case Self.cbSituacao.ItemIndex of
+      0: VSql := VSql +  ' and (ct_pagar.cp_situacao in (''N'', ''S'')) ' ;
+      1: VSql := VSql +  ' and (ct_pagar.cp_situacao in (''S'')) ' ;
+      2: VSql := VSql +  ' and (ct_pagar.cp_situacao in (''N'')) ' ;
+    end;
+
+    case Self.cbTipoRelacao.ItemIndex of
+      0:
+      begin
+        VSql := VSql +  ' and (ct_pagar.cp_dt_emissao between :dtinicial and :dtfin) ' ;
+        dm_Pagar.TextoTitulo := 'Relação das contas a pagar com emissão no ' +
+          Self.edtDtInicio.Text + ' a ' + Self.edtDtFim.Text;
+      end;
+      1:
+      begin
+        VSql := VSql +  ' and (ct_pagar.cp_dt_vcto between :dtinicial and :dtfin) ' ;
+        dm_Pagar.TextoTitulo := 'Relação das contas a pagar com vencimento no ' +
+          Self.edtDtInicio.Text + ' a ' + Self.edtDtFim.Text;
+      end;
+      2:
+      begin
+        VSql := VSql +  ' and (ct_pagar.cp_dt_baixa between :dtinicial and :dtfin) ' ;
+        dm_Pagar.TextoTitulo := 'Relação das contas a pagar com pagamento no ' +
+          Self.edtDtInicio.Text + ' a ' + Self.edtDtFim.Text;
+      end;
+    end;
+
+    if Length(Trim(Self.edtIdForncedor.Text)) > 0 then
+      VSql := VSql +  ' and (ct_pagar.cp_id_fornecedor = ' + Self.edtIdForncedor.Text + ')';
+
+//    if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+//    begin
+//      dm_CarregarDados.CarregarFornecedorInterno(StrToInt(Trim(edtIdForncedor.Text)));
+//
+//      if Length(Trim(Self.edtIdForncedor.Text)) > 0 then
+//      begin
+//        VSql := VSql + ' and (ct_pagar.cp_id_fornecedor = '
+//          + dm_CarregarDados.dst_CarregarFornecedorInternoPES_ID.AsString + ') ';
+//      end;
+//    end
+//    else
+//    begin
+//      if Length(Trim(Self.edtIdForncedor.Text)) > 0 then
+//        VSql := VSql +  ' and (ct_pagar.cp_id_fornecedor = ' + Self.edtIdForncedor.Text + ')';
+//    end;
+
+    try
+      //Self.CarregarNomeFornecedor();
+
+      if (Trim(Self.edtIdForncedor.Text) = EmptyStr) and (Self.cbSituacao.ItemIndex <> 0) then
+      begin
+        Self.edtIdForncedor.SetFocus;
+        raise Exception.Create('O id. do fornecedor é de preenchimento obrigatório.');
+      end;
+
+      dm_Pagar.dst_RelatorioPagar.Close;
+      dm_Pagar.dst_RelatorioPagar.CommandText := VSql;
+      dm_Pagar.dst_RelatorioPagar.Params[0].AsDateTime := StrToDateTime(Self.edtDtInicio.Text );
+      dm_Pagar.dst_RelatorioPagar.Params[1].AsDateTime := StrToDateTime(Self.edtDtFim.Text);
+      dm_Pagar.dst_RelatorioPagar.Open;
+
+     dm_Pagar.frxRelatorioPagar.ShowReport();
+    except
+      on E: Exception do
+      begin
+        TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+        Exit;
+      end;
+    end;
+end;
+
+procedure TfrmImp_CtPagar.CarregarNomeFornecedor;
+begin
+  try
+    if Length(Trim(edtIdForncedor.Text)) > 0 then
+    begin
+      if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+      begin
+        dm_CarregarDados.CarregarFornecedorInterno(StrToInt(edtIdForncedor.Text));
+        dbtNmFornecedor.Caption := dm_CarregarDados.dst_CarregarFornecedorInternoPES_RSOCIAL.AsString;
+      end
+      else
+      begin
+        dm_CarregarDados.CarregarFornecedor(StrToInt(edtIdForncedor.Text));
+        dbtNmFornecedor.Caption := dm_CarregarDados.dst_CarregarFornecedorPES_RSOCIAL.AsString;
+      end;
+    end;
+  finally
+    dm_CarregarDados.dst_CarregarFornecedor.Close();
+  end;
+end;
+
+procedure TfrmImp_CtPagar.edtIdForncedorExit(Sender: TObject);
+begin
+  if Length(Trim(edtIdForncedor.Text)) > 0 then
+  begin
+    try
+      Self.CarregarNomeFornecedor();
+    except
+      on E: Exception do
+        TFuncoes.SetFocusCampoObrigatorio('CLIENTE', E.Message, edtIdForncedor);
+    end;
+  end
+  else
+    dbtNmFornecedor.Caption := EmptyStr;
+end;
+
+procedure TfrmImp_CtPagar.edtIdForncedorKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    pessoa.pes_id_interno, ' +
+        '    pessoa.pes_rsocial, ' +
+        '    pessoa.pes_cnpj_cpf, ' +
+        '    pessoa.pes_id ' +
+        ' from pessoa ' +
+        '    inner join fornecedor on (pessoa.pes_id = fornecedor.for_id_pessoa) ' +
+        ' where ' +
+        '    pessoa.pes_tp_cadastro = ''F'' and ' +
+        '    pessoa.pes_id = -1';
+
+      frmPesquisar.CamposNomeExibicao.Add('Id. Interno');
+      frmPesquisar.CamposNomeExibicao.Add('Nome');
+      frmPesquisar.CamposNomeExibicao.Add('CPF/CNPJ');
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+
+      frmPesquisar.ShowModal();
+
+
+      Self.edtIdForncedor.Text := IntToStr(frmPesquisar.Id);
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmImp_CtPagar.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  dm_CarregarDados.Free;
+  dm_Pagar.Free;
+end;
+
+procedure TfrmImp_CtPagar.FormCreate(Sender: TObject);
+begin
+  dm_Pagar         := Tdm_Pagar.Create(nil);
+  dm_CarregarDados := Tdm_CarregarDados.Create(nil);
+end;
+
+procedure TfrmImp_CtPagar.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmImp_CtPagar.FormShow(Sender: TObject);
+begin
+  Self.edtDtInicio.Date := TFuncoes.PrimeiroDiaMes(Date);
+  Self.edtDtFim.Date    := Date;
+
+  Self.cbSituacao.ItemIndex    := 2;
+  Self.cbTipoRelacao.ItemIndex := 1;
+end;
+
+initialization
+  RegisterClass(TfrmImp_CtPagar);
+
+end.

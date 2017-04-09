@@ -1,0 +1,409 @@
+unit BaixarRecebimento;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, Grids, DBGrids, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls,
+  ScreenTips, sFuncoes, dtm_Receber, dtm_Pesquisar, BuilderLogDialogo, sEnumerados, Logger, Generics.Collections,
+  Conexao, sException, TratamentoErro, DBClient, Mask, DBCtrls;
+
+type
+  TfrmBaixarRecebimento = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgBaixarReceber: TDBGrid;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    btnEstorno: TBitBtn;
+    ImagesLegenda: TImageList;
+    pnlRecebido: TPanel;
+    Label1: TLabel;
+    BitBtn3: TBitBtn;
+    editVlrRecebido: TEdit;
+    procedure dbgBaixarRecebimentoDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure actNovoExecute(Sender: TObject);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure actDeletarExecute(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure btnEstornoClick(Sender: TObject);
+    procedure dbgBaixarReceberDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure dbgBaixarReceberDblClick(Sender: TObject);
+    procedure dbgBaixarReceberKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure editVlrRecebidoExit(Sender: TObject);
+  private
+
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+    procedure Localizar; override;
+  end;
+
+var
+  frmBaixarRecebimento: TfrmBaixarRecebimento;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmBaixarRecebimento.actAlterarExecute(Sender: TObject);
+begin
+//  inherited;
+
+end;
+
+procedure TfrmBaixarRecebimento.actDeletarExecute(Sender: TObject);
+begin
+//  inherited;
+
+end;
+
+procedure TfrmBaixarRecebimento.actImprimirExecute(Sender: TObject);
+begin
+  inherited;
+
+  dm_Recebimento.frxReport.LoadFromFile('C:\Silver\Report\RelatorioReciboPagto.fr3');
+  dm_Recebimento.frxReport.ShowReport();
+end;
+
+procedure TfrmBaixarRecebimento.actNovoExecute(Sender: TObject);
+begin
+  //inherited;
+
+end;
+
+procedure TfrmBaixarRecebimento.BitBtn1Click(Sender: TObject);
+begin
+  try
+    if not DtsLocalizar.DataSet.IsEmpty then
+    begin
+      while not DtsLocalizar.DataSet.Eof do
+      begin
+        try
+          Dts.DataSet.Close;
+          TClientDataSet(Dts.DataSet).Params[0].AsInteger :=
+            DtsLocalizar.DataSet.Fields[0].AsInteger;
+          Dts.DataSet.Open;
+
+          dm_Recebimento.cds_receber.Edit();
+          if DtsLocalizar.DataSet.FieldByName('CR_SEL').AsString = 'S' then
+          begin
+            if DtsLocalizar.DataSet.FieldByName('cr_vl_recebido').AsCurrency >
+                dm_Recebimento.cds_receberCR_VL_TITULO.AsCurrency then
+              begin
+                raise Exception.Create('O valor recebido é maior que o valor do titulo. Verifique.');
+              end;
+
+            if DtsLocalizar.DataSet.FieldByName('cr_vl_recebido').AsCurrency =
+              dm_Recebimento.cds_receberCR_VL_TITULO.AsCurrency then
+            begin
+              try
+                ConexaoDBX.InicializaTransacaoBD();
+
+                dm_Recebimento.cds_receberCR_SITUACAO.AsString := 'BX';
+                dm_Recebimento.cds_receberCR_DT_BAIXA.AsDateTime := Date;
+                dm_Recebimento.cds_receberCR_VL_RECEBIDO.AsCurrency :=
+                  DtsLocalizar.DataSet.FieldByName('cr_vl_recebido').AsCurrency;
+                dm_Recebimento.cds_receber.Post();
+
+                if dm_Recebimento.cds_receber.ApplyUpdates(0) > 0 then
+                  raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+                ConexaoDBX.CommitTransacaoBD();
+              except
+                on E: Exception do
+                begin
+                  ConexaoDBX.RollbackTransacaoBD();
+                  TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+                end;
+              end;
+            end
+            else
+            begin
+              try
+                if DtsLocalizar.DataSet.FieldByName('cr_vl_recebido').AsCurrency <
+                  dm_Recebimento.cds_receberCR_VL_TITULO.AsCurrency then
+                begin
+                  ConexaoDBX.InicializaTransacaoBD();
+
+                  dm_Recebimento.cds_receberCR_SITUACAO.AsString := 'PB';
+                  dm_Recebimento.cds_receberCR_DT_BAIXA.AsDateTime := 0;
+                  dm_Recebimento.cds_receberCR_DT_LIQUIDACAO.AsDateTime := Date;
+                  dm_Recebimento.cds_receberCR_VL_RECEBIDO.AsCurrency :=
+                    DtsLocalizar.DataSet.FieldByName('cr_vl_recebido').AsCurrency;
+                  dm_Recebimento.cds_receber.Post();
+
+                  if dm_Recebimento.cds_receber.ApplyUpdates(0) > 0 then
+                    raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+                  ConexaoDBX.CommitTransacaoBD();
+                end;
+              except
+                on E: Exception do
+                begin
+                  ConexaoDBX.RollbackTransacaoBD();
+                  TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+                end;
+              end;
+            end;
+          end;
+        finally
+          DtsLocalizar.DataSet.Close;
+        end;
+      end;
+    end;
+
+    //Close();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmBaixarRecebimento.BitBtn2Click(Sender: TObject);
+begin
+  try
+    Close;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmBaixarRecebimento.BitBtn3Click(Sender: TObject);
+begin
+  inherited;
+  pnlRecebido.Visible := False;
+end;
+
+procedure TfrmBaixarRecebimento.btnEstornoClick(Sender: TObject);
+begin
+  try
+    Dts.DataSet.Close;
+    TClientDataSet(Dts.DataSet).Params[0].AsInteger :=
+    DtsLocalizar.DataSet.Fields[0].AsInteger;
+    Dts.DataSet.Open;
+
+    dm_Recebimento.cds_receber.Edit();
+    if DtsLocalizar.DataSet.FieldByName('CR_SEL').AsString = 'S' then
+    try
+      ConexaoDBX.InicializaTransacaoBD();
+
+      dm_Recebimento.cds_receberCR_SITUACAO.AsString := 'AB';
+      dm_Recebimento.cds_receberCR_DT_BAIXA.AsDateTime := 0;
+      dm_Recebimento.cds_receberCR_VL_RECEBIDO.AsVariant := Null;
+      dm_Recebimento.cds_receber.Post();
+
+      if dm_Recebimento.cds_receber.ApplyUpdates(0) > 0 then
+        raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+      ConexaoDBX.CommitTransacaoBD();
+    except
+      on E: Exception do
+      begin
+        ConexaoDBX.RollbackTransacaoBD();
+        TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      end;
+    end;
+  finally
+    dm_Recebimento.cds_receber.Close();
+    DtsLocalizar.DataSet.Close();
+  end;
+end;
+
+procedure TfrmBaixarRecebimento.dbgBaixarReceberDblClick(Sender: TObject);
+begin
+  inherited;
+  DtsLocalizar.DataSet.Edit();
+
+  if DtsLocalizar.DataSet.FieldByName('CR_SEL').AsString = 'S' then
+    DtsLocalizar.DataSet.FieldByName('CR_SEL').AsVariant := Null
+  else
+    DtsLocalizar.DataSet.FieldByName('CR_SEL').AsString := 'S';
+end;
+
+procedure TfrmBaixarRecebimento.dbgBaixarReceberDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+  Column: TColumn; State: TGridDrawState);
+var
+  VCheck: Integer;
+  VRect : TRect;
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+
+  if Column.FieldName = 'CR_SEL' then
+  begin
+    dbgBaixarReceber.Canvas.FillRect(Rect);
+    VCheck := 0;
+
+    if DtsLocalizar.DataSet.FieldByName('cr_sel').AsString = 'S' then
+      VCheck := DFCS_CHECKED
+    else
+      VCheck := 0;
+
+    VRect := Rect;
+    InflateRect(VRect, -2, -2);
+    DrawFrameControl(dbgBaixarReceber.Canvas.Handle, VRect, DFC_BUTTON, DFCS_BUTTONCHECK or VCheck);
+  end;
+
+  if Column.Field = DtsLocalizar.DataSet.FieldByName('cr_situacao') then
+  begin
+     dbgBaixarReceber.Canvas.FillRect(Rect);
+     if DtsLocalizar.DataSet.FieldByName('cr_situacao').AsString = 'AB' then
+       ImagesLegenda.Draw(dbgBaixarReceber.Canvas, Rect.Left + 3, Rect.Top + 2, 3)
+     else
+     if DtsLocalizar.DataSet.FieldByName('cr_situacao').AsString = 'BX' then
+       ImagesLegenda.Draw(dbgBaixarReceber.Canvas, Rect.Left + 3, Rect.Top + 2, 0)
+     else
+     if DtsLocalizar.DataSet.FieldByName('cr_situacao').AsString = 'PB' then
+       ImagesLegenda.Draw(dbgBaixarReceber.Canvas, Rect.Left + 3, Rect.Top + 2, 1)
+     else
+     if DtsLocalizar.DataSet.FieldByName('cr_situacao').AsString = 'PC' then
+       ImagesLegenda.Draw(dbgBaixarReceber.Canvas, Rect.Left + 3, Rect.Top + 2, 2)
+     else
+     if DtsLocalizar.DataSet.FieldByName('cr_situacao').AsString = 'CN' then
+       ImagesLegenda.Draw(dbgBaixarReceber.Canvas, Rect.Left + 3, Rect.Top + 2, 4);
+
+   {  else if dm_cm1.SP_NFe_CBSNC_STATUS.Value = 'FAT' then
+        ImageList1.Draw(DBGrid1.Canvas,rect.left +3,rect.top+2,10)
+     else if dm_cm1.SP_NFe_CBSNC_STATUS.Value = 'CAN' then
+        ImageList1.Draw(DBGrid1.Canvas,rect.left +3,rect.top+2,9)
+     else if dm_cm1.SP_NFe_CBSNC_STATUS.Value = 'BLO' then
+        ImageList1.Draw(DBGrid1.Canvas,rect.left +3,rect.top+2,12)}
+  end;
+end;
+
+procedure TfrmBaixarRecebimento.dbgBaixarReceberKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if Key = VK_SPACE then
+  begin
+    DtsLocalizar.DataSet.Edit();
+
+    if DtsLocalizar.DataSet.FieldByName('cr_sel').AsString = 'S' then
+      DtsLocalizar.DataSet.FieldByName('cr_sel').AsVariant := Null
+    else
+      DtsLocalizar.DataSet.FieldByName('cr_sel').AsString := 'S';
+    end;
+
+  if Key = VK_F4 then
+  begin
+    pnlRecebido.Visible := True;
+    editVlrRecebido.SetFocus();
+  end;
+end;
+
+procedure TfrmBaixarRecebimento.dbgBaixarRecebimentoDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+  Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmBaixarRecebimento.editVlrRecebidoExit(Sender: TObject);
+begin
+  inherited;
+  editVlrRecebido.Text := StringReplace(editVlrRecebido.Text, '.', ',', [rfReplaceAll]);
+
+  DtsLocalizar.DataSet.Edit();
+  if Length(Trim(editVlrRecebido.Text)) > 0 then
+    DtsLocalizar.DataSet.FieldByName('cr_vl_recebido').AsCurrency := StrToCurr(editVlrRecebido.Text);
+end;
+
+procedure TfrmBaixarRecebimento.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_Recebimento);
+end;
+
+procedure TfrmBaixarRecebimento.FormCreate(Sender: TObject);
+begin
+  dm_Recebimento := Tdm_Recebimento.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Documento');
+  FCamposNomeExibicao.Add('Nome do cliente');
+  FCamposNomeExibicao.Add('Plano de Conta');
+  FCamposNomeExibicao.Add('Status');
+end;
+
+procedure TfrmBaixarRecebimento.IniciarFields;
+begin
+  FNomeDoFormulario := 'recebimento';
+  FNomeTabela := 'CT_RECEBER';
+  //FComponenteFoco := dbeDocumento;
+  FDbgCadastro := dbgBaixarReceber;
+
+  FSqlDefault :=
+    ' select ' +
+    '   ct_receber.cr_id, ' +
+    '   ct_receber.cr_docto, ' +
+    '   pessoa.pes_rsocial, ' +
+    '   plano_conta.pc_descricao, ' +
+    '   ct_receber.cr_situacao, ' +
+    '   ct_receber.cr_vl_recebido, ' +
+    '   ct_receber.cr_vl_titulo, ' +
+    '   ct_receber.cr_sel ' +
+    ' from ct_receber ' +
+    '    left outer join pessoa on (ct_receber.cr_id_cliente = pessoa.pes_id) ' +
+    '    left outer join plano_conta on (ct_receber.cr_id_plano = plano_conta.pc_codconta) ' +
+    ' where ' +
+    '    ct_receber.cr_id = -1';
+end;
+
+procedure TfrmBaixarRecebimento.Localizar;
+var
+  VMontarSql: String;
+  VCampo: String;
+begin
+  VMontarSql := EmptyStr;
+
+  VCampo := FMapCampo.Items[cbxField.ItemIndex];
+
+  try
+    VMontarSql := ' where upper(' + VCampo + ')' + ' like ' + ' upper( ' +
+      QuotedStr(edtValor.Text + '%') + ') order by ' + VCampo;
+
+    dm_Pesquisar.cds_Pesquisar.Data :=
+      Self.FPersistencia.ExecutarConsulta(TFuncoes.MontarSqlComponente(Self.FSqlDefault) + VMontarSql);
+
+    FDbgCadastro.SetFocus();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmBaixarRecebimento.PreenchimentoCamposDefaultNaInclusao;
+begin
+  //
+end;
+
+procedure TfrmBaixarRecebimento.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  //
+end;
+
+procedure TfrmBaixarRecebimento.ValidarCamposObrigatorios;
+begin
+  //
+end;
+
+end.

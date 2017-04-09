@@ -1,0 +1,138 @@
+unit Empresa_Corrente;
+
+interface
+
+uses
+   SysUtils, Conexao, SqlExpr, BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TEmpresaCorrente = Class
+  private
+    FId             : Integer;
+    FRSocial        : String;
+    FFantasia       : String;
+    FNomeFicticio   : String;
+    FEndereco       : String;
+    FComplemento    : String;
+    FNumero         : String;
+    FBairro         : String;
+    FIdCidade       : Integer;
+    FEstado         : String;
+    FCEP            : String;
+    FIdTelefone     : String;
+    FEmail          : String;
+    FPIS            : Currency;
+    FCOFINS         : Currency;
+    FVlrFrete       : Currency;
+    FTelefone       : String;
+    FMsg            : String;
+    FVlrVendaEntrega: Currency;
+    FVlrvendaLocal  : Currency;
+  public
+    procedure CarregarEmpresaCorrente;
+
+    property Id             : Integer  read FId              write FId;
+    property RSocial        : String   read FRSocial         write FRSocial;
+    property Fantasia       : String   read FFantasia        write FFantasia;
+    property NomeFicticio   : String   read FNomeFicticio    write FNomeFicticio;
+    property Endereco       : String   read FEndereco        write FEndereco;
+    property Complemento    : String   read FComplemento     write FComplemento;
+    property Numero         : String   read FNumero          write FNumero;
+    property Bairro         : String   read FBairro          write FBairro;
+    property IdCidade       : Integer  read FIdCidade        write FIdCidade;
+    property Estado         : String   read FEstado          write FEstado;
+    property CEP            : String   read FCEP             write FCEP;
+    property IdTelefone     : String   read FIdTelefone      write FIdTelefone;
+    property Email          : String   read FEmail           write FEmail;
+    property PIS            : Currency read FPIS             write FPIS;
+    property COFINS         : Currency read FCOFINS          write FCOFINS;
+    property VlrFrete       : Currency read FVlrFrete        write FVlrFrete;
+    property Telefone       : String   read FTelefone        write FTelefone;
+    property Msg            : String   read FMsg             write FMsg;
+    property VlrVendaEntrega: Currency read FVlrVendaEntrega write FVlrVendaEntrega;
+    property VlrVendaLocal  : Currency read FVlrvendaLocal   write FVlrvendaLocal;
+  end;
+
+var
+  EmpresaCorrente: TEmpresaCorrente;
+
+implementation
+
+{ TEmpresaCorrente }
+
+procedure TEmpresaCorrente.CarregarEmpresaCorrente;
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VQry := ConexaoDBX.BuildQry();
+  try
+    try
+      VSql :=
+        ' select ' +
+        '    emp_id_pk, ' +
+        '    emp_rsocial, ' +
+        '    emp_fantasia, ' +
+        '    emp_nome_ficticio, ' +
+        '    emp_endereco, ' +
+        '    emp_complemento, ' +
+        '    emp_numero, ' +
+        '    emp_bairro, ' +
+        '    emp_id_cidade_fk, ' +
+        '    emp_estado, ' +
+        '    emp_cep, ' +
+        '    emp_telefone, ' +
+        '    emp_email, ' +
+        '    emp_pis, ' +
+        '    emp_cofins, ' +
+        '    emp_vlr_frete, ' +
+        '    emp_telefone, ' +
+        '    emp_msg, ' +
+        '    emp_vlr_venda_entrega, ' +
+        '    emp_vlr_venda_estabelecimento ' +
+        ' from empresa ' +
+        ' where ' +
+        '    (emp_id_pk = %d)' ;
+
+      VSql := Format(VSql, [Self.FId]);
+
+      VQry.Close;
+      VQry.CommandText := VSql;
+      VQry.Open;
+      try
+        if VQry.IsEmpty then
+          raise Exception.Create('Empresa não encotrada.');
+
+        Self.FId              := VQry.Fields[0].AsInteger;
+        Self.FRSocial         := VQry.Fields[1].AsString;
+        Self.FFantasia        := VQry.Fields[2].AsString;
+        Self.FNomeFicticio    := VQry.Fields[3].AsString;
+        Self.FEndereco        := VQry.Fields[4].AsString;
+        Self.FComplemento     := VQry.Fields[5].AsString;
+        Self.FNumero          := VQry.Fields[6].AsString;
+        Self.FBairro          := VQry.Fields[7].AsString;
+        Self.FIdCidade        := VQry.Fields[8].AsInteger;
+        Self.FEstado          := VQry.Fields[9].AsString;
+        Self.FCEP             := VQry.Fields[10].AsString;
+        Self.FIdTelefone      := VQry.Fields[11].AsString;
+        Self.FEmail           := VQry.Fields[12].AsString;
+        Self.FPIS             := VQry.Fields[13].AsCurrency;
+        Self.FCOFINS          := VQry.Fields[14].AsCurrency;
+        Self.FVlrFrete        := VQry.Fields[15].AsCurrency;
+        Self.FTelefone        := VQry.Fields[15].AsString;
+        Self.FMsg             := VQry.Fields[15].AsString;
+        Self.FVlrVendaEntrega := VQry.Fields[16].AsCurrency;
+        Self.FVlrvendaLocal   := VQry.Fields[17].AsCurrency;
+      finally
+        VQry.Close;
+      end;
+
+    except on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+end.

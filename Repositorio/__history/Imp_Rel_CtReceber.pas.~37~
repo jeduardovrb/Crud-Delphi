@@ -1,0 +1,233 @@
+unit Imp_Rel_CtReceber;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, JvExStdCtrls, JvCombobox, Mask, JvExMask, JvToolEdit,
+  Buttons, dtm_Receber, sFuncoes, Empresa_Corrente, BuilderLogDialogo,
+  sEnumerados, Logger, DBCtrls, dtm_CarregarDados, Pesquisar;
+
+type
+  TfrmImp_CtReceber = class(TForm)
+    lblDtInicial: TLabel;
+    lblDtFim: TLabel;
+    lblTipoVenda: TLabel;
+    btnConfirmar: TBitBtn;
+    edtDtInicio: TJvDateEdit;
+    edtDtFim: TJvDateEdit;
+    cbSituacao: TJvComboBox;
+    Label1: TLabel;
+    cbTipoRelacao: TJvComboBox;
+    Label2: TLabel;
+    edtIdCliente: TEdit;
+    dbtNmCliente: TDBText;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure edtIdClienteExit(Sender: TObject);
+    procedure edtIdClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    procedure CarregarNomeCliente;
+
+    function GetSituacao: String;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmImp_CtReceber: TfrmImp_CtReceber;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmImp_CtReceber.btnConfirmarClick(Sender: TObject);
+var
+  VSql: String;
+begin
+  if (Trim(Self.edtIdCliente.Text)) = EmptyStr then
+  begin
+    Self.edtIdCliente.SetFocus;
+    raise Exception.Create('O Id. do Cliente é de preenchimento obrigatório.');
+  end;
+
+  VSql :=
+    ' select ' +
+    '    ct_receber.cr_id_cliente, ' +
+    '    pessoa.pes_rsocial, ' +
+    '    ct_receber.cr_dt_emissao, ' +
+    '    ct_receber.cr_dt_vcto, ' +
+    '    ct_receber.cr_dt_baixa, ' +
+    '    ct_receber.cr_vl_titulo ' +
+    ' from ct_receber ' +
+    '    left outer join pessoa on (ct_receber.cr_id_cliente = pessoa.pes_id) ' +
+    ' where ' +
+    '    (ct_receber.cr_id_empresa = ' + IntToStr(EmpresaCorrente.Id) + ' ) ' ;
+
+    case Self.cbSituacao.ItemIndex of
+      0: VSql := VSql +  ' and (ct_receber.cr_situacao in (''N'', ''S'')) ' ;
+      1: VSql := VSql +  ' and (ct_receber.cr_situacao in (''S'')) ' ;
+      2: VSql := VSql +  ' and (ct_receber.cr_situacao in (''N'')) ' ;
+    end;
+
+    case Self.cbTipoRelacao.ItemIndex of
+      0:
+      begin
+        VSql := VSql +  ' and (ct_receber.cr_dt_emissao between :dtinicial and :dtfin) ' ;
+        dm_Recebimento.TextoTitulo := 'Relação das contas a receber com emissão no ' +
+          Self.edtDtInicio.Text + ' a ' + Self.edtDtFim.Text;
+      end;
+      1:
+      begin
+        VSql := VSql +  ' and (ct_receber.cr_dt_vcto between :dtinicial and :dtfin) ' ;
+        dm_Recebimento.TextoTitulo := 'Relação das contas a receber com vencimento no ' +
+          Self.edtDtInicio.Text + ' a ' + Self.edtDtFim.Text;
+      end;
+      2:
+      begin
+        VSql := VSql +  ' and (ct_receber.cr_dt_baixa between :dtinicial and :dtfin) ' ;
+        dm_Recebimento.TextoTitulo := 'Relação das contas a receber com pagamento no ' +
+          Self.edtDtInicio.Text + ' a ' + Self.edtDtFim.Text;
+      end;
+    end;
+
+    if Length(Trim(Self.edtIdCliente.Text)) > 0 then
+      VSql := VSql +  ' and (ct_receber.cr_id_cliente = ' + Self.edtIdCliente.Text + ')';
+
+
+    try
+      dm_Recebimento.dst_RelatorioReceber.Close;
+      dm_Recebimento.dst_RelatorioReceber.CommandText := VSql;
+      dm_Recebimento.dst_RelatorioReceber.Params[0].AsDateTime := StrToDateTime(Self.edtDtInicio.Text );
+      dm_Recebimento.dst_RelatorioReceber.Params[1].AsDateTime := StrToDateTime(Self.edtDtFim.Text);
+      dm_Recebimento.dst_RelatorioReceber.Open;
+
+     dm_Recebimento.frxRelatorioReceber.ShowReport();
+    except
+      on E: Exception do
+      begin
+        TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+        Exit;
+      end;
+    end;
+end;
+
+procedure TfrmImp_CtReceber.CarregarNomeCliente;
+begin
+  try
+    if Length(Trim(edtIdCliente.Text)) > 0 then
+    begin
+      dm_CarregarDados.CarregarCliente(StrToInt(edtIdCliente.Text));
+      dbtNmCliente.Caption := dm_CarregarDados.dst_CarregarClientePES_RSOCIAL.AsString;
+    end;
+  finally
+    dm_CarregarDados.dst_CarregarCliente.Close();
+  end;
+end;
+
+procedure TfrmImp_CtReceber.edtIdClienteExit(Sender: TObject);
+begin
+  if Length(Trim(edtIdCliente.Text)) > 0 then
+  begin
+    try
+      Self.CarregarNomeCliente();
+    except
+      on E: Exception do
+        TFuncoes.SetFocusCampoObrigatorio('CLIENTE', E.Message, edtIdCliente);
+    end;
+  end
+  else
+    dbtNmCliente.Caption := EmptyStr;
+end;
+
+procedure TfrmImp_CtReceber.edtIdClienteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    pessoa.pes_id, ' +
+        '    pessoa.pes_rsocial, ' +
+        '    pessoa.pes_cnpj_cpf ' +
+        ' from pessoa ' +
+        '    inner join cliente on (pessoa.pes_id = cliente.cli_id_pessoa) ' +
+        ' where ' +
+        '    pessoa.pes_tp_cadastro = ''C'' and ' +
+        '    pessoa.pes_id = -1';
+
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+      frmPesquisar.CamposNomeExibicao.Add('Nome');
+      frmPesquisar.CamposNomeExibicao.Add('CPF/CNPJ');
+
+      frmPesquisar.ShowModal();
+
+
+      Self.edtIdCliente.Text := IntToStr(frmPesquisar.Id);
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmImp_CtReceber.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  dm_CarregarDados.Free;
+  dm_Recebimento.Free;
+end;
+
+procedure TfrmImp_CtReceber.FormCreate(Sender: TObject);
+begin
+  dm_Recebimento   := Tdm_Recebimento.Create(nil);
+  dm_CarregarDados := Tdm_CarregarDados.Create(nil);
+end;
+
+procedure TfrmImp_CtReceber.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmImp_CtReceber.FormShow(Sender: TObject);
+begin
+  Self.edtDtInicio.Date := TFuncoes.PrimeiroDiaMes(Date);
+  Self.edtDtFim.Date    := Date;
+
+
+  Self.cbSituacao.ItemIndex    := 2;
+  Self.cbTipoRelacao.ItemIndex := 1;
+end;
+
+function TfrmImp_CtReceber.GetSituacao: String;
+begin
+  case cbSituacao.ItemIndex of
+    0:
+    begin
+      Result := 'S, N';
+    end;
+
+    1:
+    begin
+      Result := 'S';
+    end;
+    2:
+    begin
+      Result := 'N';
+    end;
+  end;
+end;
+
+initialization
+  RegisterClass(TfrmImp_CtReceber);
+
+end.

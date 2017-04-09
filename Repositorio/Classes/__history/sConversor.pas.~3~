@@ -1,0 +1,19 @@
+unit sConversor;
+
+interface
+
+type
+  TConversor = Class
+    class function SomenteNumeroStr(Text: String): String;
+  end;
+
+implementation
+
+{ TFuncoes_v3 }
+
+class function TConversor.SomenteNumeroStr(Text: String): String;
+begin
+
+end;
+
+end.

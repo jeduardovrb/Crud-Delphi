@@ -1,0 +1,16 @@
+unit sException;
+
+interface
+
+uses
+  SysUtils;
+
+type
+  ECampoObrigatorioError = class(Exception);
+  ERegraNegocioError = class(Exception);
+  EOnReconcileError      = class(Exception);
+  EValidacaoRegraNegocioErro = class(Exception);
+
+implementation
+
+end.

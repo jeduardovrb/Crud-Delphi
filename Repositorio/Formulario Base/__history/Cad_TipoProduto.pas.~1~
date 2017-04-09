@@ -1,0 +1,29 @@
+unit Cad_TipoProduto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Cad_Modelo, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinsDefaultPainters,
+  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit, DB,
+  cxDBData, ActnList, ScreenTips, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons,
+  ExtCtrls, cxGridLevel, cxClasses, cxGridCustomView, cxGridCustomTableView,
+  cxGridTableView, cxGridDBTableView, cxGrid;
+
+type
+  TfrmCad_TipoProduto = class(TfrmCad_Modelo)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCad_TipoProduto: TfrmCad_TipoProduto;
+
+implementation
+
+{$R *.dfm}
+
+end.

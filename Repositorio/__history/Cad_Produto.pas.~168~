@@ -1,0 +1,494 @@
+unit Cad_Produto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ScreenTips,
+  ActnList, DB, ImgList, ComCtrls, ToolWin, DBCtrls, Mask, Pesquisar, sConversor,
+  dtm_CarregarDados, sException, sFuncoes, Cad_GrupoProduto, Cad_SubGrupoProduto, Empresa_Corrente,
+  FMTBcd, DBClient, Provider, SqlExpr, JvExStdCtrls, JvCombobox, JvDBCombobox;
+
+type
+  TfrmCad_Produto = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbCadastro: TGroupBox;
+    dbgProduto: TDBGrid;
+    Ean: TLabel;
+    dbeEan: TDBEdit;
+    lblDescricao: TLabel;
+    dbeDescricao: TDBEdit;
+    lblGrupo: TLabel;
+    dbeGrupo: TDBEdit;
+    lblSubGrupo: TLabel;
+    dbeSubGrupo: TDBEdit;
+    dbtId: TDBText;
+    lblId: TLabel;
+    lblQtdeEstoque: TLabel;
+    dbeQtdeEstoque: TDBEdit;
+    gbFinanceiro: TGroupBox;
+    dbePercentual: TDBEdit;
+    lblPercentual: TLabel;
+    lblLucro: TLabel;
+    dbeLucro: TDBEdit;
+    VlrCompra: TLabel;
+    dbeVlrCompra: TDBEdit;
+    vlrVenda: TLabel;
+    dbeVlrVenda: TDBEdit;
+    Label1: TLabel;
+    dbeUnidade: TDBEdit;
+    lblUnidade: TLabel;
+    dbtNmGrupo: TDBText;
+    dbtNmSubGrupo: TDBText;
+    btnGrupo: TBitBtn;
+    btnSubGrupo: TBitBtn;
+    Dts_ProdutoEmpresa: TDataSource;
+    dbeIdInterno: TDBEdit;
+    lblIdInterno: TLabel;
+    Label3: TLabel;
+    cbClienteFidelidade: TJvDBComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure dbeGrupoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure dbeSubGrupoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dbePercentualExit(Sender: TObject);
+    procedure dbeLucroExit(Sender: TObject);
+    procedure dbeVlrVendaExit(Sender: TObject);
+    procedure dbeGrupoExit(Sender: TObject);
+    procedure dbeSubGrupoExit(Sender: TObject);
+    procedure dbeUnidadeKeyPress(Sender: TObject; var Key: Char);
+    procedure btnGrupoClick(Sender: TObject);
+    procedure btnSubGrupoClick(Sender: TObject);
+    procedure dbgProdutoDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure FormShow(Sender: TObject);
+    procedure dbgProdutoDblClick(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure dbeIdInternoExit(Sender: TObject);
+    procedure actGravarExecute(Sender: TObject);
+  private
+    FIdInterno: Integer;
+    procedure ValidarProdutoInterno;
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+    procedure SetDescricaoDoGrupoProduto;
+    procedure SetDescricaoDoSubGrupoProduto;
+  end;
+
+var
+  frmCad_Produto: TfrmCad_Produto;
+
+implementation
+
+uses
+  BuilderLogDialogo, sEnumerados, Logger, dtm_Pesquisar, dtm_Produto;
+
+{$R *.dfm}
+
+{ TfrmCad_Produto }
+
+procedure TfrmCad_Produto.actAlterarExecute(Sender: TObject);
+begin
+  inherited;
+
+  try
+    Self.SetDescricaoDoGrupoProduto();
+    Self.SetDescricaoDoSubGrupoProduto();
+
+    Self.FIdInterno := Dts.DataSet.FieldByName('pro_id_interno').AsInteger;
+
+    if not dm_Produto.ExisteEstoque(dm_Produto.cds_ProdutoPRO_ID_PK.AsInteger) then
+    begin
+      dm_Produto.InserirProdutoEmpresa(dm_Produto.cds_ProdutoPRO_ID_PK.AsInteger);
+    end;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Produto.actGravarExecute(Sender: TObject);
+begin
+  if (Self.FAcao = acIncluir) or (Self.FIdInterno <> Dts.DataSet.FieldByName('pro_id_interno').AsInteger) then
+  begin
+    //Self.ValidarProdutoInterno();
+  end;
+
+  inherited;
+
+  Self.FIdInterno := 0;
+end;
+
+procedure TfrmCad_Produto.actImprimirExecute(Sender: TObject);
+begin
+  //inherited;
+
+  dm_Produto.dst_RelatorioProduto.Close;
+  dm_Produto.dst_RelatorioProduto.Open;
+
+  dm_Produto.frxRelatorioProdutos.ShowReport();
+end;
+
+procedure TfrmCad_Produto.btnGrupoClick(Sender: TObject);
+begin
+  inherited;
+
+  TFuncoes.CriarForm('TfrmCad_GrupoProduto');
+end;
+
+procedure TfrmCad_Produto.btnSubGrupoClick(Sender: TObject);
+begin
+  inherited;
+
+  Application.CreateForm(TfrmCad_SubGrupoProduto, frmCad_SubGrupoProduto);
+  try
+    frmCad_SubGrupoProduto.ShowModal;
+  finally
+    FreeAndNil(frmCad_SubGrupoProduto);
+  end;
+end;
+
+procedure TfrmCad_Produto.dbeGrupoExit(Sender: TObject);
+begin
+  inherited;
+  if Length(Trim(dbeGrupo.Text)) > 0 then
+  begin
+    try
+      Self.SetDescricaoDoGrupoProduto();
+    except
+      on E: Exception do
+         TFuncoes.SetFocusCampoObrigatorio('GRUPO', E.Message, dbeGrupo);
+    end;
+  end
+  else
+    dbtNmGrupo.Caption := EmptyStr;
+end;
+
+procedure TfrmCad_Produto.dbeGrupoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    grupo_produto.gru_id, ' +
+        '    grupo_produto.gru_descricao ' +
+        ' from grupo_produto' +
+        ' where ' +
+        '    grupo_produto.gru_id = -1';
+
+      frmPesquisar.NomePesquisa := 'Pes_GrupoProduto';
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+      frmPesquisar.CamposNomeExibicao.Add('Descrição');
+
+      frmPesquisar.ShowModal();
+
+      if frmPesquisar.Id > 0 then
+        Dts.DataSet.FieldByName('pro_grupo_fk').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Produto.dbeIdInternoExit(Sender: TObject);
+begin
+  inherited;
+
+  Self.ValidarProdutoInterno();
+end;
+
+procedure TfrmCad_Produto.dbeLucroExit(Sender: TObject);
+begin
+  inherited;
+  if Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency > 0 then
+  begin
+    try
+      Dts.DataSet.FieldByName('pro_vl_venda').AsCurrency := Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency +
+        Dts.DataSet.FieldByName('pro_lucro').AsCurrency;
+
+     Dts.DataSet.FieldByName('pro_percentual').AsCurrency := (Dts.DataSet.FieldByName('pro_lucro').AsCurrency * 100) /
+       Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency;
+    except
+      on E: Exception do
+        TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Produto.dbePercentualExit(Sender: TObject);
+begin
+  inherited;
+  if Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency > 0 then
+  begin
+    try
+      Dts.DataSet.FieldByName('pro_vl_venda').AsCurrency := Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency +
+        (Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency * (Dts.DataSet.FieldByName('pro_percentual').AsCurrency/100));
+
+      Dts.DataSet.FieldByName('pro_lucro').AsCurrency := Dts.DataSet.FieldByName('pro_vl_venda').AsCurrency -
+        Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency;
+    except
+      on E: Exception do
+        TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Produto.dbeSubGrupoExit(Sender: TObject);
+begin
+  inherited;
+  if Length(Trim(dbeSubGrupo.Text)) > 0 then
+  begin
+    try
+      Self.SetDescricaoDoSubGrupoProduto();
+    except
+      on E: Exception do
+        TFuncoes.SetFocusCampoObrigatorio('SUBGRUPO', E.Message, dbeSubGrupo);
+    end;
+  end
+  else
+    dbtNmSubGrupo.Caption := EmptyStr;
+end;
+
+procedure TfrmCad_Produto.dbeSubGrupoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F10) then
+  begin
+    frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    sub_grupo_produto.subgru_id, ' +
+        '    sub_grupo_produto.subgru_descricao ' +
+        ' from sub_grupo_produto ' +
+        ' where ' +
+        ' sub_grupo_produto.subgru_id = -1';
+
+      frmPesquisar.NomePesquisa := 'Pes_SubGrupo';
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+      frmPesquisar.CamposNomeExibicao.Add('Descrição');
+
+      frmPesquisar.ShowModal();
+
+      if frmPesquisar.Id > 0 then
+        Dts.DataSet.FieldByName('pro_subgrupo_fk').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Produto.dbeUnidadeKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if not (key in ['0'..'9', ','] = False) then
+  begin
+    Key := #0;
+  end;
+end;
+
+procedure TfrmCad_Produto.dbeVlrVendaExit(Sender: TObject);
+begin
+  inherited;
+  if Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency > 0 then
+  begin
+    try
+      Dts.DataSet.FieldByName('pro_lucro').AsCurrency := Dts.DataSet.FieldByName('pro_vl_venda').AsCurrency -
+        Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency;
+
+      Dts.DataSet.FieldByName('pro_percentual').AsCurrency := (Dts.DataSet.FieldByName('pro_lucro').AsCurrency * 100) /
+       Dts.DataSet.FieldByName('pro_vl_compra').AsCurrency;
+    except
+      on E: Exception do
+        TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Produto.dbgProdutoDblClick(Sender: TObject);
+begin
+  inherited;
+
+  actAlterar.Execute;
+end;
+
+procedure TfrmCad_Produto.dbgProdutoDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+  Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_Produto.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_Produto);
+end;
+
+procedure TfrmCad_Produto.FormCreate(Sender: TObject);
+begin
+  dm_Produto := Tdm_Produto.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Descrição');
+  FCamposNomeExibicao.Add('Ean');
+  FCamposNomeExibicao.Add('Id. Interno');
+  FCamposNomeExibicao.Add('Tipo');
+  FCamposNomeExibicao.Add('Valor');
+end;
+
+procedure TfrmCad_Produto.FormShow(Sender: TObject);
+begin
+  inherited;
+  dm_Produto.dst_ProdutoEmpresa.ParamByName('pe_id_empresa').AsInteger := EmpresaCorrente.Id;
+
+  if EmpresaCorrente.Parametro.EditarIdProduto = 1 then
+  begin
+    Self.lblIdInterno.Visible := True;
+    Self.dbeIdInterno.Visible := True;
+    dbgProduto.Columns[1].Visible := True;
+    dbgProduto.Columns[0].Visible := False;
+    lblId.Visible := False;
+    dbtId.Visible := False;
+  end
+  else
+  begin
+    Self.lblIdInterno.Visible := False;
+    Self.dbeIdInterno.Visible := False;
+    dbgProduto.Columns[1].Visible := False;
+  end;
+
+  if FAcao = sEnumerados.acIncluir then
+    dm_Produto.cds_ProdutoPRO_SITUACAO.AsInteger := 1;
+end;
+
+procedure TfrmCad_Produto.IniciarFields;
+begin
+  FNomeDoFormulario := 'Produto';
+  FNomeTabela := 'PRODUTO';
+  FComponenteFoco := dbeEan;
+  FDbgCadastro := dbgProduto;
+
+  FSqlDefault :=
+    ' select ' +
+    '    produto.pro_id_pk, ' +
+    '    produto.pro_nome, ' +
+    '    produto.pro_ean, ' +
+    '    produto.pro_id_interno, ' +
+    '    (case produto.pro_tipo ' +
+    '       when ''P'' then ''Produto'' ' +
+    '       when ''L'' then ''Lente'' ' +
+    '    end) pro_tipo, ' +
+    '    produto.pro_vl_venda ' +
+    ' from produto ' +
+    ' where ' +
+    '    produto.pro_id_pk = -1';
+end;
+
+procedure TfrmCad_Produto.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('pro_id_pk').AsInteger      := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    Dts.DataSet.FieldByName('pro_id_interno').AsInteger := dm_Produto.GetIdInterno;
+    Dts.DataSet.FieldByName('pro_tipo').AsString        := TConversor.ParaString(sEnumerados.tproProduto);
+    Dts.DataSet.FieldByName('pro_unidade').AsString     := 'UN';
+
+    FId := Dts.DataSet.FieldByName('pro_id_pk').AsInteger;
+
+    Dts_ProdutoEmpresa.DataSet.Insert;
+    Dts_ProdutoEmpresa.DataSet.FieldByName('pe_id_empresa').AsInteger         := EmpresaCorrente.Id;
+    Dts_ProdutoEmpresa.DataSet.FieldByName('pe_id_produto').AsInteger         := FId;
+    Dts_ProdutoEmpresa.DataSet.FieldByName('pe_qt_est_disponivel').AsCurrency := 0;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Produto.SetDescricaoDoGrupoProduto;
+begin
+  dm_CarregarDados := Tdm_CarregarDados.Create(nil);
+  try
+    dm_CarregarDados.CarregarGrupoDeProdutos(StrToInt(dbeGrupo.Text));
+    dbtNmGrupo.Caption := dm_CarregarDados.dst_CarregarGrupoProdutoGRU_DESCRICAO.AsString;
+  finally
+    dm_CarregarDados.dst_CarregarGrupoProduto.Close();
+    FreeAndNil(dm_CarregarDados);
+  end;
+end;
+
+procedure TfrmCad_Produto.SetDescricaoDoSubGrupoProduto;
+begin
+  dm_CarregarDados := Tdm_CarregarDados.Create(nil);
+  try
+    dm_CarregarDados.CarregarSubGrupoDeProdutos(StrToInt(dbeSubGrupo.Text));
+    dbtNmSubGrupo.Caption := dm_CarregarDados.dst_CarregarSubGrupoProdutoSUBGRU_DESCRICAO.AsString;
+  finally
+    dm_CarregarDados.dst_CarregarSubGrupoProduto.Close();
+    FreeAndNil(dm_CarregarDados);
+  end;
+end;
+
+procedure TfrmCad_Produto.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  TFuncoes.SetFocusCampoObrigatorio('GRUPO', MensagemErro, dbeGrupo);
+  TFuncoes.SetFocusCampoObrigatorio('SUBGRUPO', MensagemErro, dbeSubGrupo);
+end;
+
+procedure TfrmCad_Produto.ValidarCamposObrigatorios;
+begin
+  if Trim(Dts.DataSet.FieldByName('pro_grupo_fk').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "grupo" é de preenchimento Obrigatório.');
+
+  if Trim(Dts.DataSet.FieldByName('pro_subgrupo_fk').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "subgrupo" é de preenchimento Obrigatório.');
+
+  //if Trim(Dts.DataSet.FieldByName('pro_id_interno').AsString) = EmptyStr then
+  //  raise ECampoObrigatorioError.Create('Campo "Id do produto interno" é de preenchimento Obrigatório.');
+end;
+
+procedure TfrmCad_Produto.ValidarProdutoInterno;
+var
+  VDmCarregarDados: Tdm_CarregarDados;
+begin
+  VDmCarregarDados := Tdm_CarregarDados.Create(nil);
+  try
+    if Dts.DataSet.FieldByName('pro_id_interno').AsInteger > 0 then
+    begin
+      if VDmCarregarDados.IsExisteProdutoInterno(Dts.DataSet.FieldByName('pro_id_interno').AsInteger) then
+      begin
+        raise Exception.Create('Id. interno já cadastrado no produto do id: ' + VDmCarregarDados.dst_CarregarProdutoInternoPRO_ID_PK.AsString);
+      end;
+    end;
+  finally
+    FreeAndNil(VDmCarregarDados);
+  end;
+end;
+
+initialization
+  RegisterClass(TfrmCad_Produto);
+
+end.

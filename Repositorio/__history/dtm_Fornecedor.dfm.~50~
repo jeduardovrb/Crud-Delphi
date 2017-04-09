@@ -1,0 +1,607 @@
+object dm_Fornecedor: Tdm_Fornecedor
+  OldCreateOrder = False
+  Height = 421
+  Width = 570
+  object dst_PessoaEndereco: TSQLDataSet
+    SchemaName = 'ADPAROPAS'
+    CommandText = 
+      'select '#13#10'   pessoa_endereco.pe_id_pessoa,'#13#10'   pessoa_endereco.pe' +
+      '_tipo,'#13#10'   case pessoa_endereco.pe_tipo'#13#10'     when 1 then '#39'Entre' +
+      'ga'#39#13#10'     when 2 then '#39'Outros'#39#13#10'   end pe_nm_tipo,'#13#10'   pessoa_en' +
+      'dereco.pe_endereco,'#13#10'   pessoa_endereco.pe_numero,'#13#10'   pessoa_en' +
+      'dereco.pe_complemento,'#13#10'   pessoa_endereco.pe_bairro,'#13#10'   pessoa' +
+      '_endereco.pe_id_cidade,'#13#10'   pessoa_endereco.pe_cep,'#13#10'   pessoa_e' +
+      'ndereco.pe_contato,'#13#10'   pessoa_endereco.pe_seq,'#13#10'   cidade.cid_n' +
+      'ome,'#13#10'   cidade.cid_estado'#13#10'from pessoa_endereco'#13#10'   left outer ' +
+      'join cidade on (pessoa_endereco.pe_id_cidade = cidade.cid_id)'#13#10'w' +
+      'here '#13#10'   (pessoa_endereco.pe_id_pessoa = :pes_id)'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 188
+    object dst_PessoaEnderecoPE_ID_PESSOA: TIntegerField
+      FieldName = 'PE_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaEnderecoPE_TIPO: TSmallintField
+      FieldName = 'PE_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaEnderecoPE_ENDERECO: TStringField
+      DisplayLabel = 'Endere'#231'o'
+      FieldName = 'PE_ENDERECO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PessoaEnderecoPE_NUMERO: TStringField
+      DisplayLabel = 'N'#250'mero'
+      FieldName = 'PE_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object dst_PessoaEnderecoPE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object dst_PessoaEnderecoPE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_PessoaEnderecoPE_ID_CIDADE: TIntegerField
+      FieldName = 'PE_ID_CIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaEnderecoPE_CEP: TStringField
+      FieldName = 'PE_CEP'
+      ProviderFlags = [pfInUpdate]
+      EditMask = '99999\-999;0;_'
+      Size = 10
+    end
+    object dst_PessoaEnderecoPE_CONTATO: TStringField
+      FieldName = 'PE_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PessoaEnderecoCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      ProviderFlags = []
+      Size = 40
+    end
+    object dst_PessoaEnderecoCID_ESTADO: TStringField
+      FieldName = 'CID_ESTADO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 2
+    end
+    object dst_PessoaEnderecoPE_NM_TIPO: TStringField
+      DisplayLabel = 'Tipo de Endere'#231'o'
+      FieldName = 'PE_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 7
+    end
+    object dst_PessoaEnderecoPE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object cds_PessoaEndereco: TClientDataSet
+    Active = True
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_PessoaEndereco
+    Params = <>
+    Left = 304
+    Top = 188
+    object cds_PessoaEnderecoPE_ID_PESSOA: TIntegerField
+      FieldName = 'PE_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaEnderecoPE_TIPO: TSmallintField
+      FieldName = 'PE_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaEnderecoPE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PessoaEnderecoPE_NUMERO: TStringField
+      FieldName = 'PE_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_PessoaEnderecoPE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object cds_PessoaEnderecoPE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_PessoaEnderecoPE_ID_CIDADE: TIntegerField
+      FieldName = 'PE_ID_CIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaEnderecoPE_CEP: TStringField
+      FieldName = 'PE_CEP'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_PessoaEnderecoPE_CONTATO: TStringField
+      FieldName = 'PE_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PessoaEnderecoCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      ProviderFlags = []
+      Size = 40
+    end
+    object cds_PessoaEnderecoCID_ESTADO: TStringField
+      FieldName = 'CID_ESTADO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 2
+    end
+    object cds_PessoaEnderecoPE_NM_TIPO: TStringField
+      FieldName = 'PE_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 7
+    end
+    object cds_PessoaEnderecoPE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object dts_LinkPessoa: TDataSource
+    DataSet = dst_Pessoa
+    Left = 178
+    Top = 116
+  end
+  object dst_PessoaTelefone: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   PESSOA_TELEFONE.PT_ID_PESSOA,'#13#10'   PESSOA_TELEFONE.PT' +
+      '_TIPO,'#13#10'   CASE PESSOA_TELEFONE.PT_TIPO'#13#10'      WHEN 1 THEN '#39'RESI' +
+      'D'#202'NCIA / SEDE'#39#13#10'      WHEN 2 THEN '#39'COMERCIAL'#39#13#10'      WHEN 3 THEN' +
+      ' '#39'CELULAR'#39#13#10'      WHEN 4 THEN '#39'FAX'#39#13#10'      WHEN 5 THEN '#39'OUTRO'#39#13#10 +
+      '   END PT_NM_TIPO,'#13#10'   PESSOA_TELEFONE.PT_NUMERO,'#13#10'   PESSOA_TEL' +
+      'EFONE.PT_CONTATO,'#13#10'    PESSOA_TELEFONE.PT_SEQ'#13#10'FROM PESSOA_TELEF' +
+      'ONE'#13#10'WHERE '#13#10'      (PESSOA_TELEFONE.PT_ID_PESSOA = :PES_ID)'#13#10'ORD' +
+      'ER BY '#13#10'   PESSOA_TELEFONE.PT_TIPO'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 112
+    object dst_PessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaTelefonePT_NM_TIPO: TStringField
+      DisplayLabel = 'Tipo de Telefone'
+      FieldName = 'PT_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 17
+    end
+    object dst_PessoaTelefonePT_NUMERO: TStringField
+      DisplayLabel = 'N'#250'mero'
+      FieldName = 'PT_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object dst_PessoaTelefonePT_CONTATO: TStringField
+      DisplayLabel = 'Contato'
+      FieldName = 'PT_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object cds_PessoaTelefone: TClientDataSet
+    Active = True
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_PessoaTelefone
+    Params = <>
+    Left = 304
+    Top = 120
+    object cds_PessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaTelefonePT_NM_TIPO: TStringField
+      FieldName = 'PT_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 17
+    end
+    object cds_PessoaTelefonePT_NUMERO: TStringField
+      FieldName = 'PT_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object cds_PessoaTelefonePT_CONTATO: TStringField
+      FieldName = 'PT_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object dst_Pessoa: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pes_id,'#13#10'   pes_emp,'#13#10'   pes_tp_pessoa,'#13#10'   pes_situa' +
+      'cao,'#13#10'   pes_rsocial,'#13#10'   pes_fantasia,'#13#10'   pes_cnpj_cpf,'#13#10'   pe' +
+      's_insc_rg,'#13#10'   pes_rg_org_expedidor,'#13#10'   pes_rg_dt_expedicao,'#13#10' ' +
+      '  pes_tp_sanguineo,'#13#10'   pes_dt_nascimento,'#13#10'   pessoa.pes_tp_cad' +
+      'astro,'#13#10'   pessoa.pes_id_interno'#13#10'from pessoa'#13#10'where'#13#10'   pessoa.' +
+      'pes_id = :pes_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dst_PessoaPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaPES_EMP: TSmallintField
+      FieldName = 'PES_EMP'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaPES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PessoaPES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PessoaPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PessoaPES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PessoaPES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object dst_PessoaPES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_PessoaPES_RG_ORG_EXPEDIDOR: TStringField
+      FieldName = 'PES_RG_ORG_EXPEDIDOR'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object dst_PessoaPES_RG_DT_EXPEDICAO: TDateField
+      FieldName = 'PES_RG_DT_EXPEDICAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaPES_TP_SANGUINEO: TStringField
+      FieldName = 'PES_TP_SANGUINEO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object dst_PessoaPES_DT_NASCIMENTO: TDateField
+      FieldName = 'PES_DT_NASCIMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaPES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PessoaPES_ID_INTERNO: TStringField
+      FieldName = 'PES_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+  end
+  object dsp_Pessoa: TDataSetProvider
+    DataSet = dst_Pessoa
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 176
+    Top = 24
+  end
+  object cds_Pessoa: TClientDataSet
+    Active = True
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_Pessoa'
+    OnReconcileError = cds_PessoaReconcileError
+    Left = 304
+    Top = 24
+    object cds_PessoaPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaPES_EMP: TSmallintField
+      FieldName = 'PES_EMP'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaPES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_PessoaPES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_PessoaPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_PessoaPES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_PessoaPES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object cds_PessoaPES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_PessoaPES_RG_ORG_EXPEDIDOR: TStringField
+      FieldName = 'PES_RG_ORG_EXPEDIDOR'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_PessoaPES_RG_DT_EXPEDICAO: TDateField
+      FieldName = 'PES_RG_DT_EXPEDICAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaPES_TP_SANGUINEO: TStringField
+      FieldName = 'PES_TP_SANGUINEO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object cds_PessoaPES_DT_NASCIMENTO: TDateField
+      FieldName = 'PES_DT_NASCIMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaPES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_Pessoadst_Email: TDataSetField
+      FieldName = 'dst_Email'
+    end
+    object cds_Pessoadst_PessoaTelefone: TDataSetField
+      FieldName = 'dst_PessoaTelefone'
+    end
+    object cds_Pessoadst_PessoaEndereco: TDataSetField
+      FieldName = 'dst_PessoaEndereco'
+    end
+    object cds_Pessoadst_Fornecedor: TDataSetField
+      FieldName = 'dst_Fornecedor'
+    end
+    object cds_PessoaPES_ID_INTERNO: TStringField
+      FieldName = 'PES_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+  end
+  object dst_Email: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   PESSOA_EMAIL.PEM_ID_PESSOA,'#13#10'   PESSOA_EMAIL.PEM_SEQ' +
+      ','#13#10'   PESSOA_EMAIL.PEM_EMAIL'#13#10'FROM PESSOA_EMAIL'#13#10'WHERE '#13#10'   (PES' +
+      'SOA_EMAIL.PEM_ID_PESSOA = :PES_ID)'#13#10'ORDER BY'#13#10'   PESSOA_EMAIL.PE' +
+      'M_SEQ'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 256
+    object dst_EmailPEM_ID_PESSOA: TIntegerField
+      FieldName = 'PEM_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_EmailPEM_SEQ: TSmallintField
+      DisplayLabel = 'Seq.'
+      FieldName = 'PEM_SEQ'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object dst_EmailPEM_EMAIL: TStringField
+      DisplayLabel = 'Email'
+      FieldName = 'PEM_EMAIL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+  end
+  object cdsEmail: TClientDataSet
+    Active = True
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_Email
+    Params = <>
+    Left = 304
+    Top = 256
+    object cdsEmailPEM_ID_PESSOA: TIntegerField
+      FieldName = 'PEM_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cdsEmailPEM_SEQ: TSmallintField
+      FieldName = 'PEM_SEQ'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object cdsEmailPEM_EMAIL: TStringField
+      FieldName = 'PEM_EMAIL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+  end
+  object dst_Fornecedor: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   FORNECEDOR.FOR_ID_PESSOA,'#13#10'   FORNECEDOR.FOR_TP_CADA' +
+      'STRO,'#13#10'   FORNECEDOR.FOR_DT_CADASTRO,'#13#10'   FORNECEDOR.FOR_DT_RECA' +
+      'DASTRO,'#13#10'   FORNECEDOR.FOR_ID_CTB'#13#10'FROM FORNECEDOR'#13#10'WHERE '#13#10'   (' +
+      'FORNECEDOR.FOR_ID_PESSOA = :PES_ID)'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 328
+    object dst_FornecedorFOR_ID_PESSOA: TIntegerField
+      FieldName = 'FOR_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_FornecedorFOR_TP_CADASTRO: TStringField
+      FieldName = 'FOR_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_FornecedorFOR_DT_CADASTRO: TDateField
+      FieldName = 'FOR_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_FornecedorFOR_DT_RECADASTRO: TDateField
+      FieldName = 'FOR_DT_RECADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_FornecedorFOR_ID_CTB: TIntegerField
+      FieldName = 'FOR_ID_CTB'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object cds_Fornecedor: TClientDataSet
+    Active = True
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_Fornecedor
+    Params = <>
+    Left = 304
+    Top = 320
+    object cds_FornecedorFOR_ID_PESSOA: TIntegerField
+      FieldName = 'FOR_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_FornecedorFOR_TP_CADASTRO: TStringField
+      FieldName = 'FOR_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_FornecedorFOR_DT_CADASTRO: TDateField
+      FieldName = 'FOR_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_FornecedorFOR_DT_RECADASTRO: TDateField
+      FieldName = 'FOR_DT_RECADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_FornecedorFOR_ID_CTB: TIntegerField
+      FieldName = 'FOR_ID_CTB'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+end

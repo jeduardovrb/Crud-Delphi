@@ -1,0 +1,113 @@
+unit Cad_PlanoPagto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ScreenTips, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls,
+  dtm_FormaPagto, Grids, DBGrids, BuilderLogDialogo, sEnumerados, Logger, JvExStdCtrls, JvCombobox, JvDBCombobox,
+  DBCtrls, Mask;
+
+type
+  TfrmCad_FormaPagto = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgFormaPagto: TDBGrid;
+    GroupBox1: TGroupBox;
+    lblId: TLabel;
+    Label4: TLabel;
+    dbeDescricao: TDBEdit;
+    Label5: TLabel;
+    Label7: TLabel;
+    dbeParcelas: TDBEdit;
+    dbtId: TDBText;
+    dbcbEntrada: TJvDBComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_FormaPagto: TfrmCad_FormaPagto;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmForm_Modelo1 }
+
+procedure TfrmCad_FormaPagto.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_FormaPagto);
+end;
+
+procedure TfrmCad_FormaPagto.FormCreate(Sender: TObject);
+begin
+  dm_FormaPagto := Tdm_FormaPagto.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Descrição');
+  FCamposNomeExibicao.Add('Qtde Parcelas');
+end;
+
+procedure TfrmCad_FormaPagto.IniciarFields;
+begin
+  FNomeDoFormulario := 'plano de pagamento';
+  FNomeTabela := 'PLANO_PAGAMENTO';
+  FComponenteFoco := dbeDescricao;
+  FDbgCadastro := dbgFormaPagto;
+
+  FSqlDefault :=
+    ' select ' +
+    '    plano_pagamento.pp_id, ' +
+    '    plano_pagamento.pp_descricao, ' +
+    '    plano_pagamento.pp_qt_parcelas ' +
+    ' from plano_pagamento ' +
+    ' where ' +
+    '    plano_pagamento.pp_id = -1 ';
+end;
+
+procedure TfrmCad_FormaPagto.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('pp_id').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    Dts.DataSet.FieldByName('pp_com_entrada').AsString := 'N';
+    FId := Dts.DataSet.FieldByName('pp_id').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_FormaPagto.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_FormaPagto.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+initialization
+  RegisterClass(TfrmCad_PlanoPagto);
+
+end.

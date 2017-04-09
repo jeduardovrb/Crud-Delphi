@@ -1,0 +1,1328 @@
+object dm_CarregarDados: Tdm_CarregarDados
+  OldCreateOrder = False
+  Height = 452
+  Width = 998
+  object dst_CarregarGrupoProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   grupo_produto.gru_id,'#13#10'   grupo_produto.gru_descricao' +
+      #13#10'from grupo_produto'#13#10'where'#13#10'   grupo_produto.gru_id = :gru_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'gru_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 32
+    object dst_CarregarGrupoProdutoGRU_ID: TIntegerField
+      FieldName = 'GRU_ID'
+      Required = True
+    end
+    object dst_CarregarGrupoProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      Size = 40
+    end
+  end
+  object dst_CarregarSubGrupoProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   sub_grupo_produto.subgru_id,'#13#10'   sub_grupo_produto.su' +
+      'bgru_descricao'#13#10'from sub_grupo_produto'#13#10'where'#13#10'   sub_grupo_prod' +
+      'uto.subgru_id = :subgru_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'subgru_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 240
+    Top = 32
+    object dst_CarregarSubGrupoProdutoSUBGRU_ID: TIntegerField
+      FieldName = 'SUBGRU_ID'
+      Required = True
+    end
+    object dst_CarregarSubGrupoProdutoSUBGRU_DESCRICAO: TStringField
+      FieldName = 'SUBGRU_DESCRICAO'
+      Required = True
+      Size = 40
+    end
+  end
+  object dst_CarregarCidade: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   cidade.cid_id,'#13#10'   cidade.cid_nome,'#13#10'   cidade.cid_es' +
+      'tado'#13#10'from cidade'#13#10'where'#13#10'   cidade.cid_id = :cid_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cid_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 408
+    Top = 32
+    object dst_CarregarCidadeCID_ID: TIntegerField
+      FieldName = 'CID_ID'
+      Required = True
+    end
+    object dst_CarregarCidadeCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      Size = 40
+    end
+    object dst_CarregarCidadeCID_ESTADO: TStringField
+      FieldName = 'CID_ESTADO'
+      FixedChar = True
+      Size = 2
+    end
+  end
+  object dst_CarregarCliente: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa_end' +
+      'ereco.pe_endereco,'#13#10'   pessoa_endereco.pe_numero,'#13#10'   pessoa_end' +
+      'ereco.pe_complemento,'#13#10'   pessoa_endereco.pe_bairro,'#13#10'   pessoa_' +
+      'endereco.pe_seq,'#13#10'   cliente.cli_fidelidade,'#13#10'   pessoa.pes_id_i' +
+      'nterno,'#13#10'   pessoa.pes_dt_nascimento'#13#10'from pessoa'#13#10'   left outer' +
+      ' join pessoa_endereco on (pessoa.pes_id = pessoa_endereco.pe_id_' +
+      'pessoa)'#13#10'   left outer join cliente on (pessoa.pes_id = cliente.' +
+      'cli_id_pessoa)'#13#10'where'#13#10'   (pessoa.pes_tp_cadastro = '#39'C'#39') and'#13#10'  ' +
+      ' (pessoa.pes_id = :pes_id)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 560
+    Top = 32
+    object dst_CarregarClientePES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_CarregarClientePES_RSOCIAL: TStringField
+      DisplayLabel = 'R. Social'
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_CarregarClientePE_ENDERECO: TStringField
+      DisplayLabel = 'Endere'#231'o'
+      FieldName = 'PE_ENDERECO'
+      Size = 30
+    end
+    object dst_CarregarClientePE_NUMERO: TStringField
+      DisplayLabel = 'Nr.'
+      FieldName = 'PE_NUMERO'
+      Size = 10
+    end
+    object dst_CarregarClientePE_COMPLEMENTO: TStringField
+      DisplayLabel = 'Complemento'
+      FieldName = 'PE_COMPLEMENTO'
+      Size = 15
+    end
+    object dst_CarregarClientePE_BAIRRO: TStringField
+      DisplayLabel = 'Bairro'
+      FieldName = 'PE_BAIRRO'
+      Size = 18
+    end
+    object dst_CarregarClienteCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+    end
+    object dst_CarregarClientePE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+    end
+    object dst_CarregarClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+    object dst_CarregarClientePES_DT_NASCIMENTO: TDateField
+      FieldName = 'PES_DT_NASCIMENTO'
+    end
+  end
+  object dst_CarregarProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   produto.pro_id_pk,'#13#10'   produto.pro_tipo,'#13#10'   produto.' +
+      'pro_ean,'#13#10'   produto.pro_nome,'#13#10'   produto.pro_unidade,'#13#10'   prod' +
+      'uto.pro_vl_compra,'#13#10'   produto.pro_vl_venda,'#13#10'   produto.pro_id_' +
+      'interno'#13#10'from produto'#13#10'where'#13#10'   produto.pro_id_pk = :pro_id_pk ' +
+      'and'#13#10'   produto.pro_situacao = 1'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftUnknown
+        Name = 'pro_id_pk'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 120
+    object dst_CarregarProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      Required = True
+    end
+    object dst_CarregarProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CarregarProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      Size = 18
+    end
+    object dst_CarregarProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      Size = 100
+    end
+    object dst_CarregarProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      FixedChar = True
+      Size = 2
+    end
+    object dst_CarregarProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object dst_CarregarProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object dst_CarregarProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+    end
+  end
+  object dst_CarregarPlanoConta: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   plano_conta.pc_codconta,'#13#10'   plano_conta.pc_descricao' +
+      #13#10'from plano_conta'#13#10'where'#13#10'   plano_conta.pc_codconta = :pc_codc' +
+      'onta'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pc_codconta'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 240
+    Top = 120
+    object dst_CarregarPlanoContaPC_CODCONTA: TIntegerField
+      FieldName = 'PC_CODCONTA'
+      Required = True
+    end
+    object dst_CarregarPlanoContaPC_DESCRICAO: TStringField
+      FieldName = 'PC_DESCRICAO'
+      Size = 40
+    end
+  end
+  object dst_CarregarFornecedor: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa.pes' +
+      '_id_interno'#13#10'from pessoa'#13#10'where'#13#10'   pessoa.pes_tp_cadastro = '#39'F'#39 +
+      ' and'#13#10'   pessoa.pes_id = :pes_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 408
+    Top = 120
+    object dst_CarregarFornecedorPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_CarregarFornecedorPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_CarregarFornecedorPES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+  object dst_CarregarCondPagamento: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   cond_pagamento.cpa_id,'#13#10'   cond_pagamento.cpa_descric' +
+      'ao'#13#10'from cond_pagamento'#13#10'where'#13#10'   cond_pagamento.cpa_id = :cpa_' +
+      'id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cpa_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 568
+    Top = 120
+    object dst_CarregarCondPagamentoCPA_ID: TIntegerField
+      FieldName = 'CPA_ID'
+      Required = True
+    end
+    object dst_CarregarCondPagamentoCPA_DESCRICAO: TStringField
+      FieldName = 'CPA_DESCRICAO'
+      Size = 50
+    end
+  end
+  object dst_CarregarFormaPagto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   plano_pagamento.pp_id,'#13#10'   plano_pagamento.pp_descric' +
+      'ao,'#13#10'   plano_pagamento.pp_com_entrada,'#13#10'   plano_pagamento.pp_n' +
+      'm_apresentacao,'#13#10'   plano_pagamento.pp_qt_parcelas'#13#10'from plano_p' +
+      'agamento'#13#10'where'#13#10'   plano_pagamento.pp_id = :pp_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pp_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 752
+    Top = 32
+    object dst_CarregarFormaPagtoPP_ID: TIntegerField
+      FieldName = 'PP_ID'
+      Required = True
+    end
+    object dst_CarregarFormaPagtoPP_DESCRICAO: TStringField
+      FieldName = 'PP_DESCRICAO'
+      Size = 50
+    end
+    object dst_CarregarFormaPagtoPP_COM_ENTRADA: TStringField
+      FieldName = 'PP_COM_ENTRADA'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CarregarFormaPagtoPP_NM_APRESENTACAO: TStringField
+      FieldName = 'PP_NM_APRESENTACAO'
+      Size = 50
+    end
+    object dst_CarregarFormaPagtoPP_QT_PARCELAS: TSmallintField
+      FieldName = 'PP_QT_PARCELAS'
+    end
+  end
+  object dst_CarregarEndereco: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa_end' +
+      'ereco.pe_endereco,'#13#10'   pessoa_endereco.pe_numero,'#13#10'   pessoa_end' +
+      'ereco.pe_complemento,'#13#10'   pessoa_endereco.pe_bairro,'#13#10'   pessoa_' +
+      'endereco.pe_seq,'#13#10'   cliente.cli_fidelidade'#13#10'from pessoa'#13#10'   lef' +
+      't outer join pessoa_endereco on (pessoa.pes_id = pessoa_endereco' +
+      '.pe_id_pessoa)'#13#10'   left outer join cliente on (pessoa.pes_id = c' +
+      'liente.cli_id_pessoa)'#13#10'where'#13#10'   pessoa.pes_tp_cadastro = '#39'C'#39' an' +
+      'd'#13#10'   pessoa.pes_id = :pes_id and'#13#10'   pessoa_endereco.pe_seq = :' +
+      'pe_seq'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'pe_seq'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 752
+    Top = 120
+    object dst_CarregarEnderecoPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_CarregarEnderecoPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_CarregarEnderecoPE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      Size = 30
+    end
+    object dst_CarregarEnderecoPE_NUMERO: TStringField
+      FieldName = 'PE_NUMERO'
+      Size = 10
+    end
+    object dst_CarregarEnderecoPE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      Size = 15
+    end
+    object dst_CarregarEnderecoPE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      Size = 18
+    end
+    object dst_CarregarEnderecoPE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+    end
+    object dst_CarregarEnderecoCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+    end
+  end
+  object dst_CarregarCreditoCliente: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   ccf_id_cliente,'#13#10'   ccf_id_empresa,'#13#10'   ccf_vlr_credi' +
+      'to_entrega,'#13#10'   ccf_vlr_credito_estabelecimento,'#13#10'   ccf_vlr_cre' +
+      'dito'#13#10'from credito_cliente_fidelidade'#13#10'where'#13#10'   (credito_client' +
+      'e_fidelidade.ccf_id_cliente = :ccf_id_cliente) and'#13#10'   (credito_' +
+      'cliente_fidelidade.ccf_id_empresa = :ccf_id_empresa)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'ccf_id_cliente'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'ccf_id_empresa'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 192
+    object dst_CarregarCreditoClienteCCF_ID_CLIENTE: TIntegerField
+      FieldName = 'CCF_ID_CLIENTE'
+      Required = True
+    end
+    object dst_CarregarCreditoClienteCCF_ID_EMPRESA: TIntegerField
+      FieldName = 'CCF_ID_EMPRESA'
+      Required = True
+    end
+    object dst_CarregarCreditoClienteCCF_VLR_CREDITO_ENTREGA: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ENTREGA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_CarregarCreditoClienteCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ESTABELECIMENTO'
+      Precision = 18
+      Size = 2
+    end
+    object dst_CarregarCreditoClienteCCF_VLR_CREDITO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dsp_DadosPessoaTelefone: TDataSetProvider
+    DataSet = dst_DadosPessoaTelefone
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 224
+    Top = 296
+  end
+  object cds_DadosPessoaTelefone: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_DadosPessoaTelefone'
+    Left = 376
+    Top = 296
+    object cds_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      Required = True
+    end
+    object cds_DadosPessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      Required = True
+    end
+    object cds_DadosPessoaTelefonePT_NM_TIPO: TStringField
+      DisplayLabel = 'Tipo de Telefone'
+      FieldName = 'PT_NM_TIPO'
+      FixedChar = True
+      Size = 17
+    end
+    object cds_DadosPessoaTelefonePT_NUMERO: TStringField
+      DisplayLabel = 'Telefone'
+      FieldName = 'PT_NUMERO'
+      Size = 14
+    end
+    object cds_DadosPessoaTelefonePT_CONTATO: TStringField
+      FieldName = 'PT_CONTATO'
+      Size = 30
+    end
+    object cds_DadosPessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      Required = True
+    end
+  end
+  object dst_DadosPessoaTelefone: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   PESSOA_TELEFONE.PT_ID_PESSOA,'#13#10'   PESSOA_TELEFONE.PT' +
+      '_TIPO,'#13#10'   CASE PESSOA_TELEFONE.PT_TIPO'#13#10'      WHEN 1 THEN '#39'RESI' +
+      'D'#202'NCIA / SEDE'#39#13#10'      WHEN 2 THEN '#39'COMERCIAL'#39#13#10'      WHEN 3 THEN' +
+      ' '#39'CELULAR'#39#13#10'      WHEN 4 THEN '#39'FAX'#39#13#10'      WHEN 5 THEN '#39'OUTRO'#39#13#10 +
+      '   END PT_NM_TIPO,'#13#10'   PESSOA_TELEFONE.PT_NUMERO,'#13#10'   PESSOA_TEL' +
+      'EFONE.PT_CONTATO,'#13#10'    PESSOA_TELEFONE.PT_SEQ'#13#10'FROM PESSOA_TELEF' +
+      'ONE'#13#10'WHERE '#13#10'      (PESSOA_TELEFONE.PT_ID_PESSOA = :PES_ID)'#13#10'ORD' +
+      'ER BY '#13#10'   PESSOA_TELEFONE.PT_TIPO'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 80
+    Top = 296
+    object dst_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      Required = True
+    end
+    object dst_DadosPessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      Required = True
+    end
+    object dst_DadosPessoaTelefonePT_NM_TIPO: TStringField
+      FieldName = 'PT_NM_TIPO'
+      FixedChar = True
+      Size = 17
+    end
+    object dst_DadosPessoaTelefonePT_NUMERO: TStringField
+      FieldName = 'PT_NUMERO'
+      Size = 14
+    end
+    object dst_DadosPessoaTelefonePT_CONTATO: TStringField
+      FieldName = 'PT_CONTATO'
+      Size = 30
+    end
+    object dst_DadosPessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      Required = True
+    end
+  end
+  object dst_CtReceber: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select * from ct_receber'#13#10'where'#13#10'   (ct_receber.cr_id_empresa = ' +
+      ':cr_id_empresa) and'#13#10'   (ct_receber.cr_id_venda = :cr_id_venda)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cr_id_empresa'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'cr_id_venda'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 584
+    Top = 192
+    object dst_CtReceberCR_ID_EMPRESA: TSmallintField
+      FieldName = 'CR_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_CtReceberCR_ID: TIntegerField
+      FieldName = 'CR_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_CtReceberCR_DOCTO: TStringField
+      FieldName = 'CR_DOCTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object dst_CtReceberCR_TIPO: TStringField
+      FieldName = 'CR_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object dst_CtReceberCR_TIPO_OLD: TStringField
+      FieldName = 'CR_TIPO_OLD'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object dst_CtReceberCR_SITUACAO: TStringField
+      FieldName = 'CR_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dst_CtReceberCR_DT_EMISSAO: TDateField
+      FieldName = 'CR_DT_EMISSAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_VCTO: TDateField
+      FieldName = 'CR_DT_VCTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_VCTO_ORIGINAL: TDateField
+      FieldName = 'CR_DT_VCTO_ORIGINAL'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_VCTO_PRORR_1: TDateField
+      FieldName = 'CR_DT_VCTO_PRORR_1'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_BAIXA: TDateField
+      FieldName = 'CR_DT_BAIXA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_LIQUIDACAO: TDateField
+      FieldName = 'CR_DT_LIQUIDACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_VL_TITULO: TFMTBCDField
+      FieldName = 'CR_VL_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_CtReceberCR_VL_JUROS: TFMTBCDField
+      FieldName = 'CR_VL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_CtReceberCR_VL_DESC: TFMTBCDField
+      FieldName = 'CR_VL_DESC'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_CtReceberCR_VL_RECEBIDO: TFMTBCDField
+      FieldName = 'CR_VL_RECEBIDO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_CtReceberCR_ID_CLIENTE: TIntegerField
+      FieldName = 'CR_ID_CLIENTE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_VENDA: TIntegerField
+      FieldName = 'CR_ID_VENDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_CARGA: TIntegerField
+      FieldName = 'CR_ID_CARGA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_NOTA: TIntegerField
+      FieldName = 'CR_ID_NOTA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_NR_NFISCAL: TIntegerField
+      FieldName = 'CR_NR_NFISCAL'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_FORMA_PGTO: TIntegerField
+      FieldName = 'CR_ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_PLANO: TIntegerField
+      FieldName = 'CR_ID_PLANO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_VENDEDOR: TIntegerField
+      FieldName = 'CR_ID_VENDEDOR'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_TP_EC_COB: TStringField
+      FieldName = 'CR_TP_EC_COB'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dst_CtReceberCR_ID_EC_COB: TIntegerField
+      FieldName = 'CR_ID_EC_COB'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_EC_COB: TDateField
+      FieldName = 'CR_DT_EC_COB'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_HIST_TITULO: TStringField
+      FieldName = 'CR_HIST_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_CtReceberCR_DP_IMP: TStringField
+      FieldName = 'CR_DP_IMP'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_BL_IMP: TStringField
+      FieldName = 'CR_BL_IMP'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_SIT: TStringField
+      FieldName = 'CR_SIT'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_COMPOSICAO_DIVIDA: TStringField
+      FieldName = 'CR_COMPOSICAO_DIVIDA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_TIT_PROTESTADO: TStringField
+      FieldName = 'CR_TIT_PROTESTADO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_TIT_EM_ABERTO: TStringField
+      FieldName = 'CR_TIT_EM_ABERTO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_VL_REC_BANCO: TFMTBCDField
+      FieldName = 'CR_VL_REC_BANCO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_CtReceberCR_ID_CONTA_CORRENTE: TIntegerField
+      FieldName = 'CR_ID_CONTA_CORRENTE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_NR_DOCTO_BANCARIO: TStringField
+      FieldName = 'CR_NR_DOCTO_BANCARIO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 13
+    end
+    object dst_CtReceberCR_DT_PROTESTO: TDateField
+      FieldName = 'CR_DT_PROTESTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_DT_PROGRAMACAO: TDateField
+      FieldName = 'CR_DT_PROGRAMACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ALTERADO_POR: TStringField
+      FieldName = 'CR_ALTERADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_CtReceberCR_ID_TP_COBRANCA: TIntegerField
+      FieldName = 'CR_ID_TP_COBRANCA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_ID_TP_COBRANCA_OLD: TIntegerField
+      FieldName = 'CR_ID_TP_COBRANCA_OLD'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_BANCO_ENCARREGADO_COBRANCA: TStringField
+      FieldName = 'CR_BANCO_ENCARREGADO_COBRANCA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object dst_CtReceberCR_DT_CANCELAMENTO: TSQLTimeStampField
+      FieldName = 'CR_DT_CANCELAMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_CANCELADO_POR: TStringField
+      FieldName = 'CR_CANCELADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_CtReceberCR_NR_RESUMO_VENDA: TIntegerField
+      FieldName = 'CR_NR_RESUMO_VENDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_INSERT_DATE: TSQLTimeStampField
+      FieldName = 'CR_INSERT_DATE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_INSERT_USER: TStringField
+      FieldName = 'CR_INSERT_USER'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_CtReceberCR_UPDATE_DATE: TSQLTimeStampField
+      FieldName = 'CR_UPDATE_DATE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_CtReceberCR_UPDATE_USER: TStringField
+      FieldName = 'CR_UPDATE_USER'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_CtReceberCR_SEL: TStringField
+      FieldName = 'CR_SEL'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CtReceberCR_VL_RESTO: TFMTBCDField
+      FieldName = 'CR_VL_RESTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dsp_CtReceber: TDataSetProvider
+    DataSet = dst_CtReceber
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 712
+    Top = 192
+  end
+  object cds_CtReceber: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_CtReceber'
+    Left = 848
+    Top = 200
+    object cds_CtReceberCR_ID_EMPRESA: TSmallintField
+      FieldName = 'CR_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_CtReceberCR_ID: TIntegerField
+      FieldName = 'CR_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_CtReceberCR_DOCTO: TStringField
+      FieldName = 'CR_DOCTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object cds_CtReceberCR_TIPO: TStringField
+      FieldName = 'CR_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object cds_CtReceberCR_TIPO_OLD: TStringField
+      FieldName = 'CR_TIPO_OLD'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object cds_CtReceberCR_SITUACAO: TStringField
+      FieldName = 'CR_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_CtReceberCR_DT_EMISSAO: TDateField
+      FieldName = 'CR_DT_EMISSAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_VCTO: TDateField
+      FieldName = 'CR_DT_VCTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_VCTO_ORIGINAL: TDateField
+      FieldName = 'CR_DT_VCTO_ORIGINAL'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_VCTO_PRORR_1: TDateField
+      FieldName = 'CR_DT_VCTO_PRORR_1'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_BAIXA: TDateField
+      FieldName = 'CR_DT_BAIXA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_LIQUIDACAO: TDateField
+      FieldName = 'CR_DT_LIQUIDACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_VL_TITULO: TFMTBCDField
+      FieldName = 'CR_VL_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_CtReceberCR_VL_JUROS: TFMTBCDField
+      FieldName = 'CR_VL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_CtReceberCR_VL_DESC: TFMTBCDField
+      FieldName = 'CR_VL_DESC'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_CtReceberCR_VL_RECEBIDO: TFMTBCDField
+      FieldName = 'CR_VL_RECEBIDO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_CtReceberCR_ID_CLIENTE: TIntegerField
+      FieldName = 'CR_ID_CLIENTE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_VENDA: TIntegerField
+      FieldName = 'CR_ID_VENDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_CARGA: TIntegerField
+      FieldName = 'CR_ID_CARGA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_NOTA: TIntegerField
+      FieldName = 'CR_ID_NOTA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_NR_NFISCAL: TIntegerField
+      FieldName = 'CR_NR_NFISCAL'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_FORMA_PGTO: TIntegerField
+      FieldName = 'CR_ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_PLANO: TIntegerField
+      FieldName = 'CR_ID_PLANO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_VENDEDOR: TIntegerField
+      FieldName = 'CR_ID_VENDEDOR'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_TP_EC_COB: TStringField
+      FieldName = 'CR_TP_EC_COB'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_CtReceberCR_ID_EC_COB: TIntegerField
+      FieldName = 'CR_ID_EC_COB'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_EC_COB: TDateField
+      FieldName = 'CR_DT_EC_COB'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_HIST_TITULO: TStringField
+      FieldName = 'CR_HIST_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_CtReceberCR_DP_IMP: TStringField
+      FieldName = 'CR_DP_IMP'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_BL_IMP: TStringField
+      FieldName = 'CR_BL_IMP'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_SIT: TStringField
+      FieldName = 'CR_SIT'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_COMPOSICAO_DIVIDA: TStringField
+      FieldName = 'CR_COMPOSICAO_DIVIDA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_TIT_PROTESTADO: TStringField
+      FieldName = 'CR_TIT_PROTESTADO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_TIT_EM_ABERTO: TStringField
+      FieldName = 'CR_TIT_EM_ABERTO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_VL_REC_BANCO: TFMTBCDField
+      FieldName = 'CR_VL_REC_BANCO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_CtReceberCR_ID_CONTA_CORRENTE: TIntegerField
+      FieldName = 'CR_ID_CONTA_CORRENTE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_NR_DOCTO_BANCARIO: TStringField
+      FieldName = 'CR_NR_DOCTO_BANCARIO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 13
+    end
+    object cds_CtReceberCR_DT_PROTESTO: TDateField
+      FieldName = 'CR_DT_PROTESTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_DT_PROGRAMACAO: TDateField
+      FieldName = 'CR_DT_PROGRAMACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ALTERADO_POR: TStringField
+      FieldName = 'CR_ALTERADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_CtReceberCR_ID_TP_COBRANCA: TIntegerField
+      FieldName = 'CR_ID_TP_COBRANCA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_ID_TP_COBRANCA_OLD: TIntegerField
+      FieldName = 'CR_ID_TP_COBRANCA_OLD'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_BANCO_ENCARREGADO_COBRANCA: TStringField
+      FieldName = 'CR_BANCO_ENCARREGADO_COBRANCA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object cds_CtReceberCR_DT_CANCELAMENTO: TSQLTimeStampField
+      FieldName = 'CR_DT_CANCELAMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_CANCELADO_POR: TStringField
+      FieldName = 'CR_CANCELADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_CtReceberCR_NR_RESUMO_VENDA: TIntegerField
+      FieldName = 'CR_NR_RESUMO_VENDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_INSERT_DATE: TSQLTimeStampField
+      FieldName = 'CR_INSERT_DATE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_INSERT_USER: TStringField
+      FieldName = 'CR_INSERT_USER'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_CtReceberCR_UPDATE_DATE: TSQLTimeStampField
+      FieldName = 'CR_UPDATE_DATE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_CtReceberCR_UPDATE_USER: TStringField
+      FieldName = 'CR_UPDATE_USER'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_CtReceberCR_SEL: TStringField
+      FieldName = 'CR_SEL'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_CtReceberCR_VL_RESTO: TFMTBCDField
+      FieldName = 'CR_VL_RESTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dst_CarregarProdutoInterno: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   produto.pro_id_pk,'#13#10'   produto.pro_tipo,'#13#10'   produto.' +
+      'pro_ean,'#13#10'   produto.pro_nome,'#13#10'   produto.pro_unidade,'#13#10'   prod' +
+      'uto.pro_vl_compra,'#13#10'   produto.pro_vl_venda,'#13#10'   produto.pro_id_' +
+      'interno'#13#10'from produto'#13#10'where'#13#10'   produto.pro_id_interno = :pro_i' +
+      'd_interno and'#13#10'   produto.pro_situacao = 1'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftUnknown
+        Name = 'pro_id_interno'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 216
+    Top = 192
+    object dst_CarregarProdutoInternoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      Required = True
+    end
+    object dst_CarregarProdutoInternoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_CarregarProdutoInternoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      Size = 18
+    end
+    object dst_CarregarProdutoInternoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      Size = 100
+    end
+    object dst_CarregarProdutoInternoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      FixedChar = True
+      Size = 2
+    end
+    object dst_CarregarProdutoInternoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_CarregarProdutoInternoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_CarregarProdutoInternoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+    end
+  end
+  object dst_CarregarClienteInterno: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa.pes' +
+      '_id_interno,'#13#10'   pessoa_endereco.pe_endereco,'#13#10'   pessoa_enderec' +
+      'o.pe_numero,'#13#10'   pessoa_endereco.pe_complemento,'#13#10'   pessoa_ende' +
+      'reco.pe_bairro,'#13#10'   pessoa_endereco.pe_seq,'#13#10'   cliente.cli_fide' +
+      'lidade'#13#10'from pessoa'#13#10'   left outer join pessoa_endereco on (pess' +
+      'oa.pes_id = pessoa_endereco.pe_id_pessoa)'#13#10'   left outer join cl' +
+      'iente on (pessoa.pes_id = cliente.cli_id_pessoa)'#13#10'where'#13#10'   pess' +
+      'oa.pes_tp_cadastro = '#39'C'#39' and'#13#10'  pessoa.pes_id_interno = :pes_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 400
+    Top = 192
+    object dst_CarregarClienteInternoPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_CarregarClienteInternoPES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+    object dst_CarregarClienteInternoPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_CarregarClienteInternoPE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      Size = 100
+    end
+    object dst_CarregarClienteInternoPE_NUMERO: TStringField
+      FieldName = 'PE_NUMERO'
+      Size = 10
+    end
+    object dst_CarregarClienteInternoPE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      Size = 80
+    end
+    object dst_CarregarClienteInternoPE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      Size = 40
+    end
+    object dst_CarregarClienteInternoPE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+    end
+    object dst_CarregarClienteInternoCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+    end
+  end
+  object dst_CarregarFornecedorInterno: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa.pes' +
+      '_id_interno'#13#10'from pessoa'#13#10'where'#13#10'   pessoa.pes_tp_cadastro = '#39'F'#39 +
+      ' and'#13#10'   pessoa.pes_id_interno = :pes_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 560
+    Top = 288
+    object dst_CarregarFornecedorInternoPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_CarregarFornecedorInternoPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_CarregarFornecedorInternoPES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+  object dst_Cliente: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa_end' +
+      'ereco.pe_endereco,'#13#10'   pessoa_endereco.pe_numero,'#13#10'   pessoa_end' +
+      'ereco.pe_complemento,'#13#10'   pessoa_endereco.pe_bairro,'#13#10'   pessoa_' +
+      'endereco.pe_seq,'#13#10'   cliente.cli_fidelidade,'#13#10'   pessoa.pes_id_i' +
+      'nterno'#13#10'from pessoa'#13#10'   left outer join pessoa_endereco on (pess' +
+      'oa.pes_id = pessoa_endereco.pe_id_pessoa)'#13#10'   left outer join cl' +
+      'iente on (pessoa.pes_id = cliente.cli_id_pessoa)'#13#10'where'#13#10'   pess' +
+      'oa.pes_tp_cadastro = '#39'C'#39' and'#13#10'   pessoa.pes_id = :pes_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 80
+    Top = 368
+    object dst_ClientePES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_ClientePES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_ClientePE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      Size = 100
+    end
+    object dst_ClientePE_NUMERO: TStringField
+      FieldName = 'PE_NUMERO'
+      Size = 10
+    end
+    object dst_ClientePE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      Size = 80
+    end
+    object dst_ClientePE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      Size = 40
+    end
+    object dst_ClientePE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+    end
+    object dst_ClienteCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+    end
+    object dst_ClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+  object Dsp_Cliente: TDataSetProvider
+    DataSet = dst_Cliente
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 208
+    Top = 368
+  end
+  object cds_Cliente: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'Dsp_Cliente'
+    Left = 360
+    Top = 368
+    object cds_ClientePES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object cds_ClientePES_RSOCIAL: TStringField
+      DisplayLabel = 'R. Social'
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object cds_ClientePE_ENDERECO: TStringField
+      DisplayLabel = 'Endere'#231'o'
+      FieldName = 'PE_ENDERECO'
+      Size = 100
+    end
+    object cds_ClientePE_NUMERO: TStringField
+      DisplayLabel = 'Nr'
+      FieldName = 'PE_NUMERO'
+      Size = 10
+    end
+    object cds_ClientePE_COMPLEMENTO: TStringField
+      DisplayLabel = 'Complemento'
+      FieldName = 'PE_COMPLEMENTO'
+      Size = 80
+    end
+    object cds_ClientePE_BAIRRO: TStringField
+      DisplayLabel = 'Bairro'
+      FieldName = 'PE_BAIRRO'
+      Size = 40
+    end
+    object cds_ClientePE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+    end
+    object cds_ClienteCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+    end
+    object cds_ClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+end

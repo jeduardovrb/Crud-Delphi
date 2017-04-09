@@ -1,0 +1,93 @@
+object dm_GrupoProduto: Tdm_GrupoProduto
+  OldCreateOrder = False
+  Height = 94
+  Width = 387
+  object dst_GrupoProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select * from grupo_produto'#13#10'where'#13#10'   grupo_produto.gru_id = :g' +
+      'ru_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'gru_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 48
+    Top = 24
+    object dst_GrupoProdutoGRU_ID: TIntegerField
+      FieldName = 'GRU_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_GrupoProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dst_GrupoProdutoGRU_VERIFICAR_ESTOQUE: TStringField
+      FieldName = 'GRU_VERIFICAR_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_GrupoProdutoGRU_SERVICO: TStringField
+      FieldName = 'GRU_SERVICO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_GrupoProdutoDTBLOQUEIO: TDateField
+      FieldName = 'DTBLOQUEIO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dsp_GrupoProduto: TDataSetProvider
+    DataSet = dst_GrupoProduto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 168
+    Top = 24
+  end
+  object cds_GrupoProduto: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'gru_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_GrupoProduto'
+    Left = 288
+    Top = 24
+    object cds_GrupoProdutoGRU_ID: TIntegerField
+      FieldName = 'GRU_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_GrupoProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_GrupoProdutoGRU_VERIFICAR_ESTOQUE: TStringField
+      FieldName = 'GRU_VERIFICAR_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_GrupoProdutoGRU_SERVICO: TStringField
+      FieldName = 'GRU_SERVICO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_GrupoProdutoDTBLOQUEIO: TDateField
+      FieldName = 'DTBLOQUEIO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+end

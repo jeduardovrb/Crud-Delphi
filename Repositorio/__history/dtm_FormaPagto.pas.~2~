@@ -1,0 +1,26 @@
+unit dtm_FormaPagto;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  Tdm_FormaPagto = class(TDataModule)
+    dsp_FormaPagto: TDataSetProvider;
+    ClientDataSet1: TClientDataSet;
+    dst_FormaPagto: TSQLDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_FormaPagto: Tdm_FormaPagto;
+
+implementation
+
+{$R *.dfm}
+
+end.

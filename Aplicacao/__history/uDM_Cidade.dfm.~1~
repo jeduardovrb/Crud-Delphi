@@ -1,0 +1,10 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 150
+  Width = 515
+  object dst_CarregarCidade: TSQLDataSet
+    Params = <>
+    Left = 56
+    Top = 32
+  end
+end

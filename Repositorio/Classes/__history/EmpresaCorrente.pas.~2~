@@ -1,0 +1,33 @@
+unit EmpresaCorrente;
+
+interface
+
+type
+  TEmpresaCorrente = Class
+    private
+      FID_PK
+      FRSOCIAL
+      FFANTASIA
+      FNOME_FICTICIO
+      FENDERECO
+      FCOMPLEMENTO
+      FNUMERO
+      FBAIRRO
+      FID_CIDADE_FK
+      FESTADO
+      FCEP
+      FID_TELEFONE
+      FEMAIL
+      FPIS
+      FCOFINS
+      FDT_CADASTRO
+      FDT_ALTERACAO
+      FVLR_FRETE
+
+    public
+
+  end;
+
+implementation
+
+end.

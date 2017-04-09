@@ -1,0 +1,1442 @@
+object dm_Produto: Tdm_Produto
+  OldCreateOrder = False
+  Height = 474
+  Width = 424
+  object dsp_Produto: TDataSetProvider
+    DataSet = dst_Produto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 176
+    Top = 24
+  end
+  object cds_Produto: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pro_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_Produto'
+    OnReconcileError = cds_ProdutoReconcileError
+    Left = 304
+    Top = 24
+    object cds_ProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_ProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_ProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_ProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object cds_ProdutoPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object cds_ProdutoPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 200
+    end
+    object cds_ProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_ProdutoPRO_GRUPO_FK: TIntegerField
+      FieldName = 'PRO_GRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ProdutoPRO_SUBGRUPO_FK: TIntegerField
+      FieldName = 'PRO_SUBGRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ProdutoPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_ProdutoPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_ProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_ProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_ProdutoPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_ProdutoPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ProdutoPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_Produtodst_ProdutoEmpresa: TDataSetField
+      FieldName = 'dst_ProdutoEmpresa'
+    end
+    object cds_ProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_Produto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 'select * from produto '#13#10'where'#13#10'   produto.pro_id_pk = :pro_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pro_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dst_ProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_ProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_ProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_ProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object dst_ProdutoPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object dst_ProdutoPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 200
+    end
+    object dst_ProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dst_ProdutoPRO_GRUPO_FK: TIntegerField
+      FieldName = 'PRO_GRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ProdutoPRO_SUBGRUPO_FK: TIntegerField
+      FieldName = 'PRO_SUBGRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ProdutoPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ProdutoPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ProdutoPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ProdutoPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ProdutoPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object cds_ProdutoEmpresa: TClientDataSet
+    Aggregates = <>
+    DataSetField = cds_Produtodst_ProdutoEmpresa
+    Params = <>
+    Left = 296
+    Top = 104
+    object cds_ProdutoEmpresaPE_ID_EMPRESA: TIntegerField
+      FieldName = 'PE_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_ProdutoEmpresaPE_ID_PRODUTO: TIntegerField
+      FieldName = 'PE_ID_PRODUTO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_ProdutoEmpresaPE_ID_GRADE: TSmallintField
+      FieldName = 'PE_ID_GRADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ProdutoEmpresaPE_QT_EST_DISPONIVEL: TFMTBCDField
+      FieldName = 'PE_QT_EST_DISPONIVEL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object cds_ProdutoEmpresaPE_QT_EST_RESERVADO: TFMTBCDField
+      FieldName = 'PE_QT_EST_RESERVADO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object cds_ProdutoEmpresaPE_QT_EST_MOSTRUARIO: TFMTBCDField
+      FieldName = 'PE_QT_EST_MOSTRUARIO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object cds_ProdutoEmpresaPE_QT_EST_ASSISTENCIA: TFMTBCDField
+      FieldName = 'PE_QT_EST_ASSISTENCIA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object cds_ProdutoEmpresaPE_QT_EST_BLOQUEADO: TFMTBCDField
+      FieldName = 'PE_QT_EST_BLOQUEADO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object cds_ProdutoEmpresaPE_DD_ESTOQUE_MAXIMO: TSmallintField
+      FieldName = 'PE_DD_ESTOQUE_MAXIMO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ProdutoEmpresaPE_QT_MEDIA_VENDA: TFMTBCDField
+      FieldName = 'PE_QT_MEDIA_VENDA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_QT_ESTOQUE_MAXIMO: TFMTBCDField
+      FieldName = 'PE_QT_ESTOQUE_MAXIMO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_JAN: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_JAN'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_FEV: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_FEV'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_MAR: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_MAR'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_ABR: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_ABR'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_MAI: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_MAI'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_JUN: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_JUN'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_JUL: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_JUL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_AGO: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_AGO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_SET: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_SET'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_OUT: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_OUT'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_NOV: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_NOV'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_VL_VENDA_DEZ: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_DEZ'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object cds_ProdutoEmpresaPE_QT_ESTOQUE_MIN_PRATICADO: TFMTBCDField
+      FieldName = 'PE_QT_ESTOQUE_MIN_PRATICADO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+  end
+  object dst_ProdutoEmpresa: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   pe_id_empresa,'#13#10'   pe_id_produto,'#13#10'   pe_id_grade,'#13#10' ' +
+      '  pe_qt_est_disponivel,'#13#10'   pe_qt_est_reservado,'#13#10'   pe_qt_est_m' +
+      'ostruario,'#13#10'   pe_qt_est_assistencia,'#13#10'   pe_qt_est_bloqueado,'#13#10 +
+      '   pe_dd_estoque_maximo,'#13#10'   pe_qt_media_venda,'#13#10'   pe_qt_estoqu' +
+      'e_maximo,'#13#10'   pe_vl_venda_jan,'#13#10'   pe_vl_venda_fev,'#13#10'   pe_vl_ve' +
+      'nda_mar,'#13#10'   pe_vl_venda_abr,'#13#10'   pe_vl_venda_mai,'#13#10'   pe_vl_ven' +
+      'da_jun,'#13#10'   pe_vl_venda_jul,'#13#10'   pe_vl_venda_ago,'#13#10'   pe_vl_vend' +
+      'a_set,'#13#10'   pe_vl_venda_out,'#13#10'   pe_vl_venda_nov,'#13#10'   pe_vl_venda' +
+      '_dez,'#13#10'   pe_qt_estoque_min_praticado'#13#10'from produto_empresa'#13#10'whe' +
+      're'#13#10'   (pe_id_produto = :pro_id_pk) and'#13#10'   (pe_id_empresa = :pe' +
+      '_id_empresa)'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkProduto
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pro_id_pk'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'pe_id_empresa'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 104
+    object dst_ProdutoEmpresaPE_ID_EMPRESA: TIntegerField
+      FieldName = 'PE_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_ProdutoEmpresaPE_ID_PRODUTO: TIntegerField
+      FieldName = 'PE_ID_PRODUTO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_ProdutoEmpresaPE_ID_GRADE: TSmallintField
+      FieldName = 'PE_ID_GRADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ProdutoEmpresaPE_QT_EST_DISPONIVEL: TFMTBCDField
+      FieldName = 'PE_QT_EST_DISPONIVEL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object dst_ProdutoEmpresaPE_QT_EST_RESERVADO: TFMTBCDField
+      FieldName = 'PE_QT_EST_RESERVADO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object dst_ProdutoEmpresaPE_QT_EST_MOSTRUARIO: TFMTBCDField
+      FieldName = 'PE_QT_EST_MOSTRUARIO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object dst_ProdutoEmpresaPE_QT_EST_ASSISTENCIA: TFMTBCDField
+      FieldName = 'PE_QT_EST_ASSISTENCIA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object dst_ProdutoEmpresaPE_QT_EST_BLOQUEADO: TFMTBCDField
+      FieldName = 'PE_QT_EST_BLOQUEADO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 5
+    end
+    object dst_ProdutoEmpresaPE_DD_ESTOQUE_MAXIMO: TSmallintField
+      FieldName = 'PE_DD_ESTOQUE_MAXIMO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ProdutoEmpresaPE_QT_MEDIA_VENDA: TFMTBCDField
+      FieldName = 'PE_QT_MEDIA_VENDA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_QT_ESTOQUE_MAXIMO: TFMTBCDField
+      FieldName = 'PE_QT_ESTOQUE_MAXIMO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_JAN: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_JAN'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_FEV: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_FEV'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_MAR: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_MAR'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_ABR: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_ABR'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_MAI: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_MAI'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_JUN: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_JUN'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_JUL: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_JUL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_AGO: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_AGO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_SET: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_SET'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_OUT: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_OUT'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_NOV: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_NOV'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_VL_VENDA_DEZ: TFMTBCDField
+      FieldName = 'PE_VL_VENDA_DEZ'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+    object dst_ProdutoEmpresaPE_QT_ESTOQUE_MIN_PRATICADO: TFMTBCDField
+      FieldName = 'PE_QT_ESTOQUE_MIN_PRATICADO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 3
+    end
+  end
+  object dts_LinkProduto: TDataSource
+    DataSet = dst_Produto
+    Left = 176
+    Top = 104
+  end
+  object dst_RelatorioProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select '#13#10'  produto.pro_id_pk,'#13#10'  grupo_produto.gru_descricao,'#13#10' ' +
+      ' sub_grupo_produto.subgru_descricao,'#13#10'  produto.pro_nome,'#13#10'  pro' +
+      'duto.pro_vl_compra,'#13#10'  produto.pro_vl_venda'#13#10'from produto'#13#10'  lef' +
+      't outer join grupo_produto on (produto.pro_grupo_fk = grupo_prod' +
+      'uto.gru_id)'#13#10'  left outer join sub_grupo_produto on (produto.pro' +
+      '_subgrupo_fk = sub_grupo_produto.subgru_id)'#13#10'order by'#13#10'  produto' +
+      '.pro_id_pk'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 176
+    object dst_RelatorioProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      Required = True
+    end
+    object dst_RelatorioProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      Size = 40
+    end
+    object dst_RelatorioProdutoSUBGRU_DESCRICAO: TStringField
+      FieldName = 'SUBGRU_DESCRICAO'
+      Size = 40
+    end
+    object dst_RelatorioProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      Size = 100
+    end
+    object dst_RelatorioProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object dst_RelatorioProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object frmDstRelatorioProduto: TfrxDBDataset
+    UserName = 'frmDstRelatorioProduto'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'PRO_ID_PK=PRO_ID_PK'
+      'GRU_DESCRICAO=GRU_DESCRICAO'
+      'SUBGRU_DESCRICAO=SUBGRU_DESCRICAO'
+      'PRO_NOME=PRO_NOME'
+      'PRO_VL_COMPRA=PRO_VL_COMPRA'
+      'PRO_VL_VENDA=PRO_VL_VENDA')
+    DataSet = dst_RelatorioProduto
+    BCDToCurrency = False
+    Left = 192
+    Top = 176
+  end
+  object frxRelatorioProdutos: TfrxReport
+    Version = '4.11.14'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42117.909975081000000000
+    ReportOptions.LastChange = 42117.931442372700000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 320
+    Top = 176
+    Datasets = <
+      item
+        DataSet = frmDstRelatorioProduto
+        DataSetName = 'frmDstRelatorioProduto'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      Orientation = poLandscape
+      PaperWidth = 297.000000000000000000
+      PaperHeight = 210.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object ReportTitle1: TfrxReportTitle
+        Height = 26.456710000000000000
+        Top = 18.897650000000000000
+        Width = 1046.929810000000000000
+      end
+      object Memo1: TfrxMemoView
+        Align = baCenter
+        Left = 5.669295000000044000
+        Top = 17.677180000000000000
+        Width = 1035.591220000000000000
+        Height = 18.897650000000000000
+        ShowHint = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Frame.Typ = [ftBottom]
+        HAlign = haCenter
+        Memo.UTF8W = (
+          'Rela'#231#227'o dos Pre'#231'os dos Produtos')
+        ParentFont = False
+      end
+      object PageHeader1: TfrxPageHeader
+        Height = 45.354360000000000000
+        Top = 68.031540000000010000
+        Width = 1046.929810000000000000
+        object Memo3: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 25.000000000000000000
+          Width = 49.133890000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DisplayFormat.FormatStr = '000000'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'C'#243'digo')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 264.567100000000000000
+          Top = 25.000000000000000000
+          Width = 151.181200000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Sub - Grupo')
+          ParentFont = False
+        end
+        object Memo6: TfrxMemoView
+          Left = 453.543600000000000000
+          Top = 25.000000000000000000
+          Width = 264.567100000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Nome do Produto')
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          Left = 782.362710000000000000
+          Top = 25.000000000000000000
+          Width = 86.929190000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Valor da Compra')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          Left = 941.102970000000000000
+          Top = 25.000000000000000000
+          Width = 79.370130000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Valor da Venda')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          Left = 75.590600000000000000
+          Top = 24.440940000000000000
+          Width = 151.181200000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Grupo')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        Height = 16.251968503937000000
+        Top = 173.858380000000000000
+        Width = 1046.929810000000000000
+        DataSet = frmDstRelatorioProduto
+        DataSetName = 'frmDstRelatorioProduto'
+        RowCount = 0
+        object Memo2: TfrxMemoView
+          Width = 1046.929810000000000000
+          Height = 15.118110240000000000
+          ShowHint = False
+          Highlight.Font.Charset = DEFAULT_CHARSET
+          Highlight.Font.Color = 14342874
+          Highlight.Font.Height = -13
+          Highlight.Font.Name = 'Arial'
+          Highlight.Font.Style = []
+          Highlight.Condition = '<Line#> mod 2'
+        end
+        object frmDstRelatorioProdutoPRO_ID_PK: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 0.779529999999994100
+          Width = 49.133890000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'PRO_ID_PK'
+          DataSet = frmDstRelatorioProduto
+          DataSetName = 'frmDstRelatorioProduto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haCenter
+          Memo.UTF8W = (
+            '[frmDstRelatorioProduto."PRO_ID_PK"]')
+          ParentFont = False
+        end
+        object frmDstRelatorioProdutoGRU_DESCRICAO: TfrxMemoView
+          Left = 74.811070000000000000
+          Width = 151.181200000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'GRU_DESCRICAO'
+          DataSet = frmDstRelatorioProduto
+          DataSetName = 'frmDstRelatorioProduto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frmDstRelatorioProduto."GRU_DESCRICAO"]')
+          ParentFont = False
+        end
+        object frmDstRelatorioProdutoSUBGRU_DESCRICAO: TfrxMemoView
+          Left = 263.787570000000000000
+          Width = 151.181200000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'SUBGRU_DESCRICAO'
+          DataSet = frmDstRelatorioProduto
+          DataSetName = 'frmDstRelatorioProduto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frmDstRelatorioProduto."SUBGRU_DESCRICAO"]')
+          ParentFont = False
+        end
+        object frmDstRelatorioProdutoPRO_NOME: TfrxMemoView
+          Left = 452.764070000000000000
+          Width = 264.567100000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'PRO_NOME'
+          DataSet = frmDstRelatorioProduto
+          DataSetName = 'frmDstRelatorioProduto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frmDstRelatorioProduto."PRO_NOME"]')
+          ParentFont = False
+        end
+        object frmDstRelatorioProdutoPRO_VL_COMPRA: TfrxMemoView
+          Left = 755.126470000000000000
+          Width = 113.385900000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'PRO_VL_COMPRA'
+          DataSet = frmDstRelatorioProduto
+          DataSetName = 'frmDstRelatorioProduto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[frmDstRelatorioProduto."PRO_VL_COMPRA"]')
+          ParentFont = False
+        end
+        object frmDstRelatorioProdutoPRO_VL_VENDA: TfrxMemoView
+          Left = 906.307670000000000000
+          Width = 117.165430000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'PRO_VL_VENDA'
+          DataSet = frmDstRelatorioProduto
+          DataSetName = 'frmDstRelatorioProduto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[frmDstRelatorioProduto."PRO_VL_VENDA"]')
+          ParentFont = False
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        Height = 22.677180000000000000
+        Top = 249.448980000000000000
+        Width = 1046.929810000000000000
+        object Memo9: TfrxMemoView
+          Left = 876.850960000000000000
+          Top = 3.779529999999994000
+          Width = 143.622140000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'P'#225'gina [Page] de [TotalPages#]')
+          ParentFont = False
+        end
+        object Memo10: TfrxMemoView
+          Left = 3.779530000000000000
+          Top = 3.779529999999994000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Silver Software')
+          ParentFont = False
+        end
+        object Memo11: TfrxMemoView
+          Left = 4.559060000000000000
+          Width = 1039.370750000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftTop]
+          HAlign = haCenter
+          ParentFont = False
+        end
+      end
+    end
+  end
+  object dst_GetIdProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   produto.pro_id_pk,'#13#10'   produto.pro_id_interno,'#13#10'   pr' +
+      'oduto.pro_tipo,'#13#10'   produto.pro_ean,'#13#10'   produto.pro_nome,'#13#10'   p' +
+      'roduto.pro_nome_frente,'#13#10'   produto.pro_descricao,'#13#10'   produto.p' +
+      'ro_unidade,'#13#10'   produto.pro_grupo_fk,'#13#10'   produto.pro_subgrupo_f' +
+      'k,'#13#10'   produto.pro_percentual,'#13#10'   produto.pro_lucro,'#13#10'   produt' +
+      'o.pro_vl_compra,'#13#10'   produto.pro_vl_venda,'#13#10'   produto.pro_qtde_' +
+      'estoque,'#13#10'   produto.pro_dt_cadastro,'#13#10'   produto.pro_dt_alterac' +
+      'ao'#13#10'from produto'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 48
+    Top = 272
+    object dst_GetIdProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      Required = True
+    end
+    object dst_GetIdProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_GetIdProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      Size = 18
+    end
+    object dst_GetIdProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      Size = 100
+    end
+    object dst_GetIdProdutoPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      Size = 100
+    end
+    object dst_GetIdProdutoPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      Size = 200
+    end
+    object dst_GetIdProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      FixedChar = True
+      Size = 2
+    end
+    object dst_GetIdProdutoPRO_GRUPO_FK: TIntegerField
+      FieldName = 'PRO_GRUPO_FK'
+    end
+    object dst_GetIdProdutoPRO_SUBGRUPO_FK: TIntegerField
+      FieldName = 'PRO_SUBGRUPO_FK'
+    end
+    object dst_GetIdProdutoPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      Precision = 18
+      Size = 2
+    end
+    object dst_GetIdProdutoPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      Precision = 18
+      Size = 2
+    end
+    object dst_GetIdProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_GetIdProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_GetIdProdutoPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      Precision = 18
+      Size = 2
+    end
+    object dst_GetIdProdutoPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+    end
+    object dst_GetIdProdutoPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+    end
+    object dst_GetIdProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+    end
+  end
+  object dsp_GetIdProduto: TDataSetProvider
+    DataSet = dst_GetIdProduto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 184
+    Top = 272
+  end
+  object cds_GetIdProduto: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_GetIdProduto'
+    Left = 312
+    Top = 272
+    object cds_GetIdProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      Required = True
+    end
+    object cds_GetIdProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      FixedChar = True
+      Size = 1
+    end
+    object cds_GetIdProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      Size = 18
+    end
+    object cds_GetIdProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      Size = 100
+    end
+    object cds_GetIdProdutoPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      Size = 100
+    end
+    object cds_GetIdProdutoPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      Size = 200
+    end
+    object cds_GetIdProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      FixedChar = True
+      Size = 2
+    end
+    object cds_GetIdProdutoPRO_GRUPO_FK: TIntegerField
+      FieldName = 'PRO_GRUPO_FK'
+    end
+    object cds_GetIdProdutoPRO_SUBGRUPO_FK: TIntegerField
+      FieldName = 'PRO_SUBGRUPO_FK'
+    end
+    object cds_GetIdProdutoPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      Precision = 18
+      Size = 2
+    end
+    object cds_GetIdProdutoPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      Precision = 18
+      Size = 2
+    end
+    object cds_GetIdProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      Precision = 18
+      Size = 2
+    end
+    object cds_GetIdProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      Precision = 18
+      Size = 2
+    end
+    object cds_GetIdProdutoPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      Precision = 18
+      Size = 2
+    end
+    object cds_GetIdProdutoPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+    end
+    object cds_GetIdProdutoPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+    end
+    object cds_GetIdProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+    end
+  end
+  object dst_AlterarProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'  produto.pro_id_pk,'#13#10'  produto.pro_id_interno,'#13#10'  produ' +
+      'to.pro_tipo,'#13#10'  produto.pro_ean,'#13#10'  produto.pro_nome,'#13#10'  produto' +
+      '.pro_nome_frente,'#13#10'  produto.pro_descricao,'#13#10'  produto.pro_unida' +
+      'de,'#13#10'  produto.pro_grupo_fk,'#13#10'  produto.pro_subgrupo_fk,'#13#10'  prod' +
+      'uto.pro_percentual,'#13#10'  produto.pro_lucro,'#13#10'  produto.pro_vl_comp' +
+      'ra,'#13#10'  produto.pro_vl_venda,'#13#10'  produto.pro_qtde_estoque,'#13#10'  pro' +
+      'duto.pro_dt_cadastro,'#13#10'  produto.pro_dt_alteracao,'#13#10'  grupo_prod' +
+      'uto.gru_descricao,'#13#10'  sub_grupo_produto.subgru_descricao'#13#10'from p' +
+      'roduto'#13#10'   left outer join grupo_produto on (produto.pro_grupo_f' +
+      'k = grupo_produto.gru_id)'#13#10'   left outer join sub_grupo_produto ' +
+      'on (produto.pro_subgrupo_fk = sub_grupo_produto.subgru_id)'#13#10'orde' +
+      'r by'#13#10'    produto.pro_id_interno'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 48
+    Top = 388
+    object dst_AlterarProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_AlterarProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_AlterarProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_AlterarProdutoPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object dst_AlterarProdutoPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object dst_AlterarProdutoPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 200
+    end
+    object dst_AlterarProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dst_AlterarProdutoPRO_GRUPO_FK: TIntegerField
+      FieldName = 'PRO_GRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_AlterarProdutoPRO_SUBGRUPO_FK: TIntegerField
+      FieldName = 'PRO_SUBGRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_AlterarProdutoPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_AlterarProdutoPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_AlterarProdutoPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_AlterarProdutoPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_AlterarProdutoPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_AlterarProdutoPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_AlterarProdutoPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_AlterarProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dst_AlterarProdutoSUBGRU_DESCRICAO: TStringField
+      FieldName = 'SUBGRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dst_AlterarProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dsp_AlterarProduto: TDataSetProvider
+    DataSet = dst_AlterarProduto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 184
+    Top = 392
+  end
+  object cds_AlterarProduto: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_AlterarProduto'
+    Left = 296
+    Top = 392
+    object cds_AlterarProdutoPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_AlterarProdutoPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_AlterarProdutoPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_AlterarProdutoPRO_NOME: TStringField
+      DisplayLabel = 'Nome do Produto'
+      FieldName = 'PRO_NOME'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object cds_AlterarProdutoPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object cds_AlterarProdutoPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 200
+    end
+    object cds_AlterarProdutoPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_AlterarProdutoPRO_GRUPO_FK: TIntegerField
+      DisplayLabel = 'Id.'
+      FieldName = 'PRO_GRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_AlterarProdutoPRO_SUBGRUPO_FK: TIntegerField
+      DisplayLabel = 'Id.'
+      FieldName = 'PRO_SUBGRUPO_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_AlterarProdutoPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_AlterarProdutoPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_AlterarProdutoPRO_VL_COMPRA: TFMTBCDField
+      DisplayLabel = 'Valor Compra'
+      FieldName = 'PRO_VL_COMPRA'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_AlterarProdutoPRO_VL_VENDA: TFMTBCDField
+      DisplayLabel = 'Valor Venda'
+      FieldName = 'PRO_VL_VENDA'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_AlterarProdutoPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_AlterarProdutoPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_AlterarProdutoPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_AlterarProdutoGRU_DESCRICAO: TStringField
+      DisplayLabel = 'Descri'#231#227'o do Grupo'
+      FieldName = 'GRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_AlterarProdutoSUBGRU_DESCRICAO: TStringField
+      DisplayLabel = 'Descri'#231#227'o Sub-Grupo'
+      FieldName = 'SUBGRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_AlterarProdutoPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_AllProdutos: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 'select * from produto '#13#10'order by'#13#10'   produto.pro_id_interno'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 49
+    Top = 328
+    object dst_AllProdutosPRO_ID_PK: TIntegerField
+      FieldName = 'PRO_ID_PK'
+      Required = True
+    end
+    object dst_AllProdutosPRO_TIPO: TStringField
+      FieldName = 'PRO_TIPO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_AllProdutosPRO_EAN: TStringField
+      FieldName = 'PRO_EAN'
+      Size = 18
+    end
+    object dst_AllProdutosPRO_NOME: TStringField
+      FieldName = 'PRO_NOME'
+      Size = 100
+    end
+    object dst_AllProdutosPRO_NOME_FRENTE: TStringField
+      FieldName = 'PRO_NOME_FRENTE'
+      Size = 100
+    end
+    object dst_AllProdutosPRO_DESCRICAO: TStringField
+      FieldName = 'PRO_DESCRICAO'
+      Size = 200
+    end
+    object dst_AllProdutosPRO_UNIDADE: TStringField
+      FieldName = 'PRO_UNIDADE'
+      FixedChar = True
+      Size = 2
+    end
+    object dst_AllProdutosPRO_GRUPO_FK: TIntegerField
+      FieldName = 'PRO_GRUPO_FK'
+    end
+    object dst_AllProdutosPRO_SUBGRUPO_FK: TIntegerField
+      FieldName = 'PRO_SUBGRUPO_FK'
+    end
+    object dst_AllProdutosPRO_PERCENTUAL: TFMTBCDField
+      FieldName = 'PRO_PERCENTUAL'
+      Precision = 18
+      Size = 2
+    end
+    object dst_AllProdutosPRO_LUCRO: TFMTBCDField
+      FieldName = 'PRO_LUCRO'
+      Precision = 18
+      Size = 2
+    end
+    object dst_AllProdutosPRO_VL_COMPRA: TFMTBCDField
+      FieldName = 'PRO_VL_COMPRA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_AllProdutosPRO_VL_VENDA: TFMTBCDField
+      FieldName = 'PRO_VL_VENDA'
+      Precision = 18
+      Size = 2
+    end
+    object dst_AllProdutosPRO_QTDE_ESTOQUE: TFMTBCDField
+      FieldName = 'PRO_QTDE_ESTOQUE'
+      Precision = 18
+      Size = 2
+    end
+    object dst_AllProdutosPRO_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'PRO_DT_CADASTRO'
+    end
+    object dst_AllProdutosPRO_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'PRO_DT_ALTERACAO'
+    end
+    object dst_AllProdutosPRO_ID_INTERNO: TIntegerField
+      FieldName = 'PRO_ID_INTERNO'
+    end
+  end
+end

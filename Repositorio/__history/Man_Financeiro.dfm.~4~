@@ -1,0 +1,66 @@
+object frmMan_Financeiro: TfrmMan_Financeiro
+  Left = 0
+  Top = 0
+  Caption = 'Financeiro'
+  ClientHeight = 234
+  ClientWidth = 483
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 483
+    Height = 234
+    Align = alClient
+    DataSource = Dts
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'CR_ID'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CR_DOCTO'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CR_DT_EMISSAO'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CR_DT_VCTO'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CR_DT_BAIXA'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CR_VL_TITULO'
+        Visible = True
+      end>
+  end
+  object Dts: TDataSource
+    DataSet = dm_Recebimento.cds_receber
+    Left = 408
+    Top = 104
+  end
+end

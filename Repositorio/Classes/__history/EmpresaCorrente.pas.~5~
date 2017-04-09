@@ -1,0 +1,65 @@
+unit EmpresaCorrente;
+
+interface
+
+uses
+   SysUtils;
+
+type
+  TEmpresaCorrente = Class
+    private
+      FId          : Integer;
+      FRSocial     : String;
+      FFantasia    : String;
+      FNomeFicticio: String;
+      FEndereco    : String;
+      FComplemento : String;
+      FNumero      : String;
+      FBAIRRO      : String;
+      FIdCidade    : Integer;
+      FEstado      : String;
+      FCEP         : String;
+      FID_TELEFONE : Integer;
+      FEmail       : String;
+      FPIS         : Currency;
+      FCOFINS      : Currency;
+      FVLR_FRETE   : Currency;
+    public
+      property Id          : Integer read FId       write FId;
+      property RSocial     : String  read FRSocial  write FRSocial;
+      property Fantasia    : String  read FFantasia write FFantasia;
+      property NomeFicticio: String
+      property Endereco    : String
+      property Complemento : String
+      property Numero      : String
+      property BAIRRO      : String
+      property IdCidade    : Intege
+      property Estado      : String
+      property CEP         : String
+      property ID_TELEFONE : Intege
+      property Email       : String
+      property PIS         : Curren
+      property COFINS      : Curren
+      property VLR_FRETE   : Curren
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  end;
+
+implementation
+
+end.

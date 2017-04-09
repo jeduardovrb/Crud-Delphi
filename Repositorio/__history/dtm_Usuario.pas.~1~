@@ -1,0 +1,23 @@
+unit dtm_Usuario;
+
+interface
+
+uses
+  SysUtils, Classes;
+
+type
+  Tdm_Usuario = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Usuario: Tdm_Usuario;
+
+implementation
+
+{$R *.dfm}
+
+end.

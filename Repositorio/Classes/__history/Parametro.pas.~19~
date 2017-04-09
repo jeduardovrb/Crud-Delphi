@@ -1,0 +1,102 @@
+unit Parametro;
+
+interface
+
+uses
+  SysUtils, Conexao, SqlExpr, BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TParametro = class
+  private
+    FIdEmpresa: integer;
+    FClienteFidelidade: Integer;
+    FAlJuros: Currency;
+    FPlanoContaVenda: Integer;
+    FPlanoContaEntrada: Integer;
+    FQtdePrazoCC: Integer;
+    FQtdePrazoDias: Integer;
+    FVendaGrid: Integer;
+    FPesquisaRapida: Integer;
+    FEditarIdProduto: Integer;
+    FNaoDigitarVirgula: Integer;
+
+  public
+    procedure CarregarParametro(AIdEmpresa: Integer);
+
+    property IdEmpresa: Integer read FIdEmpresa write FIdEmpresa;
+    property ClienteFidelidade: Integer read FClienteFidelidade write FClienteFidelidade;
+    property PlanoContaVenda: Integer read FPlanoContaVenda write FPlanoContaVenda;
+    property PlanoContaEntrada: Integer read FPlanoContaEntrada write FPlanoContaEntrada;
+    property AlJusto: Currency read FAlJuros write FAlJuros;
+    property QtdePrazoDias: Integer read FQtdePrazoDias write FQtdePrazoDias;
+    property QtdePrazoCC: Integer read FQtdePrazoCC write FQtdePrazoCC;
+    property VendaGrid: Integer read FVendaGrid write FVendaGrid;
+    property PesquisaRapida: Integer read FPesquisaRapida write FPesquisaRapida;
+    property EditarIdProduto: Integer read FEditarIdProduto write FEditarIdProduto;
+    property NaoDigitarVirgula: Integer read FNaoDigitarVirgula write FNaoDigitarVirgula;
+  end;
+
+implementation
+
+{ TParametro }
+
+{ TParametro }
+
+procedure TParametro.CarregarParametro(AIdEmpresa: Integer);
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VQry := ConexaoDBX.BuildQry();
+  try
+    try
+      VSql :=
+        ' select ' +
+        '    pa_empresa, ' +
+        '    pa_cliente_fidelidade, ' +
+        '    pa_plano_conta_venda, ' +
+        '    pa_plano_conta_entrada, ' +
+        '    pa_al_juros, ' +
+        '    pa_qtde_prazo_dias, ' +
+        '    pa_qtde_prazo_cc, ' +
+        '    pa_venda_grid, ' +
+        '    pa_pesquisa_rapida, ' +
+        '    pa_editar_id_produto, ' +
+        '    pa_nao_digitar_virgula ' +
+        ' from parametro ' +
+        ' where ' +
+        '    (parametro.pa_empresa = %d) ' ;
+
+      VSql := Format(VSql, [AIdEmpresa]);
+
+      VQry.Close;
+      VQry.CommandText := VSql;
+      VQry.Open;
+      try
+        if VQry.IsEmpty then
+          raise Exception.Create('Parametro não encotrada.');
+
+        Self.FIdEmpresa         := VQry.Fields[0].AsInteger;
+        Self.FClienteFidelidade := VQry.Fields[1].AsInteger;
+        Self.FPlanoContaVenda   := VQry.Fields[2].AsInteger;
+        Self.FPlanoContaEntrada := VQry.Fields[3].AsInteger;
+        Self.FAlJuros           := VQry.Fields[4].AsCurrency;
+        Self.FQtdePrazoDias     := VQry.Fields[5].AsInteger;
+        Self.FQtdePrazoCC       := VQry.Fields[6].AsInteger;
+        Self.FVendaGrid         := VQry.Fields[7].AsInteger;
+        Self.FPesquisaRapida    := VQry.Fields[8].AsInteger;
+        Self.FEditarIdProduto   := VQry.Fields[9].AsInteger;
+        Self.FNaoDigitarVirgula := VQry.Fields[10].AsInteger;
+      finally
+        VQry.Close;
+      end;
+
+    except on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+end.

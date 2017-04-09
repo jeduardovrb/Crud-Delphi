@@ -1,0 +1,332 @@
+unit dtm_Produto;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DB, SqlExpr, DBClient, Provider, TratamentoErro,
+  frxClass, frxDBSet;
+
+type
+  Tdm_Produto = class(TDataModule)
+    dsp_Produto: TDataSetProvider;
+    cds_Produto: TClientDataSet;
+    dst_Produto: TSQLDataSet;
+    dst_ProdutoPRO_ID_PK: TIntegerField;
+    dst_ProdutoPRO_TIPO: TStringField;
+    dst_ProdutoPRO_EAN: TStringField;
+    dst_ProdutoPRO_NOME: TStringField;
+    dst_ProdutoPRO_NOME_FRENTE: TStringField;
+    dst_ProdutoPRO_DESCRICAO: TStringField;
+    dst_ProdutoPRO_GRUPO_FK: TIntegerField;
+    dst_ProdutoPRO_SUBGRUPO_FK: TIntegerField;
+    dst_ProdutoPRO_PERCENTUAL: TFMTBCDField;
+    dst_ProdutoPRO_LUCRO: TFMTBCDField;
+    dst_ProdutoPRO_VL_COMPRA: TFMTBCDField;
+    dst_ProdutoPRO_VL_VENDA: TFMTBCDField;
+    dst_ProdutoPRO_QTDE_ESTOQUE: TFMTBCDField;
+    dst_ProdutoPRO_DT_CADASTRO: TSQLTimeStampField;
+    dst_ProdutoPRO_DT_ALTERACAO: TSQLTimeStampField;
+    cds_ProdutoPRO_ID_PK: TIntegerField;
+    cds_ProdutoPRO_TIPO: TStringField;
+    cds_ProdutoPRO_EAN: TStringField;
+    cds_ProdutoPRO_NOME: TStringField;
+    cds_ProdutoPRO_NOME_FRENTE: TStringField;
+    cds_ProdutoPRO_DESCRICAO: TStringField;
+    cds_ProdutoPRO_GRUPO_FK: TIntegerField;
+    cds_ProdutoPRO_SUBGRUPO_FK: TIntegerField;
+    cds_ProdutoPRO_PERCENTUAL: TFMTBCDField;
+    cds_ProdutoPRO_LUCRO: TFMTBCDField;
+    cds_ProdutoPRO_VL_COMPRA: TFMTBCDField;
+    cds_ProdutoPRO_VL_VENDA: TFMTBCDField;
+    cds_ProdutoPRO_QTDE_ESTOQUE: TFMTBCDField;
+    cds_ProdutoPRO_DT_CADASTRO: TSQLTimeStampField;
+    cds_ProdutoPRO_DT_ALTERACAO: TSQLTimeStampField;
+    dst_ProdutoPRO_UNIDADE: TStringField;
+    cds_ProdutoPRO_UNIDADE: TStringField;
+    cds_ProdutoEmpresa: TClientDataSet;
+    dst_ProdutoEmpresa: TSQLDataSet;
+    dts_LinkProduto: TDataSource;
+    dst_ProdutoEmpresaPE_ID_EMPRESA: TIntegerField;
+    dst_ProdutoEmpresaPE_ID_PRODUTO: TIntegerField;
+    dst_ProdutoEmpresaPE_ID_GRADE: TSmallintField;
+    dst_ProdutoEmpresaPE_QT_EST_DISPONIVEL: TFMTBCDField;
+    dst_ProdutoEmpresaPE_QT_EST_RESERVADO: TFMTBCDField;
+    dst_ProdutoEmpresaPE_QT_EST_MOSTRUARIO: TFMTBCDField;
+    dst_ProdutoEmpresaPE_QT_EST_ASSISTENCIA: TFMTBCDField;
+    dst_ProdutoEmpresaPE_QT_EST_BLOQUEADO: TFMTBCDField;
+    dst_ProdutoEmpresaPE_DD_ESTOQUE_MAXIMO: TSmallintField;
+    dst_ProdutoEmpresaPE_QT_MEDIA_VENDA: TFMTBCDField;
+    dst_ProdutoEmpresaPE_QT_ESTOQUE_MAXIMO: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_JAN: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_FEV: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_MAR: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_ABR: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_MAI: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_JUN: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_JUL: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_AGO: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_SET: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_OUT: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_NOV: TFMTBCDField;
+    dst_ProdutoEmpresaPE_VL_VENDA_DEZ: TFMTBCDField;
+    dst_ProdutoEmpresaPE_QT_ESTOQUE_MIN_PRATICADO: TFMTBCDField;
+    cds_Produtodst_ProdutoEmpresa: TDataSetField;
+    cds_ProdutoEmpresaPE_ID_EMPRESA: TIntegerField;
+    cds_ProdutoEmpresaPE_ID_PRODUTO: TIntegerField;
+    cds_ProdutoEmpresaPE_ID_GRADE: TSmallintField;
+    cds_ProdutoEmpresaPE_QT_EST_DISPONIVEL: TFMTBCDField;
+    cds_ProdutoEmpresaPE_QT_EST_RESERVADO: TFMTBCDField;
+    cds_ProdutoEmpresaPE_QT_EST_MOSTRUARIO: TFMTBCDField;
+    cds_ProdutoEmpresaPE_QT_EST_ASSISTENCIA: TFMTBCDField;
+    cds_ProdutoEmpresaPE_QT_EST_BLOQUEADO: TFMTBCDField;
+    cds_ProdutoEmpresaPE_DD_ESTOQUE_MAXIMO: TSmallintField;
+    cds_ProdutoEmpresaPE_QT_MEDIA_VENDA: TFMTBCDField;
+    cds_ProdutoEmpresaPE_QT_ESTOQUE_MAXIMO: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_JAN: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_FEV: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_MAR: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_ABR: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_MAI: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_JUN: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_JUL: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_AGO: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_SET: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_OUT: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_NOV: TFMTBCDField;
+    cds_ProdutoEmpresaPE_VL_VENDA_DEZ: TFMTBCDField;
+    cds_ProdutoEmpresaPE_QT_ESTOQUE_MIN_PRATICADO: TFMTBCDField;
+    dst_RelatorioProduto: TSQLDataSet;
+    dst_RelatorioProdutoPRO_ID_PK: TIntegerField;
+    dst_RelatorioProdutoGRU_DESCRICAO: TStringField;
+    dst_RelatorioProdutoSUBGRU_DESCRICAO: TStringField;
+    dst_RelatorioProdutoPRO_NOME: TStringField;
+    dst_RelatorioProdutoPRO_VL_COMPRA: TFMTBCDField;
+    dst_RelatorioProdutoPRO_VL_VENDA: TFMTBCDField;
+    frmDstRelatorioProduto: TfrxDBDataset;
+    frxRelatorioProdutos: TfrxReport;
+    dst_GetIdProduto: TSQLDataSet;
+    dsp_GetIdProduto: TDataSetProvider;
+    cds_GetIdProduto: TClientDataSet;
+    dst_GetIdProdutoPRO_ID_PK: TIntegerField;
+    dst_GetIdProdutoPRO_TIPO: TStringField;
+    dst_GetIdProdutoPRO_EAN: TStringField;
+    dst_GetIdProdutoPRO_NOME: TStringField;
+    dst_GetIdProdutoPRO_NOME_FRENTE: TStringField;
+    dst_GetIdProdutoPRO_DESCRICAO: TStringField;
+    dst_GetIdProdutoPRO_UNIDADE: TStringField;
+    dst_GetIdProdutoPRO_GRUPO_FK: TIntegerField;
+    dst_GetIdProdutoPRO_SUBGRUPO_FK: TIntegerField;
+    dst_GetIdProdutoPRO_PERCENTUAL: TFMTBCDField;
+    dst_GetIdProdutoPRO_LUCRO: TFMTBCDField;
+    dst_GetIdProdutoPRO_VL_COMPRA: TFMTBCDField;
+    dst_GetIdProdutoPRO_VL_VENDA: TFMTBCDField;
+    dst_GetIdProdutoPRO_QTDE_ESTOQUE: TFMTBCDField;
+    dst_GetIdProdutoPRO_DT_CADASTRO: TSQLTimeStampField;
+    dst_GetIdProdutoPRO_DT_ALTERACAO: TSQLTimeStampField;
+    cds_GetIdProdutoPRO_ID_PK: TIntegerField;
+    cds_GetIdProdutoPRO_TIPO: TStringField;
+    cds_GetIdProdutoPRO_EAN: TStringField;
+    cds_GetIdProdutoPRO_NOME: TStringField;
+    cds_GetIdProdutoPRO_NOME_FRENTE: TStringField;
+    cds_GetIdProdutoPRO_DESCRICAO: TStringField;
+    cds_GetIdProdutoPRO_UNIDADE: TStringField;
+    cds_GetIdProdutoPRO_GRUPO_FK: TIntegerField;
+    cds_GetIdProdutoPRO_SUBGRUPO_FK: TIntegerField;
+    cds_GetIdProdutoPRO_PERCENTUAL: TFMTBCDField;
+    cds_GetIdProdutoPRO_LUCRO: TFMTBCDField;
+    cds_GetIdProdutoPRO_VL_COMPRA: TFMTBCDField;
+    cds_GetIdProdutoPRO_VL_VENDA: TFMTBCDField;
+    cds_GetIdProdutoPRO_QTDE_ESTOQUE: TFMTBCDField;
+    cds_GetIdProdutoPRO_DT_CADASTRO: TSQLTimeStampField;
+    cds_GetIdProdutoPRO_DT_ALTERACAO: TSQLTimeStampField;
+    dst_AlterarProduto: TSQLDataSet;
+    dst_AlterarProdutoPRO_ID_PK: TIntegerField;
+    dst_AlterarProdutoPRO_TIPO: TStringField;
+    dst_AlterarProdutoPRO_EAN: TStringField;
+    dst_AlterarProdutoPRO_NOME: TStringField;
+    dst_AlterarProdutoPRO_NOME_FRENTE: TStringField;
+    dst_AlterarProdutoPRO_DESCRICAO: TStringField;
+    dst_AlterarProdutoPRO_UNIDADE: TStringField;
+    dst_AlterarProdutoPRO_GRUPO_FK: TIntegerField;
+    dst_AlterarProdutoPRO_SUBGRUPO_FK: TIntegerField;
+    dst_AlterarProdutoPRO_PERCENTUAL: TFMTBCDField;
+    dst_AlterarProdutoPRO_LUCRO: TFMTBCDField;
+    dst_AlterarProdutoPRO_VL_COMPRA: TFMTBCDField;
+    dst_AlterarProdutoPRO_VL_VENDA: TFMTBCDField;
+    dst_AlterarProdutoPRO_QTDE_ESTOQUE: TFMTBCDField;
+    dst_AlterarProdutoPRO_DT_CADASTRO: TSQLTimeStampField;
+    dst_AlterarProdutoPRO_DT_ALTERACAO: TSQLTimeStampField;
+    dst_AlterarProdutoGRU_DESCRICAO: TStringField;
+    dst_AlterarProdutoSUBGRU_DESCRICAO: TStringField;
+    dsp_AlterarProduto: TDataSetProvider;
+    cds_AlterarProduto: TClientDataSet;
+    cds_AlterarProdutoPRO_ID_PK: TIntegerField;
+    cds_AlterarProdutoPRO_TIPO: TStringField;
+    cds_AlterarProdutoPRO_EAN: TStringField;
+    cds_AlterarProdutoPRO_NOME: TStringField;
+    cds_AlterarProdutoPRO_NOME_FRENTE: TStringField;
+    cds_AlterarProdutoPRO_DESCRICAO: TStringField;
+    cds_AlterarProdutoPRO_UNIDADE: TStringField;
+    cds_AlterarProdutoPRO_GRUPO_FK: TIntegerField;
+    cds_AlterarProdutoPRO_SUBGRUPO_FK: TIntegerField;
+    cds_AlterarProdutoPRO_PERCENTUAL: TFMTBCDField;
+    cds_AlterarProdutoPRO_LUCRO: TFMTBCDField;
+    cds_AlterarProdutoPRO_VL_COMPRA: TFMTBCDField;
+    cds_AlterarProdutoPRO_VL_VENDA: TFMTBCDField;
+    cds_AlterarProdutoPRO_QTDE_ESTOQUE: TFMTBCDField;
+    cds_AlterarProdutoPRO_DT_CADASTRO: TSQLTimeStampField;
+    cds_AlterarProdutoPRO_DT_ALTERACAO: TSQLTimeStampField;
+    cds_AlterarProdutoGRU_DESCRICAO: TStringField;
+    cds_AlterarProdutoSUBGRU_DESCRICAO: TStringField;
+    dst_ProdutoPRO_ID_INTERNO: TIntegerField;
+    cds_ProdutoPRO_ID_INTERNO: TIntegerField;
+    dst_AlterarProdutoPRO_ID_INTERNO: TIntegerField;
+    cds_AlterarProdutoPRO_ID_INTERNO: TIntegerField;
+    dst_GetIdProdutoPRO_ID_INTERNO: TIntegerField;
+    cds_GetIdProdutoPRO_ID_INTERNO: TIntegerField;
+    dst_AllProdutos: TSQLDataSet;
+    dst_AllProdutosPRO_ID_PK: TIntegerField;
+    dst_AllProdutosPRO_TIPO: TStringField;
+    dst_AllProdutosPRO_EAN: TStringField;
+    dst_AllProdutosPRO_NOME: TStringField;
+    dst_AllProdutosPRO_NOME_FRENTE: TStringField;
+    dst_AllProdutosPRO_DESCRICAO: TStringField;
+    dst_AllProdutosPRO_UNIDADE: TStringField;
+    dst_AllProdutosPRO_GRUPO_FK: TIntegerField;
+    dst_AllProdutosPRO_SUBGRUPO_FK: TIntegerField;
+    dst_AllProdutosPRO_PERCENTUAL: TFMTBCDField;
+    dst_AllProdutosPRO_LUCRO: TFMTBCDField;
+    dst_AllProdutosPRO_VL_COMPRA: TFMTBCDField;
+    dst_AllProdutosPRO_VL_VENDA: TFMTBCDField;
+    dst_AllProdutosPRO_QTDE_ESTOQUE: TFMTBCDField;
+    dst_AllProdutosPRO_DT_CADASTRO: TSQLTimeStampField;
+    dst_AllProdutosPRO_DT_ALTERACAO: TSQLTimeStampField;
+    dst_AllProdutosPRO_ID_INTERNO: TIntegerField;
+    procedure cds_ProdutoReconcileError(DataSet: TCustomClientDataSet;
+      E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+  private
+    { Private declarations }
+  public
+    procedure InserirProdutoEmpresa(AIdProduto: Integer);
+    procedure InserirProdutoEmpresaSql(AIdProduto: Integer);
+
+    function GetIdInterno: Integer;
+    function ExisteEstoque: Boolean;
+  end;
+
+var
+  dm_Produto: Tdm_Produto;
+
+implementation
+
+uses dtm_Conexao, Conexao, Empresa_Corrente;
+
+{$R *.dfm}
+
+procedure Tdm_Produto.cds_ProdutoReconcileError(DataSet: TCustomClientDataSet;
+  E: EReconcileError; UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  TTratamentoErro.HandleReconcileError(E.Message, Action);
+end;
+
+function Tdm_Produto.ExisteEstoque: Boolean;
+var
+  VQry: TSQLQuery;
+begin
+  VQry := ConexaoDBX.BuildQry;
+  try
+    VQry.Close;
+    VQry.CommandText :=
+      ' select '''' from produto_empresa ' +
+      ' where ' +
+      '    (produto_empresa.pe_id_empresa = :pe_id_empresa) and ' +
+      '    (produto_empresa.pe_id_produto = :pe_id_produto) ';
+    VQry.ParamByName('pe_id_empresa').AsInteger := EmpresaCorrente.Id;
+    VQry.ParamByName('pe_id_produto').AsInteger := cds_ProdutoPRO_ID_PK.AsInteger;
+    VQry.Open;
+
+    try
+      Result := not VQry.IsEmpty;
+    finally
+      VQry.Close;
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+function Tdm_Produto.GetIdInterno: Integer;
+var
+  VQry: TSQLQuery;
+begin
+  Result := 0;
+  try
+    VQry := ConexaoDBX.BuildQry;
+    try
+      VQry.Close;
+      VQry.CommandText := 'select max(produto.pro_id_interno) id_produto from produto where (produto.pro_id_interno <> 999)';
+      VQry.Open;
+
+      try
+        if VQry.IsEmpty then
+          Result := 1
+        else
+        begin
+          if VQry.FieldByName('id_produto').AsInteger = 999 then
+            Result := 1000
+          else
+            Result := VQry.FieldByName('id_produto').AsInteger + 1;
+        end;
+
+      finally
+        VQry.Close;
+      end;
+    finally
+      FreeAndNil(VQry);
+    end;
+  except
+    raise;
+  end
+//  try
+//    cds_GetIdProduto.Close;
+//    cds_GetIdProduto.Open;
+//
+//    cds_GetIdProduto.Last;
+//
+//    Result := cds_GetIdProdutoPRO_ID_INTERNO.AsInteger + 1;
+//  except
+//    raise;
+//  end;
+end;
+
+procedure Tdm_Produto.InserirProdutoEmpresa(AIdProduto: Integer);
+begin
+  cds_ProdutoEmpresa.Insert;
+  cds_ProdutoEmpresa.FieldByName('pe_id_empresa').AsInteger         := EmpresaCorrente.Id;
+  cds_ProdutoEmpresa.FieldByName('pe_id_produto').AsInteger         := AIdProduto;
+  cds_ProdutoEmpresa.FieldByName('pe_qt_est_disponivel').AsCurrency := 0;
+  cds_ProdutoEmpresa.Post;
+end;
+
+procedure Tdm_Produto.InserirProdutoEmpresaSql(AIdProduto: Integer);
+var
+  VQry: TSQLQuery;
+begin
+  VQry := ConexaoDBX.BuildQry;
+  try
+    VQry.Close;
+    VQry.CommandText :=
+      ' insert into produto_empresa (pe_id_empresa, pe_id_produto, pe_qt_est_disponivel) ' +
+      '    values (:pe_id_empresa, :pe_id_produto, :pe_qt_est_disponivel) ';
+    VQry.ParamByName('pe_id_empresa').AsInteger := EmpresaCorrente.Id;
+    VQry.ParamByName('pe_id_produto').AsInteger := AIdProduto;
+    VQry.ParamByName('pe_qt_est_disponivel').AsInteger := 0;
+    VQry.ExecSQL();
+
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+end.

@@ -1,0 +1,24 @@
+unit Man_Financeiro;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TfrmMan_Financeiro = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMan_Financeiro: TfrmMan_Financeiro;
+
+implementation
+
+{$R *.dfm}
+
+end.

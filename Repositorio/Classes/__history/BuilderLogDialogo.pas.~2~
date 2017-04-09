@@ -1,0 +1,59 @@
+unit BuilderLogDialogo;
+
+interface
+
+uses
+  SysUtils, Forms, frmLogDialogo, Lib_Enumerado_v3;
+
+type
+  TBuilderLogDialogo_v3 = class
+  private
+    constructor Create;
+
+  public
+    class procedure Show(AIcone: TIconeLog; ALog, AMsg: String); overload;
+    class procedure Show(AIcone: TIconeLog; ATitulo, ALog, AMsg: String); overload;
+    class function  GetTitulo(AIcone: TIconeLog): String;
+  end;
+
+implementation
+
+{ TBuilderLogDialogo_v3 }
+
+constructor TBuilderLogDialogo_v3.Create;
+begin
+  // Não permitir instanciar essa classe pelo método create.
+end;
+
+class procedure TBuilderLogDialogo_v3.Show(AIcone: TIconeLog; ATitulo, ALog, AMsg: String);
+var
+  VLogDialog: TLogDialogo;
+begin
+  Application.CreateForm(TLogDialogo, VLogDialog);
+  try
+    VLogDialog.Titulo := ATitulo;
+    VLogDialog.Log    := ALog;
+    VLogDialog.Erro   := AMsg;
+    VLogDialog.Icone  := AIcone;
+
+    VLogDialog.ShowModal();
+  finally
+    FreeAndNil(VLogDialog);
+  end;
+end;
+
+class procedure TBuilderLogDialogo_v3.Show(AIcone: TIconeLog; ALog, AMsg: String);
+begin
+  Self.Show(AIcone, Self.GetTitulo(AIcone), ALog, AMsg);
+end;
+
+class function TBuilderLogDialogo_v3.GetTitulo(AIcone: TIconeLog): String;
+begin
+  case AIcone of
+    Lib_Enumerado_v3.ilogInformacao: Result := 'Informação';
+    Lib_Enumerado_v3.ilogAtencao   : Result := 'Atenção';
+    Lib_Enumerado_v3.ilogErro      : Result := 'Erro';
+  end;
+end;
+
+end.

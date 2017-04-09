@@ -1,0 +1,35 @@
+unit dtm_SubGrupoProduto;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  TDataModule1 = class(TDataModule)
+    dsp_Pesquisar: TDataSetProvider;
+    cds_Pesquisar: TClientDataSet;
+    dst_Pesquisar: TSQLDataSet;
+    dsp_SubGrupo: TDataSetProvider;
+    cds_SubGrupo: TClientDataSet;
+    dst_SubGrupo: TSQLDataSet;
+    dst_PesquisarSUBGRU_ID: TIntegerField;
+    dst_PesquisarSUBGRU_DESCRICAO: TStringField;
+    cds_PesquisarSUBGRU_ID: TIntegerField;
+    cds_PesquisarSUBGRU_DESCRICAO: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule1: TDataModule1;
+
+implementation
+
+uses dtm_Conexao;
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,494 @@
+object frmMan_EmissaoRecibo: TfrmMan_EmissaoRecibo
+  Left = 0
+  Top = 0
+  Caption = 'Emiss'#227'o de Recibo'
+  ClientHeight = 152
+  ClientWidth = 651
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 38
+    Top = 24
+    Width = 47
+    Height = 13
+    Caption = 'Recebi de'
+  end
+  object Label2: TLabel
+    Left = 26
+    Top = 81
+    Width = 58
+    Height = 13
+    Caption = 'Referente a'
+  end
+  object Label4: TLabel
+    Left = 392
+    Top = 27
+    Width = 79
+    Height = 13
+    Caption = 'a import'#226'ncia de'
+  end
+  object Label5: TLabel
+    Left = 60
+    Top = 51
+    Width = 14
+    Height = 13
+    Caption = 'em'
+  end
+  object edtRecebi: TEdit
+    Left = 96
+    Top = 24
+    Width = 290
+    Height = 21
+    TabOrder = 0
+  end
+  object edtReferente: TEdit
+    Left = 95
+    Top = 78
+    Width = 519
+    Height = 21
+    TabOrder = 3
+    Text = 'Receita diversa realizada nesta data.'
+  end
+  object edtData: TJvDateEdit
+    Left = 96
+    Top = 51
+    Width = 121
+    Height = 21
+    CheckOnExit = True
+    ShowNullDate = False
+    TabOrder = 2
+  end
+  object edtValorTotal: TJvCalcEdit
+    Left = 493
+    Top = 24
+    Width = 121
+    Height = 21
+    TabOrder = 1
+    DecimalPlacesAlwaysShown = False
+  end
+  object btnVisualizar: TBitBtn
+    Left = 184
+    Top = 105
+    Width = 107
+    Height = 40
+    Caption = 'Visualizar'
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
+    TabOrder = 4
+    OnClick = btnVisualizarClick
+  end
+  object BitBtn1: TBitBtn
+    Left = 297
+    Top = 105
+    Width = 107
+    Height = 40
+    Caption = 'Sair'
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
+    TabOrder = 5
+    OnClick = BitBtn1Click
+  end
+  object frxReport: TfrxReport
+    Version = '4.11.14'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42156.959378692100000000
+    ReportOptions.LastChange = 42158.862172928240000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    OnGetValue = frxReportGetValue
+    Left = 416
+    Top = 96
+    Datasets = <
+      item
+        DataSet = frxDst_Recibo
+        DataSetName = 'frxDst_Recibo'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 145.000000000000000000
+      PaperSize = 256
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object MasterData1: TfrxMasterData
+        Height = 408.189240000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        DataSet = frxDst_Recibo
+        DataSetName = 'frxDst_Recibo'
+        RowCount = 0
+        object Memo4: TfrxMemoView
+          Align = baCenter
+          Left = 194.645795000000000000
+          Top = 294.803340000000000000
+          Width = 328.819110000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Style = fsDot
+          Frame.Typ = [ftBottom]
+          ParentFont = False
+        end
+        object Memo2: TfrxMemoView
+          Left = 570.709030000000000000
+          Top = 45.354360000000000000
+          Width = 90.708720000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            '[VVALORTOTAL]')
+          ParentFont = False
+        end
+        object frxDst_ReciboEMP_RSOCIAL: TfrxMemoView
+          Left = 194.535560000000000000
+          Top = 321.260050000000000000
+          Width = 328.819110000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'EMP_RSOCIAL'
+          DataSet = frxDst_Recibo
+          DataSetName = 'frxDst_Recibo'
+          HAlign = haCenter
+          Memo.UTF8W = (
+            '[frxDst_Recibo."EMP_RSOCIAL"]')
+        end
+        object frxDst_ReciboEMP_CNPJ_CPF: TfrxMemoView
+          Align = baCenter
+          Left = 194.645795000000000000
+          Top = 347.716760000000000000
+          Width = 328.819110000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'EMP_CNPJ_CPF'
+          DataSet = frxDst_Recibo
+          DataSetName = 'frxDst_Recibo'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Style = fsDot
+          HAlign = haCenter
+          Memo.UTF8W = (
+            '[frxDst_Recibo."EMP_CNPJ_CPF"]')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 72.133890000000000000
+          Width = 170.078850000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Style = fsDot
+          Memo.UTF8W = (
+            'Recebi(emos) do(a) Cliente:')
+          ParentFont = False
+        end
+        object Memo6: TfrxMemoView
+          Left = 182.196970000000000000
+          Top = 72.133890000000000000
+          Width = 521.575140000000100000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Style = fsDot
+          Memo.UTF8W = (
+            '[VNOME]')
+          ParentFont = False
+        end
+        object Memo1: TfrxMemoView
+          Align = baCenter
+          Left = 287.244280000000000000
+          Top = 4.897649999999999000
+          Width = 143.622140000000000000
+          Height = 22.677180000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -21
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            '== Recibo ==')
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          Left = 11.118120000000000000
+          Top = 97.149660000000000000
+          Width = 124.724490000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Style = fsDot
+          Memo.UTF8W = (
+            'a import'#226'ncia de R$')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          Left = 212.433210000000000000
+          Top = 96.929190000000000000
+          Width = 491.338900000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Memo.UTF8W = (
+            '[VVALOR]')
+        end
+        object Memo3: TfrxMemoView
+          Left = 1.559060000000000000
+          Top = 282.464750000000000000
+          Width = 714.331170000000000000
+          Height = 102.047310000000000000
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 139.181200000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Memo.UTF8W = (
+            'Referente a')
+        end
+        object Memo10: TfrxMemoView
+          Left = 86.929190000000000000
+          Top = 139.181200000000000000
+          Width = 597.165740000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Memo.UTF8W = (
+            '[VREFERENCIA]')
+        end
+        object Memo11: TfrxMemoView
+          Left = 219.212740000000000000
+          Top = 244.551330000000000000
+          Width = 187.086735000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Memo.UTF8W = (
+            'Visconde do Rio Branco - MG,')
+        end
+        object Memo12: TfrxMemoView
+          Left = 406.299475000000000000
+          Top = 244.551330000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Memo.UTF8W = (
+            '[VDATA]')
+        end
+        object Memo13: TfrxMemoView
+          Left = 438.425480000000000000
+          Top = 45.354360000000000000
+          Width = 132.283550000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Valor da Parcela: R$')
+          ParentFont = False
+        end
+        object Memo14: TfrxMemoView
+          Left = 1.889765000000000000
+          Top = 212.535560000000000000
+          Width = 714.331170000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            '')
+          ParentFont = False
+        end
+        object Memo15: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 163.196970000000000000
+          Width = 672.756340000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            
+              'PELO QUE FIRMAMOS O PRESENTE RECIBO DANDO PLENA E IRREVOG'#193'VEL QU' +
+              'ITA'#199#195'O.')
+          ParentFont = False
+        end
+        object Memo16: TfrxMemoView
+          Left = 136.063080000000000000
+          Top = 97.267780000000000000
+          Width = 68.031540000000010000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Memo.UTF8W = (
+            '[VVALORTOTAL]')
+        end
+      end
+    end
+  end
+  object dst_Recibo: TSQLDataSet
+    CommandText = 
+      'select'#13#10'  empresa.emp_id_pk,'#13#10'  empresa.emp_rsocial,'#13#10'  empresa.' +
+      'emp_fantasia,'#13#10'  empresa.emp_nome_ficticio,'#13#10'  empresa.emp_ender' +
+      'eco,'#13#10'  empresa.emp_complemento,'#13#10'  empresa.emp_numero,'#13#10'  empre' +
+      'sa.emp_bairro,'#13#10'  empresa.emp_id_cidade_fk,'#13#10'  empresa.emp_estad' +
+      'o,'#13#10'  empresa.emp_cep,'#13#10'  empresa.emp_cnpj_cpf,'#13#10'  empresa.emp_i' +
+      'nsc_rg'#13#10'from empresa'#13#10'where'#13#10'   empresa.emp_id_pk = :emp'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'emp'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 584
+    Top = 88
+    object dst_ReciboEMP_ID_PK: TIntegerField
+      FieldName = 'EMP_ID_PK'
+      Required = True
+    end
+    object dst_ReciboEMP_RSOCIAL: TStringField
+      FieldName = 'EMP_RSOCIAL'
+      Size = 40
+    end
+    object dst_ReciboEMP_FANTASIA: TStringField
+      FieldName = 'EMP_FANTASIA'
+      Size = 40
+    end
+    object dst_ReciboEMP_NOME_FICTICIO: TStringField
+      FieldName = 'EMP_NOME_FICTICIO'
+      Size = 40
+    end
+    object dst_ReciboEMP_ENDERECO: TStringField
+      FieldName = 'EMP_ENDERECO'
+      Size = 40
+    end
+    object dst_ReciboEMP_COMPLEMENTO: TStringField
+      FieldName = 'EMP_COMPLEMENTO'
+      Size = 40
+    end
+    object dst_ReciboEMP_NUMERO: TStringField
+      FieldName = 'EMP_NUMERO'
+      Size = 10
+    end
+    object dst_ReciboEMP_BAIRRO: TStringField
+      FieldName = 'EMP_BAIRRO'
+      Size = 30
+    end
+    object dst_ReciboEMP_ID_CIDADE_FK: TIntegerField
+      FieldName = 'EMP_ID_CIDADE_FK'
+    end
+    object dst_ReciboEMP_ESTADO: TStringField
+      FieldName = 'EMP_ESTADO'
+      FixedChar = True
+      Size = 2
+    end
+    object dst_ReciboEMP_CEP: TStringField
+      FieldName = 'EMP_CEP'
+      Size = 10
+    end
+    object dst_ReciboEMP_CNPJ_CPF: TStringField
+      FieldName = 'EMP_CNPJ_CPF'
+    end
+    object dst_ReciboEMP_INSC_RG: TStringField
+      FieldName = 'EMP_INSC_RG'
+    end
+  end
+  object frxDst_Recibo: TfrxDBDataset
+    UserName = 'frxDst_Recibo'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'EMP_ID_PK=EMP_ID_PK'
+      'EMP_RSOCIAL=EMP_RSOCIAL'
+      'EMP_FANTASIA=EMP_FANTASIA'
+      'EMP_NOME_FICTICIO=EMP_NOME_FICTICIO'
+      'EMP_ENDERECO=EMP_ENDERECO'
+      'EMP_COMPLEMENTO=EMP_COMPLEMENTO'
+      'EMP_NUMERO=EMP_NUMERO'
+      'EMP_BAIRRO=EMP_BAIRRO'
+      'EMP_ID_CIDADE_FK=EMP_ID_CIDADE_FK'
+      'EMP_ESTADO=EMP_ESTADO'
+      'EMP_CEP=EMP_CEP'
+      'EMP_CNPJ_CPF=EMP_CNPJ_CPF'
+      'EMP_INSC_RG=EMP_INSC_RG')
+    DataSet = dst_Recibo
+    BCDToCurrency = False
+    Left = 488
+    Top = 96
+  end
+end

@@ -1,0 +1,26 @@
+unit dtmTpProduto;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DB, SqlExpr;
+
+type
+  TDataModule1 = class(TDataModule)
+    dst_Pesquisar: TSQLDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule1: TDataModule1;
+
+implementation
+
+uses dtm_Conexao;
+
+{$R *.dfm}
+
+end.

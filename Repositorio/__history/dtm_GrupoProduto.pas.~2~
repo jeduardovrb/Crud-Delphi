@@ -1,0 +1,38 @@
+unit dtm_GrupoProduto;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DBClient, Provider, DB, SqlExpr;
+
+type
+  Tdm_GrupoProduto = class(TDataModule)
+    dst_GrupoProduto: TSQLDataSet;
+    dsp_GrupoProduto: TDataSetProvider;
+    cds_GrupoProduto: TClientDataSet;
+    dst_GrupoProdutoGRU_ID: TIntegerField;
+    dst_GrupoProdutoGRU_DESCRICAO: TStringField;
+    dst_GrupoProdutoGRU_VERIFICAR_ESTOQUE: TStringField;
+    dst_GrupoProdutoGRU_SERVICO: TStringField;
+    dst_GrupoProdutoDTBLOQUEIO: TDateField;
+    cds_GrupoProdutoGRU_ID: TIntegerField;
+    cds_GrupoProdutoGRU_DESCRICAO: TStringField;
+    cds_GrupoProdutoGRU_VERIFICAR_ESTOQUE: TStringField;
+    cds_GrupoProdutoGRU_SERVICO: TStringField;
+    cds_GrupoProdutoDTBLOQUEIO: TDateField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_GrupoProduto: Tdm_GrupoProduto;
+
+implementation
+
+uses dtm_Conexao;
+
+{$R *.dfm}
+
+end.

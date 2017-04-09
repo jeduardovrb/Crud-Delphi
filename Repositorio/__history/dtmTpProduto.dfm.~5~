@@ -1,0 +1,52 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 175
+  Width = 493
+  object dts_Pesquisar: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   tipo_produtos.tp_id_pk,'#13#10'   tipo_produtos.tp_nome'#13#10'fr' +
+      'om tipo_produtos'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 32
+    Top = 24
+  end
+  object dsp_Pesquisar: TDataSetProvider
+    DataSet = dts_Pesquisar
+    UpdateMode = upWhereKeyOnly
+    Left = 152
+    Top = 24
+  end
+  object cds_Pesquisar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_Pesquisar'
+    Left = 272
+    Top = 24
+  end
+  object SQLDataSet1: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   tipo_produtos.tp_id_pk,'#13#10'   tipo_produtos.tp_nome'#13#10'fr' +
+      'om tipo_produtos'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 32
+    Top = 88
+  end
+  object DataSetProvider1: TDataSetProvider
+    DataSet = SQLDataSet1
+    UpdateMode = upWhereKeyOnly
+    Left = 152
+    Top = 88
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 272
+    Top = 88
+  end
+end

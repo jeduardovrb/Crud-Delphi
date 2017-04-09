@@ -1,0 +1,14 @@
+unit sEnumerados;
+
+interface
+
+type
+  TTipoPessoas = (tpIndefinido, tpFisico, tpJuridico);
+
+  TIconeLog = (ilogIndefinido, ilogInformacao, ilogAtencao, ilogErro);
+
+  TTipoProduto = (tproIndefinido, tproProduto, tproLente);
+
+implementation
+
+end.

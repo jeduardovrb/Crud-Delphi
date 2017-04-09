@@ -1,0 +1,452 @@
+unit dtm_Clientes;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider,
+  TratamentoErro, Empresa_Corrente, frxClass, frxDBSet, frxRich, frxBarcode,
+  Conexao;
+
+type
+  Tdm_Clientes = class(TDataModule)
+    dst_PessoaEndereco: TSQLDataSet;
+    dst_PessoaEnderecoPE_ID_PESSOA: TIntegerField;
+    dst_PessoaEnderecoPE_TIPO: TSmallintField;
+    dst_PessoaEnderecoPE_ENDERECO: TStringField;
+    dst_PessoaEnderecoPE_NUMERO: TStringField;
+    dst_PessoaEnderecoPE_BAIRRO: TStringField;
+    dst_PessoaEnderecoPE_ID_CIDADE: TIntegerField;
+    dst_PessoaEnderecoPE_CEP: TStringField;
+    dst_PessoaEnderecoPE_CONTATO: TStringField;
+    dst_PessoaEnderecoCID_NOME: TStringField;
+    dst_PessoaEnderecoCID_ESTADO: TStringField;
+    cds_PessoaEndereco: TClientDataSet;
+    dts_LinkPessoa: TDataSource;
+    dst_PessoaTelefone: TSQLDataSet;
+    dst_PessoaTelefonePT_ID_PESSOA: TIntegerField;
+    dst_PessoaTelefonePT_TIPO: TSmallintField;
+    dst_PessoaTelefonePT_NM_TIPO: TStringField;
+    dst_PessoaTelefonePT_NUMERO: TStringField;
+    dst_PessoaTelefonePT_CONTATO: TStringField;
+    cds_PessoaTelefone: TClientDataSet;
+    cds_PessoaTelefonePT_ID_PESSOA: TIntegerField;
+    cds_PessoaTelefonePT_TIPO: TSmallintField;
+    cds_PessoaTelefonePT_NM_TIPO: TStringField;
+    cds_PessoaTelefonePT_NUMERO: TStringField;
+    cds_PessoaTelefonePT_CONTATO: TStringField;
+    dst_Cliente: TSQLDataSet;
+    dst_ClienteCLI_ID_PESSOA: TIntegerField;
+    dst_ClienteCLI_DT_CADASTRO: TDateField;
+    dst_ClienteCLI_DT_RECADASTRO: TDateField;
+    dst_ClienteCLI_ID_CTB: TIntegerField;
+    dst_ClienteCLI_TP_CADASTRO: TStringField;
+    cds_Cliente: TClientDataSet;
+    cds_ClienteCLI_ID_PESSOA: TIntegerField;
+    cds_ClienteCLI_DT_CADASTRO: TDateField;
+    cds_ClienteCLI_DT_RECADASTRO: TDateField;
+    cds_ClienteCLI_ID_CTB: TIntegerField;
+    cds_ClienteCLI_TP_CADASTRO: TStringField;
+    dst_Pessoa: TSQLDataSet;
+    dsp_Pessoa: TDataSetProvider;
+    cds_Pessoa: TClientDataSet;
+    dst_PessoaPES_ID: TIntegerField;
+    dst_PessoaPES_EMP: TSmallintField;
+    dst_PessoaPES_TP_PESSOA: TStringField;
+    dst_PessoaPES_SITUACAO: TStringField;
+    dst_PessoaPES_RSOCIAL: TStringField;
+    dst_PessoaPES_FANTASIA: TStringField;
+    dst_PessoaPES_CNPJ_CPF: TStringField;
+    dst_PessoaPES_INSC_RG: TStringField;
+    dst_PessoaPES_RG_ORG_EXPEDIDOR: TStringField;
+    dst_PessoaPES_RG_DT_EXPEDICAO: TDateField;
+    dst_PessoaPES_TP_SANGUINEO: TStringField;
+    dst_PessoaPES_DT_NASCIMENTO: TDateField;
+    dst_Email: TSQLDataSet;
+    cdsEmail: TClientDataSet;
+    cdsEmailPEM_ID_PESSOA: TIntegerField;
+    cdsEmailPEM_SEQ: TSmallintField;
+    cdsEmailPEM_EMAIL: TStringField;
+    dst_EmailPEM_ID_PESSOA: TIntegerField;
+    dst_EmailPEM_SEQ: TSmallintField;
+    dst_EmailPEM_EMAIL: TStringField;
+    dst_PessoaPES_TP_CADASTRO: TStringField;
+    cds_PessoaEnderecoPE_ID_PESSOA: TIntegerField;
+    cds_PessoaEnderecoPE_TIPO: TSmallintField;
+    cds_PessoaEnderecoPE_ENDERECO: TStringField;
+    cds_PessoaEnderecoPE_NUMERO: TStringField;
+    cds_PessoaEnderecoPE_BAIRRO: TStringField;
+    cds_PessoaEnderecoPE_ID_CIDADE: TIntegerField;
+    cds_PessoaEnderecoPE_CEP: TStringField;
+    cds_PessoaEnderecoPE_CONTATO: TStringField;
+    cds_PessoaEnderecoCID_NOME: TStringField;
+    cds_PessoaEnderecoCID_ESTADO: TStringField;
+    dst_PessoaEnderecoPE_NM_TIPO: TStringField;
+    cds_PessoaEnderecoPE_NM_TIPO: TStringField;
+    cds_PessoaPES_ID: TIntegerField;
+    cds_PessoaPES_EMP: TSmallintField;
+    cds_PessoaPES_TP_PESSOA: TStringField;
+    cds_PessoaPES_SITUACAO: TStringField;
+    cds_PessoaPES_RSOCIAL: TStringField;
+    cds_PessoaPES_FANTASIA: TStringField;
+    cds_PessoaPES_CNPJ_CPF: TStringField;
+    cds_PessoaPES_INSC_RG: TStringField;
+    cds_PessoaPES_RG_ORG_EXPEDIDOR: TStringField;
+    cds_PessoaPES_RG_DT_EXPEDICAO: TDateField;
+    cds_PessoaPES_TP_SANGUINEO: TStringField;
+    cds_PessoaPES_DT_NASCIMENTO: TDateField;
+    cds_PessoaPES_TP_CADASTRO: TStringField;
+    cds_Pessoadst_Email: TDataSetField;
+    cds_Pessoadst_Cliente: TDataSetField;
+    cds_Pessoadst_PessoaTelefone: TDataSetField;
+    cds_Pessoadst_PessoaEndereco: TDataSetField;
+    dst_PessoaEnderecoPE_SEQ: TIntegerField;
+    cds_PessoaEnderecoPE_SEQ: TIntegerField;
+    dst_PessoaTelefonePT_SEQ: TIntegerField;
+    cds_PessoaTelefonePT_SEQ: TIntegerField;
+    dsp_DadosPessoaTelefone: TDataSetProvider;
+    cds_DadosPessoaTelefone: TClientDataSet;
+    dst_DadosPessoaTelefone: TSQLDataSet;
+    dst_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField;
+    dst_DadosPessoaTelefonePT_TIPO: TSmallintField;
+    dst_DadosPessoaTelefonePT_NM_TIPO: TStringField;
+    dst_DadosPessoaTelefonePT_NUMERO: TStringField;
+    dst_DadosPessoaTelefonePT_CONTATO: TStringField;
+    dst_DadosPessoaTelefonePT_SEQ: TIntegerField;
+    cds_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField;
+    cds_DadosPessoaTelefonePT_TIPO: TSmallintField;
+    cds_DadosPessoaTelefonePT_NM_TIPO: TStringField;
+    cds_DadosPessoaTelefonePT_NUMERO: TStringField;
+    cds_DadosPessoaTelefonePT_CONTATO: TStringField;
+    cds_DadosPessoaTelefonePT_SEQ: TIntegerField;
+    dst_ClienteCLI_FIDELIDADE: TIntegerField;
+    cds_ClienteCLI_FIDELIDADE: TIntegerField;
+    dts_CreditoClienteFidelidade: TSQLDataSet;
+    dts_CreditoClienteFidelidadeCCF_ID_CLIENTE: TIntegerField;
+    dts_CreditoClienteFidelidadeCCF_ID_EMPRESA: TIntegerField;
+    dts_CreditoClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField;
+    dts_CreditoClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField;
+    dts_CreditoClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField;
+    cds_CreditoClienteFidelidade: TClientDataSet;
+    cds_CreditoClienteFidelidadeCCF_ID_CLIENTE: TIntegerField;
+    cds_CreditoClienteFidelidadeCCF_ID_EMPRESA: TIntegerField;
+    cds_CreditoClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField;
+    cds_CreditoClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField;
+    cds_CreditoClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField;
+    dsp_ClienteFidelidade: TDataSetProvider;
+    cds_ClienteFidelidade: TClientDataSet;
+    dst_ClienteFidelidade: TSQLDataSet;
+    dst_ClienteFidelidadeCCF_ID_CLIENTE: TIntegerField;
+    dst_ClienteFidelidadeCCF_ID_EMPRESA: TIntegerField;
+    dst_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField;
+    dst_ClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField;
+    dst_ClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField;
+    cds_ClienteFidelidadeCCF_ID_CLIENTE: TIntegerField;
+    cds_ClienteFidelidadeCCF_ID_EMPRESA: TIntegerField;
+    cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField;
+    cds_ClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField;
+    cds_ClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField;
+    frxClienteFidelidade: TfrxReport;
+    frbDst_ClienteFidelidade: TfrxDBDataset;
+    frxBarCodeObject1: TfrxBarCodeObject;
+    cds_Pessoadts_CreditoClienteFidelidade: TDataSetField;
+    dst_PessoaEnderecoPE_COMPLEMENTO: TStringField;
+    cds_PessoaEnderecoPE_COMPLEMENTO: TStringField;
+    dst_IdInternoCliente: TSQLDataSet;
+    dst_RelCliente: TSQLDataSet;
+    frxRelCliente: TfrxReport;
+    frxDst_RelCliente: TfrxDBDataset;
+    dst_RelClienteCLI_ID_PESSOA: TIntegerField;
+    dst_RelClientePES_RSOCIAL: TStringField;
+    dst_RelClienteCLI_DT_CADASTRO: TDateField;
+    dst_RelClientePES_DT_NASCIMENTO: TDateField;
+    dst_IdInternoClientePES_ID: TIntegerField;
+    dst_IdInternoClientePES_EMP: TSmallintField;
+    dst_IdInternoClientePES_TP_CADASTRO: TStringField;
+    dst_IdInternoClientePES_TP_PESSOA: TStringField;
+    dst_IdInternoClientePES_SITUACAO: TStringField;
+    dst_IdInternoClientePES_RSOCIAL: TStringField;
+    dst_IdInternoClientePES_FANTASIA: TStringField;
+    dst_IdInternoClientePES_CNPJ_CPF: TStringField;
+    dst_IdInternoClientePES_INSC_RG: TStringField;
+    dst_IdInternoClientePES_RG_ORG_EXPEDIDOR: TStringField;
+    dst_IdInternoClientePES_RG_DT_EXPEDICAO: TDateField;
+    dst_IdInternoClientePES_TP_SANGUINEO: TStringField;
+    cds_IdInternoCliente: TClientDataSet;
+    dsp_IdInternoCliente: TDataSetProvider;
+    cds_IdInternoClientePES_ID: TIntegerField;
+    cds_IdInternoClientePES_EMP: TSmallintField;
+    cds_IdInternoClientePES_TP_CADASTRO: TStringField;
+    cds_IdInternoClientePES_TP_PESSOA: TStringField;
+    cds_IdInternoClientePES_SITUACAO: TStringField;
+    cds_IdInternoClientePES_RSOCIAL: TStringField;
+    cds_IdInternoClientePES_FANTASIA: TStringField;
+    cds_IdInternoClientePES_CNPJ_CPF: TStringField;
+    cds_IdInternoClientePES_INSC_RG: TStringField;
+    cds_IdInternoClientePES_RG_ORG_EXPEDIDOR: TStringField;
+    cds_IdInternoClientePES_RG_DT_EXPEDICAO: TDateField;
+    cds_IdInternoClientePES_TP_SANGUINEO: TStringField;
+    dst_PessoaPES_ID_INTERNO: TIntegerField;
+    cds_PessoaPES_ID_INTERNO: TIntegerField;
+    cds_IdInternoClientePES_ID_INTERNO: TIntegerField;
+    dst_RelClientePES_ID_INTERNO: TIntegerField;
+    dst_IdInternoClientePES_ID_INTERNO: TIntegerField;
+    dst_RelatorioCliente: TSQLDataSet;
+    dst_RelatorioClienteCLI_ID_PESSOA: TIntegerField;
+    dst_RelatorioClientePES_ID_INTERNO: TIntegerField;
+    dst_RelatorioClientePES_TP_CADASTRO: TStringField;
+    dst_RelatorioClientePES_TP_PESSOA: TStringField;
+    dst_RelatorioClientePES_SITUACAO: TStringField;
+    dst_RelatorioClientePES_RSOCIAL: TStringField;
+    dst_RelatorioClientePES_FANTASIA: TStringField;
+    dst_RelatorioClientePES_CNPJ_CPF: TStringField;
+    dst_RelatorioClientePES_INSC_RG: TStringField;
+    dst_RelatorioClientePE_TIPO: TSmallintField;
+    dst_RelatorioClientePE_ENDERECO: TStringField;
+    dst_RelatorioClientePE_NUMERO: TStringField;
+    dst_RelatorioClientePE_COMPLEMENTO: TStringField;
+    dst_RelatorioClientePE_BAIRRO: TStringField;
+    dst_RelatorioClientePE_ID_CIDADE: TIntegerField;
+    dst_RelatorioClientePE_CEP: TStringField;
+    dst_RelatorioClientePT_NUMERO: TStringField;
+    dst_RelatorioClientePEM_EMAIL: TStringField;
+    dst_RelatorioClientePES_INSERT_DATE: TSQLTimeStampField;
+    dst_RelatorioClientePES_UPDATE_DATE: TSQLTimeStampField;
+    procedure cds_PessoaReconcileError(DataSet: TCustomClientDataSet;
+      E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+    procedure frxRelClienteGetValue(const VarName: string; var Value: Variant);
+  private
+    { Private declarations }
+  public
+    procedure AbrirCdsClienteFidelidade(AIdCliente: Integer);
+
+    function IsClienteFidelidade(AIdCliente: Integer): Boolean;
+    function IsExisteTelefone: Boolean;
+    function IsExisteEmail: Boolean;
+    function IsExisteEndereco: Boolean;
+    function SomarCliente(ATipo: String): Integer;
+    function ValidarDescricao(ARSocial: String): Boolean;
+    function GetIdInterno(): Integer;
+  end;
+
+var
+  dm_Clientes: Tdm_Clientes;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tdm_Clientes.AbrirCdsClienteFidelidade(AIdCliente: Integer);
+begin
+  dst_ClienteFidelidade.Close;
+  dst_ClienteFidelidade.Params[0].AsInteger := AIdCliente;
+  dst_ClienteFidelidade.Params[1].AsInteger := EmpresaCorrente.Id;
+  cds_ClienteFidelidade.Open;
+end;
+
+procedure Tdm_Clientes.cds_PessoaReconcileError(DataSet: TCustomClientDataSet;
+  E: EReconcileError; UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  TTratamentoErro.HandleReconcileError(E.Message, Action);
+end;
+
+procedure Tdm_Clientes.frxRelClienteGetValue(const VarName: string;
+  var Value: Variant);
+begin
+  if VarName = 'VIDCLIENTE' then
+  begin
+    if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+      Value := dst_RelClientePES_ID_INTERNO.AsString
+    else
+      Value := dst_RelClienteCLI_ID_PESSOA.AsString;
+  end;
+end;
+
+function Tdm_Clientes.GetIdInterno: Integer;
+var
+  VQry: TSQLQuery;
+begin
+  Result := 0;
+  try
+    VQry := ConexaoDBX.BuildQry;
+    try
+      VQry.Close;
+      VQry.CommandText := 'select max(pessoa.pes_id_interno) id_interno from pessoa';
+      VQry.Open;
+
+      try
+        if VQry.IsEmpty then
+          Result := 1
+        else
+          Result := VQry.FieldByName('id_interno').AsInteger + 1;
+      finally
+        VQry.Close;
+      end;
+    finally
+      FreeAndNil(VQry);
+    end;
+  except
+    raise;
+  end;
+end;
+
+function Tdm_Clientes.IsClienteFidelidade(AIdCliente: Integer): Boolean;
+begin
+  dst_ClienteFidelidade.Close;
+  dst_ClienteFidelidade.Params[0].AsInteger := AIdCliente;
+  dst_ClienteFidelidade.Params[1].AsInteger := EmpresaCorrente.Id;
+  cds_ClienteFidelidade.Open;
+
+  Result := not cds_ClienteFidelidade.IsEmpty;
+end;
+
+function Tdm_Clientes.IsExisteEmail: Boolean;
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VSql :=
+    ' select '''' ' +
+    ' from pessoa_email ' +
+    ' where ' +
+    '    pessoa_email.pem_id_pessoa = %d ' ;
+
+  VSql := Format(VSql, [cds_PessoaPES_ID.AsInteger]);
+
+  VQry := ConexaoDBX.BuildQry;
+  try
+    VQry.Close;
+    VQry.CommandText := VSql;
+    VQry.Open;
+    try
+      Result := not VQry.IsEmpty;
+    finally
+      VQry.Close;
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+function Tdm_Clientes.IsExisteEndereco: Boolean;
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VSql :=
+    ' select '''' ' +
+    ' from pessoa_endereco ' +
+    ' where ' +
+    '    pessoa_endereco.pe_id_pessoa = %d ' ;
+
+  VSql := Format(VSql, [cds_PessoaPES_ID.AsInteger]);
+
+  VQry := ConexaoDBX.BuildQry;
+  try
+    VQry.Close;
+    VQry.CommandText := VSql;
+    VQry.Open;
+    try
+      Result := not VQry.IsEmpty;
+    finally
+      VQry.Close;
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+function Tdm_Clientes.IsExisteTelefone: Boolean;
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VSql :=
+    ' select '''' ' +
+    ' from pessoa_telefone ' +
+    ' where ' +
+    '    pessoa_telefone.pt_id_pessoa = %d ' ;
+
+  VSql := Format(VSql, [cds_PessoaPES_ID.AsInteger]);
+
+  VQry := ConexaoDBX.BuildQry;
+  try
+    VQry.Close;
+    VQry.CommandText := VSql;
+    VQry.Open;
+    try
+      Result := not VQry.IsEmpty;
+    finally
+      VQry.Close;
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+function Tdm_Clientes.SomarCliente(ATipo: String): Integer;
+var
+  VSql: String;
+  VQry: TSQLQuery;
+begin
+  try
+    VSql :=
+      ' select ' +
+      '    pes_id ' +
+      ' from pessoa ' +
+      ' where ' +
+      '    pessoa.pes_tp_cadastro = %s ';
+
+    VSql := Format(VSql, [QuotedStr(ATipo)]);
+
+    VQry := ConexaoDBX.BuildQry;
+    try
+      VQry.Close;
+      VQry.CommandText := VSql;
+      VQry.Open;
+      try
+        Result := VQry.RecordCount;
+      finally
+        VQry.Close;
+      end;
+    finally
+      FreeAndNil(VQry);
+    end;
+  except
+    raise;
+  end;
+end;
+
+function Tdm_Clientes.ValidarDescricao(ARSocial: String): Boolean;
+var
+  VSql: String;
+  VQry: TSQLQuery;
+begin
+  try
+    VSql :=
+      ' select '''' from pessoa ' +
+      '    where ' +
+      '    (pessoa.pes_tp_cadastro = ''C'') and ' +
+      '    (pessoa.pes_rsocial = %s) ';
+
+    VSql := Format(VSql, [QuotedStr(ARSocial)]);
+
+    VQry := ConexaoDBX.BuildQry;
+    try
+      VQry.Close;
+      VQry.CommandText := VSql;
+      VQry.Open;
+      try
+        Result := not VQry.IsEmpty;
+      finally
+        VQry.Close;
+      end;
+    finally
+      FreeAndNil(VQry);
+    end;
+  except
+    raise;
+  end;
+end;
+
+end.

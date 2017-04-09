@@ -1,0 +1,171 @@
+unit sFuncoes;
+
+interface
+
+uses
+  windows, Forms, Controls, SysUtils, SqlExpr, DBGrids, Grids, Graphics, ComCtrls, Classes, Dialogs, IniFiles;
+
+type
+  TFuncoes = Class
+  public
+    class function MontarSqlComponente(objeto : TObject) : String; overload;
+  	class function MontarSqlComponente(ASqlComponente : String) : String; overload;
+  end;
+
+implementation
+
+{ TFuncoes_v3 }
+
+class procedure TFuncoes.ColorirGrid(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState; Color: TColor);
+begin
+  if not odd(TDBGrid(Sender).DataSource.DataSet.RecNo) then
+  begin
+     TDBGrid(Sender).Canvas.Brush.Color := Color;
+     TDBGrid(Sender).Canvas.FillRect(Rect);
+     TDBGrid(Sender).DefaultDrawDataCell(Rect, Column.Field, State);
+  end;
+
+  if (gdSelected in state ) then
+  begin
+     TDBGrid(Sender).Canvas.Brush.Color:= clNavy;
+     TDBGrid(Sender).Canvas.Font.Color := clwhite;
+     TDBGrid(Sender).Canvas.FillRect(Rect);
+     TDBGrid(Sender).DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  end;
+end;
+
+class procedure TFuncoes.EscreverDateTime(ADateTime: TDateTimePicker);
+begin
+  if not (ADateTime.DroppedDown) then
+  begin
+    keybd_event(39,0,0,0);
+  end;
+end;
+
+class procedure TFuncoes.ExibirMensagem(AMensagem, ATitulo: String;
+  AIcone: Integer);
+begin
+  Application.MessageBox(PChar(AMensagem), PChar(ATitulo), MB_OK + AIcone);
+end;
+
+class function TFuncoes.GetTituloMensagem(AIcone: Integer): String;
+begin
+  case AIcone of
+    MB_ICONWARNING    : Result := 'Atenção';
+    MB_ICONERROR      : Result := 'Erro';
+    MB_ICONINFORMATION: Result := 'Informação';
+  end;
+end;
+
+class function TFuncoes.iif(Condicao: Boolean; RetornaTrue,
+  RetornaFalse: Variant): Variant;
+begin
+  if Condicao then
+    Result := RetornaTrue
+  else
+    Result := RetornaFalse;
+end;
+
+class function TFuncoes.IsCampoObrigatorio(ACampo, AMsg: String): Boolean;
+begin
+  Result := (Pos(AnsiUpperCase(ACampo), AnsiUpperCase(AMsg)) > 0);
+end;
+
+class function TFuncoes.MontarSqlComponente(objeto: TObject): String;
+Var
+	VPosicaoFinal  : Integer;
+	VCorpoSQL      : String;
+	VSqlComponente : String;
+begin
+	if(objeto.ClassName = 'TSQLQuery')then
+		VSqlComponente := TSQLQuery(objeto).SQL.Text
+  else if(objeto.ClassName = 'TSQLDataSet')then
+		VSqlComponente := TSQLDataSet(objeto).CommandText
+  else
+    raise Exception.Create('Este tipo de componente não está sendo tratado para modificar o texto SQL: "Rotinas" ');
+
+	// -------------------------
+	// MUDANDO DATASET INFORMADO
+	// -------------------------
+	VPosicaoFinal := 0;
+	VPosicaoFinal := POS('WHERE', UpperCase(VSqlComponente)) - 1;
+
+	if (VPosicaoFinal <= 0) then
+		VPosicaoFinal := length(VSqlComponente);
+
+	VCorpoSQL := COPY(VSqlComponente, 1, VPosicaoFinal ) + ' ' ;
+
+	result := VCorpoSQL;
+end;
+
+class function TFuncoes.MontarSqlComponente(ASqlComponente: String): String;
+var
+	VPosicaoFinal  : Integer;
+	VCorpoSQL      : String;
+begin
+	// -------------------------
+	// MUDANDO DATASET INFORMADO
+	// -------------------------
+	VPosicaoFinal := 0;
+	VPosicaoFinal := POS('WHERE', UpperCase(ASqlComponente)) - 1;
+
+	if (VPosicaoFinal <= 0) then
+		VPosicaoFinal := length(ASqlComponente);
+
+	VCorpoSQL := COPY(ASqlComponente, 1, VPosicaoFinal ) + ' ' ;
+
+	Result := VCorpoSQL;
+end;
+
+class function TFuncoes.PrimeiroDiaMes(ADateTime: TDateTime): TDateTime;
+var
+  VDia: Word;
+  VMes: Word;
+  VAno: Word;
+begin
+  DecodeDate(ADateTime, VAno, VMes, VDia);
+  Result := EncodeDate (VAno, VMes, 1);
+end;
+
+class function TFuncoes.RemoveAcento(AString: String): String;
+var
+  I: Integer;
+begin
+   for I := 1 to Length(AString) do
+   begin
+     if Pos(AString[I], sConstantes.COM_ACENTO) <> 0 then
+       AString[I] := sConstantes.SEM_ACENTO[Pos(AString[I], sConstantes.COM_ACENTO)];
+   end;
+
+   Result := AString;
+end;
+
+class procedure TFuncoes.SetFocusCampoObrigatorio(ACampo, AMsg: String;
+  AComponente: TWinControl);
+begin
+  if (Self.IsCampoObrigatorio(ACampo, AMsg)) then
+    AComponente.SetFocus;
+end;
+
+class function TFuncoes.SolicitarConfirmacao(AMensagem: String): Boolean;
+begin
+  Result := (Application.MessageBox(PChar(AMensagem), 'Confirmação',
+    MB_YESNO + MB_DEFBUTTON2 + MB_ICONQUESTION) = mrYes);
+end;
+
+class procedure TFuncoes.SomenteNumerosEmString(AKey: Char);
+begin
+  inherited;
+  if (AKey in ['0'..'9', ',', '.', #8] = False) then
+  begin
+    AKey := #0;
+  end;
+end;
+
+class function TFuncoes.SomenteNumeroStr(Text: String): String;
+begin
+  //
+end;
+
+end.

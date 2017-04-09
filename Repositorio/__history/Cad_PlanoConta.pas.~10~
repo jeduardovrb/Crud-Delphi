@@ -1,0 +1,111 @@
+unit Cad_PlanoConta;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ScreenTips, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls, Grids,
+  DBGrids, BuilderLogDialogo, Logger, sEnumerados, dtm_PlanoConta, sFuncoes, DBCtrls, Mask;
+
+type
+  TfrmCad_PlanoConta = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgPlanoConta: TDBGrid;
+    gbPlanoConta: TGroupBox;
+    lblIdPc: TLabel;
+    lblDescricao: TLabel;
+    dbeDescricao: TDBEdit;
+    dbtId: TDBText;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure dbgPlanoContaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_PlanoConta: TfrmCad_PlanoConta;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmCad_PlanoConta }
+
+procedure TfrmCad_PlanoConta.dbgPlanoContaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer;
+  Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_PlanoConta.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_PlanoConta);
+end;
+
+procedure TfrmCad_PlanoConta.FormCreate(Sender: TObject);
+begin
+  dm_PlanoConta := Tdm_PlanoConta.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Descrição');
+end;
+
+procedure TfrmCad_PlanoConta.IniciarFields;
+begin
+  FNomeDoFormulario := 'Plano de Contas';
+  FNomeTabela := 'PLANO_CONTA';
+  //FComponenteFoco := dbeDescricao;
+  FDbgCadastro := dbgPlanoConta;
+
+  FSqlDefault :=
+    ' select ' +
+    '    plano_conta.pc_codconta, ' +
+    '    plano_conta.pc_descricao ' +
+    ' from plano_conta ' +
+    ' where ' +
+    '    plano_conta.pc_codconta = -1';
+end;
+
+procedure TfrmCad_PlanoConta.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('pc_codconta').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    FId := Dts.DataSet.FieldByName('pc_codconta').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_PlanoConta.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_PlanoConta.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+end.

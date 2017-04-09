@@ -1,0 +1,32 @@
+unit Cad_CondPagto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ScreenTips, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls, dtm_CondPagto,
+  DBCtrls, Mask, Grids, DBGrids;
+
+type
+  TfrmCad_CondPagto = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgCondPagto: TDBGrid;
+    gb_CondPagto: TGroupBox;
+    lblId: TLabel;
+    lblDescricao: TLabel;
+    dbeDescricao: TDBEdit;
+    dbeId: TDBText;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCad_CondPagto: TfrmCad_CondPagto;
+
+implementation
+
+{$R *.dfm}
+
+end.

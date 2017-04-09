@@ -1,0 +1,522 @@
+unit Cad_Modelo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, FormBase, ComCtrls, ToolWin, ActnList, ImgList, DB, sException,
+  StdCtrls, DBClient, TratamentoErro, sFuncoes,
+  Buttons, ActnMan, ActnCtrls, PlatformDefaultStyleActnCtrls, ScreenTips,
+  ExtCtrls, Grids, DBGrids, Provider, SqlExpr, dtm_Pesquisar, Generics.Collections;
+
+type
+  TfrmCad_Modelo = class(TForm)
+    pgcAbasCadastro: TPageControl;
+    tshConsultar: TTabSheet;
+    tshCadastro: TTabSheet;
+    Images: TImageList;
+    Dts: TDataSource;
+    pnlRodape: TPanel;
+    btnGravar: TBitBtn;
+    btnCancelar: TBitBtn;
+    pnlPesquisa: TPanel;
+    lblCampos: TLabel;
+    Label2: TLabel;
+    cbxField: TComboBox;
+    edtValor: TEdit;
+    btnPesquisar: TBitBtn;
+    DtsLocalizar: TDataSource;
+    ActionList1: TActionList;
+    actNovo: TAction;
+    actAlterar: TAction;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    actDeletar: TAction;
+    actGravar: TAction;
+    actCancelar: TAction;
+    actPesquisar: TAction;
+    actSair: TAction;
+    actImprimir: TAction;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    procedure actSairExecute(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure actPesquisarExecute(Sender: TObject);
+    procedure actCancelarExecute(Sender: TObject);
+    procedure actGravarExecute(Sender: TObject);
+    procedure actDeletarExecute(Sender: TObject);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure actNovoExecute(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Action2Execute(Sender: TObject);
+    procedure Action8Execute(Sender: TObject);
+    procedure Action7Execute(Sender: TObject);
+    procedure Action6Execute(Sender: TObject);
+    procedure Action5Execute(Sender: TObject);
+    procedure Action4Execute(Sender: TObject);
+    procedure Action3Execute(Sender: TObject);
+    procedure actNovoUpdate(Sender: TObject);
+    procedure actGravarUpdate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure edtValorChange(Sender: TObject);
+  protected
+    FNomeCadastro: String;
+    FId: Integer;
+    FNomeTabela: String;
+    FIdEmpresa : Variant;
+    FComponenteFoco : TWinControl;
+    FSqlDefault: String;
+    FCamposNomeExibicao: TStringList;
+    FDbgCadastro: TDBGrid;
+  private
+    FMapCampo: TDictionary<Integer, String>;
+  public
+    procedure ValidarCamposObrigatorios; virtual;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); virtual;
+    procedure PreenchimentoCamposDefaultNaInclusao; virtual; abstract;
+    procedure Novo; virtual;
+    procedure Alterar; virtual;
+    procedure Delete; virtual;
+    procedure Gravar; virtual;
+    procedure Cancelar; virtual;
+    procedure Pesquisar; virtual;
+    procedure Imprimir; virtual;
+    procedure Localizar; virtual;
+    procedure IniciarFields; virtual; abstract;
+    procedure CarregarComboBoxPesquisa;
+    procedure CarregarSqlDefault;
+    procedure SetCamposNomeExibicao;
+  end;
+
+var
+  frmCad_Modelo: TfrmCad_Modelo;
+
+implementation
+
+uses
+  Conexao, Logger, BuilderLogDialogo, sEnumerados, sDBUtils;
+
+{$R *.dfm}
+
+procedure TfrmCad_Modelo.actAlterarExecute(Sender: TObject);
+begin
+  Self.Alterar();
+end;
+
+procedure TfrmCad_Modelo.actCancelarExecute(Sender: TObject);
+begin
+  Self.Cancelar();
+end;
+
+procedure TfrmCad_Modelo.actDeletarExecute(Sender: TObject);
+begin
+  Self.Delete();
+end;
+
+procedure TfrmCad_Modelo.actGravarExecute(Sender: TObject);
+begin
+  Self.Gravar();
+end;
+
+procedure TfrmCad_Modelo.actImprimirExecute(Sender: TObject);
+begin
+  Self.Imprimir();
+end;
+
+procedure TfrmCad_Modelo.actNovoExecute(Sender: TObject);
+begin
+  Self.Novo();
+end;
+
+procedure TfrmCad_Modelo.actNovoUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Dts.State in [dsInactive, dsBrowse];
+end;
+
+procedure TfrmCad_Modelo.Action2Execute(Sender: TObject);
+begin
+  Self.Alterar();
+end;
+
+procedure TfrmCad_Modelo.Action3Execute(Sender: TObject);
+begin
+  Self.Delete();
+end;
+
+procedure TfrmCad_Modelo.Action4Execute(Sender: TObject);
+begin
+  Self.Gravar();
+end;
+
+procedure TfrmCad_Modelo.actGravarUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Dts.State in [dsEdit, dsInsert];
+end;
+
+procedure TfrmCad_Modelo.Action5Execute(Sender: TObject);
+begin
+  Self.Cancelar();
+end;
+
+procedure TfrmCad_Modelo.Action6Execute(Sender: TObject);
+begin
+  Self.Pesquisar();
+end;
+
+procedure TfrmCad_Modelo.Action7Execute(Sender: TObject);
+begin
+  Self.Imprimir();
+end;
+
+procedure TfrmCad_Modelo.Action8Execute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmCad_Modelo.actPesquisarExecute(Sender: TObject);
+begin
+  Self.Pesquisar();
+end;
+
+procedure TfrmCad_Modelo.actSairExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmCad_Modelo.Alterar;
+begin
+  try
+    if not DtsLocalizar.DataSet.IsEmpty then
+    begin
+      Dts.DataSet.Close;
+      TClientDataSet(Dts.DataSet).Params[0].AsInteger :=
+        DtsLocalizar.DataSet.Fields[0].AsInteger;
+      Dts.DataSet.Open;
+      DtsLocalizar.DataSet.Close;
+
+      begin
+        pgcAbasCadastro.ActivePage := tshCadastro;
+        Dts.DataSet.Edit();
+        Self.FComponenteFoco.SetFocus()
+      end;
+    end;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Modelo.btnPesquisarClick(Sender: TObject);
+begin
+  Self.Localizar();
+end;
+
+procedure TfrmCad_Modelo.Cancelar;
+begin
+  try
+    TClientDataSet(Dts.DataSet).CancelUpdates;
+    pgcAbasCadastro.ActivePage := tshConsultar;
+    Self.cbxField.ItemIndex := 1;
+    Self.edtValor.Clear();
+    Self.cbxField.SetFocus();
+
+    TDBUtils.GetId(FIdEmpresa, FId, FNomeTabela);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Modelo.CarregarComboBoxPesquisa;
+var
+  I: Integer;
+begin
+  try
+    for I := 0 to Pred(DtsLocalizar.DataSet.FieldCount) do
+    begin
+      cbxField.Items.Add(DtsLocalizar.DataSet.Fields[I].DisplayLabel);
+    end;
+
+    cbxField.ItemIndex := 1;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Modelo.CarregarSqlDefault;
+var
+  VProvider: TDataSetProvider;
+begin
+  VProvider :=
+    TDataSetProvider(TClientDataSet(DtsLocalizar.DataSet).Owner.FindComponent(TClientDataSet(DtsLocalizar.DataSet).ProviderName));
+
+  Self.FSqlDefault := TSQLDataSet(VProvider.DataSet).CommandText;
+end;
+
+procedure TfrmCad_Modelo.Delete;
+begin
+  try
+   if not DtsLocalizar.DataSet.IsEmpty then
+   begin
+     Dts.DataSet.Close;
+     TClientDataSet(Dts.DataSet).Params[0].AsInteger :=
+       DtsLocalizar.DataSet.Fields[0].AsInteger;
+     Dts.DataSet.Open;
+     DtsLocalizar.DataSet.Close;
+
+     if TFuncoes.SolicitarConfirmacao('Deseja Excluir o cadastro de ' + FNomeCadastro + ' ?') then
+     begin
+       ConexaoDBX.InicializaTransacaoBD();
+
+       Dts.DataSet.Delete;
+       if Dts.DataSet is TClientDataSet then
+         if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+           raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+       Self.cbxField.ItemIndex := 1;
+       Self.edtValor.Clear();
+       Self.cbxField.SetFocus();
+       ConexaoDBX.CommitTransacaoBD();
+       Dts.DataSet.Close;
+     end;
+   end;
+  except
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+      Dts.DataSet.Close;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Modelo.edtValorChange(Sender: TObject);
+begin
+  // btnPesquisar.Enabled := Length(edtValor.Text) >= 3;
+end;
+
+procedure TfrmCad_Modelo.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if Dts.DataSet.Active then
+    Dts.DataSet.Close;
+
+  if DtsLocalizar.DataSet.Active then
+    DtsLocalizar.DataSet.Close;
+
+  FreeAndNil(FMapCampo);
+  FreeAndNil(FCamposNomeExibicao);
+  FreeAndNil(LogErro);
+  FreeAndNil(dm_Pesquisar);
+end;
+
+procedure TfrmCad_Modelo.FormCreate(Sender: TObject);
+begin
+  dm_Pesquisar := Tdm_Pesquisar.Create(nil);
+  LogErro := TLoggerErro.Create;
+  Self.FCamposNomeExibicao := TStringList.Create;
+  FMapCampo := TDictionary<Integer, String>.Create;
+  Self.IniciarFields();
+  dm_Pesquisar.cds_Pesquisar.Data := TDBUtils.ExecutarConsulta(FSqlDefault);
+end;
+
+procedure TfrmCad_Modelo.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F3 then
+  begin
+    actNovo.Execute;
+  end;
+
+  if Key = VK_F4 then
+  begin
+    actAlterar.Execute;
+  end;
+
+  if Key = VK_F5 then
+  begin
+    actDeletar.Execute;
+  end;
+
+  if Key = VK_F6 then
+  begin
+    actImprimir.Execute;
+  end;
+
+  if Key = VK_F2 then
+  begin
+    actPesquisar.Execute;
+  end;
+
+  if Key = VK_ESCAPE then
+  begin
+    actSair.Execute;
+  end;
+end;
+
+procedure TfrmCad_Modelo.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmCad_Modelo.FormShow(Sender: TObject);
+begin
+  Self.SetCamposNomeExibicao();
+  Self.CarregarComboBoxPesquisa();
+
+  pgcAbasCadastro.ActivePage := tshConsultar;
+  cbxField.SetFocus();
+end;
+
+procedure TfrmCad_Modelo.Gravar;
+begin
+  try
+    Self.ValidarCamposObrigatorios();
+
+    ConexaoDBX.InicializaTransacaoBD();
+
+    if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+      raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+    pgcAbasCadastro.ActivePage := tshConsultar;
+    cbxField.ItemIndex := 1;
+    cbxField.SetFocus();
+    edtValor.Clear();
+
+    ConexaoDBX.CommitTransacaoBD();
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      Self.TratarExceptionCampoObrigatorio(E.Message);
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmCad_Modelo.Imprimir;
+begin
+
+end;
+
+procedure TfrmCad_Modelo.Localizar;
+var
+  VMontarSql: String;
+  VCampo: String;
+  Indice: Integer;
+  Value: Integer;
+  I: Integer;
+begin
+  VMontarSql := EmptyStr;
+
+  Indice := cbxField.ItemIndex;
+
+  for Value in FMapCampo.Keys do
+  begin
+    VCampo := FMapCampo.Items[Indice];
+  end;
+
+  try
+    VMontarSql := ' where upper(' + VCampo + ')' + ' like ' + ' upper( ' +
+      QuotedStr(edtValor.Text + '%') + ') order by ' + VCampo;
+
+    dm_Pesquisar.cds_Pesquisar.Data := TDBUtils.ExecutarConsulta(TFuncoes.MontarSqlComponente(Self.FSqlDefault) + VMontarSql);
+
+    for I := 0 to Pred(Self.FCamposNomeExibicao.Count) do
+    begin
+      DtsLocalizar.DataSet.Fields[I].DisplayLabel := Self.FCamposNomeExibicao[I];
+    end;
+
+    FDbgCadastro.SetFocus();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Modelo.Novo;
+begin
+  try
+    pgcAbasCadastro.ActivePage := tshCadastro;
+
+    if not Dts.DataSet.Active then
+    begin
+      Dts.DataSet.Close;
+      TClientDataSet(Dts.DataSet).Params[0].AsInteger := -1;
+      Dts.DataSet.Open;
+    end;
+
+    if DtsLocalizar.DataSet.Active then
+      DtsLocalizar.DataSet.Close;
+
+    Dts.DataSet.Append();
+    Self.FComponenteFoco.SetFocus();
+    Self.PreenchimentoCamposDefaultNaInclusao();
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Modelo.Pesquisar;
+begin
+  try
+    cbxField.SetFocus();
+    edtValor.Clear();
+
+    if DtsLocalizar.DataSet.Active then
+      DtsLocalizar.DataSet.Close;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Modelo.SetCamposNomeExibicao;
+var
+  I: Integer;
+begin
+  for I := 0 to Pred(Self.FCamposNomeExibicao.Count) do
+  begin
+    DtsLocalizar.DataSet.Fields[I].DisplayLabel := Self.FCamposNomeExibicao[I];
+    FMapCampo.Add(I, DtsLocalizar.DataSet.Fields[I].FieldName);
+  end;
+end;
+
+procedure TfrmCad_Modelo.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+
+end;
+
+procedure TfrmCad_Modelo.ValidarCamposObrigatorios;
+begin
+  //
+end;
+
+end.

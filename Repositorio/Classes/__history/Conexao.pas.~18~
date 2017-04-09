@@ -1,0 +1,177 @@
+unit Conexao;
+
+interface
+
+uses
+  Classes, SqlExpr, DB, DBClient, DBXCommon, SysUtils, Variants,
+  Forms, Windows, Controls, stdCtrls, Dialogs;
+
+type
+  TConexaoDBX = class
+  private
+    FConexaoBD: TSQLConnection;
+    FTransacaoBD: TDBXTransaction;
+    FTransacaoQry: TDBXTransaction;
+    FQry: TSQLQuery;
+    FDstSP: TSQLDataSet;
+    FDst: TSQLDataSet;
+  public
+    constructor Create(ConexaoBD: TSQLConnection);
+    destructor Destroy; override;
+
+    procedure InicializaTransacao(var ATransacao: TDBXTransaction);
+    procedure InicializaTransacaoBD;
+    procedure InicializaTransacaoQry;
+    procedure CommitTransacao(var ATransacao: TDBXTransaction);
+    procedure CommitTransacaoBD;
+    procedure CommitTransacaoQry;
+    procedure RollbackTransacao(var ATransacao: TDBXTransaction);
+    procedure RollbackTransacaoBD;
+    procedure RollbackTransacaoQry;
+    function GetInstanceQry: TSQLQuery;
+    function GetInstanceDstSP: TSQLDataSet;
+    function GetInstanceDst: TSQLDataSet;
+    function BuildQry: TSQLQuery; overload;
+    function BuildQry(ASql: String): TSQLQuery; overload;
+    function IsConectado: Boolean;
+
+    property ConexaoBD: TSQLConnection read FConexaoBD;
+    property Qry: TSQLQuery read FQry write FQry;
+    property DstSP: TSQLDataSet read FDstSP write FDstSP;
+    property Dst  : TSQLDataSet read FDst    write FDst;
+  end;
+
+var
+  ConexaoDBX: TConexaoDBX;
+
+implementation
+
+{ TConexaoDBX }
+
+constructor TConexaoDBX.Create(ConexaoBD: TSQLConnection);
+begin
+  FConexaoBD := ConexaoBD;
+  FConexaoBD.Params.Clear;
+  ConexaoBD.LoadParamsFromIniFile('Conexao.ini');
+end;
+
+destructor TConexaoDBX.Destroy;
+begin
+  FreeAndNil(FConexaoBD);
+  inherited;
+end;
+
+procedure TConexaoDBX.InicializaTransacao(var ATransacao: TDBXTransaction);
+begin
+  if Assigned(ATransacao) then
+    raise Exception.Create(ClassName + ': Transação já inicializada.');
+
+  ATransacao := Self.ConexaoBD.BeginTransaction(TDBXIsolations.ReadCommitted);
+end;
+
+procedure TConexaoDBX.InicializaTransacaoBD;
+begin
+  Self.InicializaTransacao(Self.FTransacaoBD);
+end;
+
+procedure TConexaoDBX.InicializaTransacaoQry;
+begin
+  Self.InicializaTransacao(Self.FTransacaoQry);
+end;
+
+function TConexaoDBX.BuildQry: TSQLQuery;
+begin
+  Result := TSQLQuery.Create(nil);
+
+  Result.SQLConnection := FConexaoBD;
+end;
+
+function TConexaoDBX.BuildQry(ASql: String): TSQLQuery;
+begin
+  try
+    Result := Self.BuildQry();
+    Result.Close;
+    Result.CommandText := ASql;
+  except
+    raise;
+  end;
+end;
+
+procedure TConexaoDBX.CommitTransacao(var ATransacao: TDBXTransaction);
+begin
+  if not Assigned(ATransacao) then
+    raise Exception.Create(ClassName + ': Transação não inicializada.');
+
+  Self.ConexaoBD.CommitFreeAndNil(ATransacao);
+end;
+
+procedure TConexaoDBX.CommitTransacaoBD;
+begin
+  Self.CommitTransacao(Self.FTransacaoBD);
+end;
+
+procedure TConexaoDBX.CommitTransacaoQry;
+begin
+  Self.CommitTransacao(Self.FTransacaoQry);
+end;
+
+procedure TConexaoDBX.RollbackTransacao(var ATransacao: TDBXTransaction);
+begin
+  if not Assigned(ATransacao) then
+    raise Exception.Create(ClassName + ': Transação não inicializada.');
+
+  Self.ConexaoBD.RollbackFreeAndNil(ATransacao);
+end;
+
+procedure TConexaoDBX.RollbackTransacaoBD;
+begin
+  Self.RollbackTransacao(Self.FTransacaoBD);
+end;
+
+procedure TConexaoDBX.RollbackTransacaoQry;
+begin
+  Self.RollbackTransacao(Self.FTransacaoQry);
+end;
+
+function TConexaoDBX.GetInstanceDst: TSQLDataSet;
+begin
+  if not Assigned(FDst) then
+  begin
+    FDst := TSQLDataSet.Create(nil);
+    FDst.SQLConnection := FConexaoBD;
+    //FDst.CommandType := ctQuery;
+  end;
+
+  Result := FDst;
+end;
+
+function TConexaoDBX.GetInstanceDstSP: TSQLDataSet;
+begin
+  if not Assigned(FDstSP) then
+  begin
+    FDstSP := TSQLDataSet.Create(nil);
+    FDstSP.SQLConnection := FConexaoBD;
+    FDstSP.CommandType := ctStoredProc;
+  end;
+
+  Result := FDstSP;
+end;
+
+function TConexaoDBX.GetInstanceQry: TSQLQuery;
+begin
+  if not Assigned(FQry) then
+  begin
+    FQry := TSQLQuery.Create(nil);
+    FQry.SQLConnection := FConexaoBD;
+    FQry.GetMetadata := False;
+  end;
+
+  Result := FQry;
+end;
+
+function TConexaoDBX.IsConectado: Boolean;
+begin
+  Result := Self.ConexaoBD.Connected;
+end;
+
+end.

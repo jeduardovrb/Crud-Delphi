@@ -1,0 +1,40 @@
+unit dtm_FormaPagto;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  Tdm_FormaPagto = class(TDataModule)
+    dsp_FormaPagto: TDataSetProvider;
+    cds_FormaPagto: TClientDataSet;
+    dst_FormaPagto: TSQLDataSet;
+    dst_FormaPagtoPP_ID: TIntegerField;
+    dst_FormaPagtoPP_STATUS: TStringField;
+    dst_FormaPagtoPP_DESCRICAO: TStringField;
+    dst_FormaPagtoPP_COM_ENTRADA: TStringField;
+    dst_FormaPagtoPP_NM_APRESENTACAO: TStringField;
+    dst_FormaPagtoPP_QT_PARCELAS: TSmallintField;
+    dst_FormaPagtoPP_ID_COND_PGTO: TIntegerField;
+    cds_FormaPagtoPP_ID: TIntegerField;
+    cds_FormaPagtoPP_STATUS: TStringField;
+    cds_FormaPagtoPP_DESCRICAO: TStringField;
+    cds_FormaPagtoPP_COM_ENTRADA: TStringField;
+    cds_FormaPagtoPP_NM_APRESENTACAO: TStringField;
+    cds_FormaPagtoPP_QT_PARCELAS: TSmallintField;
+    cds_FormaPagtoPP_ID_COND_PGTO: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_FormaPagto: Tdm_FormaPagto;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,110 @@
+unit dtm_Empresa;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  Tdm_Empresa = class(TDataModule)
+    dsp_Empresa: TDataSetProvider;
+    cds_Empresa: TClientDataSet;
+    dts_Empresa: TSQLDataSet;
+    dts_EmpresaEMP_ID_PK: TIntegerField;
+    dts_EmpresaEMP_RSOCIAL: TStringField;
+    dts_EmpresaEMP_FANTASIA: TStringField;
+    dts_EmpresaEMP_NOME_FICTICIO: TStringField;
+    dts_EmpresaEMP_ENDERECO: TStringField;
+    dts_EmpresaEMP_COMPLEMENTO: TStringField;
+    dts_EmpresaEMP_NUMERO: TStringField;
+    dts_EmpresaEMP_BAIRRO: TStringField;
+    dts_EmpresaEMP_ID_CIDADE_FK: TIntegerField;
+    dts_EmpresaEMP_ESTADO: TStringField;
+    dts_EmpresaEMP_CEP: TStringField;
+    dts_EmpresaEMP_TELEFONE: TStringField;
+    dts_EmpresaEMP_EMAIL: TStringField;
+    dts_EmpresaEMP_PIS: TFMTBCDField;
+    dts_EmpresaEMP_COFINS: TFMTBCDField;
+    dts_EmpresaEMP_VLR_FRETE: TFMTBCDField;
+    cds_EmpresaEMP_ID_PK: TIntegerField;
+    cds_EmpresaEMP_RSOCIAL: TStringField;
+    cds_EmpresaEMP_FANTASIA: TStringField;
+    cds_EmpresaEMP_NOME_FICTICIO: TStringField;
+    cds_EmpresaEMP_ENDERECO: TStringField;
+    cds_EmpresaEMP_COMPLEMENTO: TStringField;
+    cds_EmpresaEMP_NUMERO: TStringField;
+    cds_EmpresaEMP_BAIRRO: TStringField;
+    cds_EmpresaEMP_ID_CIDADE_FK: TIntegerField;
+    cds_EmpresaEMP_ESTADO: TStringField;
+    cds_EmpresaEMP_CEP: TStringField;
+    cds_EmpresaEMP_TELEFONE: TStringField;
+    cds_EmpresaEMP_EMAIL: TStringField;
+    cds_EmpresaEMP_PIS: TFMTBCDField;
+    cds_EmpresaEMP_COFINS: TFMTBCDField;
+    cds_EmpresaEMP_VLR_FRETE: TFMTBCDField;
+    dts_EmpresaEMP_ID_TELEFONE_FK: TIntegerField;
+    dts_EmpresaEMP_DT_CADASTRO: TSQLTimeStampField;
+    dts_EmpresaEMP_DT_ALTERACAO: TSQLTimeStampField;
+    dts_EmpresaEMP_MSG: TStringField;
+    dts_EmpresaEMP_VLR_VENDA_ENTREGA: TFMTBCDField;
+    dts_EmpresaEMP_VLR_VENDA_ESTABELECIMENTO: TFMTBCDField;
+    cds_EmpresaEMP_ID_TELEFONE_FK: TIntegerField;
+    cds_EmpresaEMP_DT_CADASTRO: TSQLTimeStampField;
+    cds_EmpresaEMP_DT_ALTERACAO: TSQLTimeStampField;
+    cds_EmpresaEMP_VLR_VENDA_ENTREGA: TFMTBCDField;
+    cds_EmpresaEMP_VLR_VENDA_ESTABELECIMENTO: TFMTBCDField;
+    dts_EmpresaEMP_CNPJ_CPF: TStringField;
+    dts_EmpresaEMP_INSC_RG: TStringField;
+    cds_EmpresaEMP_CNPJ_CPF: TStringField;
+    cds_EmpresaEMP_INSC_RG: TStringField;
+    cds_EmpresaEMP_MSG: TStringField;
+    dst_Parametro: TSQLDataSet;
+    dts_LinkEmpresa: TDataSource;
+    cds_Parametro: TClientDataSet;
+    dst_ParametroPA_EMPRESA: TIntegerField;
+    dst_ParametroPA_CLIENTE_FIDELIDADE: TIntegerField;
+    dst_ParametroPA_PLANO_CONTA_VENDA: TIntegerField;
+    dst_ParametroPA_PLANO_CONTA_ENTRADA: TIntegerField;
+    dst_ParametroPA_AL_JUROS: TFMTBCDField;
+    dst_ParametroPA_QTDE_PRAZO_DIAS: TIntegerField;
+    dst_ParametroPA_QTDE_PRAZO_CC: TIntegerField;
+    cds_Empresadst_Parametro: TDataSetField;
+    cds_ParametroPA_EMPRESA: TIntegerField;
+    cds_ParametroPA_CLIENTE_FIDELIDADE: TIntegerField;
+    cds_ParametroPA_PLANO_CONTA_VENDA: TIntegerField;
+    cds_ParametroPA_PLANO_CONTA_ENTRADA: TIntegerField;
+    cds_ParametroPA_AL_JUROS: TFMTBCDField;
+    cds_ParametroPA_QTDE_PRAZO_DIAS: TIntegerField;
+    cds_ParametroPA_QTDE_PRAZO_CC: TIntegerField;
+    dst_ParametroNM_DESCRICAO_PLANO_VENDA: TStringField;
+    dst_ParametroNM_DESCROCAO_PLANO_ENTRADA: TStringField;
+    cds_ParametroNM_DESCRICAO_PLANO_VENDA: TStringField;
+    cds_ParametroNM_DESCROCAO_PLANO_ENTRADA: TStringField;
+    dts_EmpresaCID_NOME: TStringField;
+    cds_EmpresaCID_NOME: TStringField;
+    dts_EmpresaEMP_FOTO_EMPRESA: TBlobField;
+    dts_EmpresaEMP_FOTO_AUXILIAR: TBlobField;
+    cds_EmpresaEMP_FOTO_EMPRESA: TBlobField;
+    cds_EmpresaEMP_FOTO_AUXILIAR: TBlobField;
+    dst_ParametroPA_VENDA_GRID: TIntegerField;
+    cds_ParametroPA_VENDA_GRID: TIntegerField;
+    dst_ParametroPA_PESQUISA_RAPIDA: TIntegerField;
+    cds_ParametroPA_PESQUISA_RAPIDA: TIntegerField;
+    dst_ParametroPA_EDITAR_ID_PRODUTO: TIntegerField;
+    cds_ParametroPA_EDITAR_ID_PRODUTO: TIntegerField;
+    dst_ParametroPA_NAO_DIGITAR_VIRGULA: TIntegerField;
+    cds_ParametroPA_NAO_DIGITAR_VIRGULA: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Empresa: Tdm_Empresa;
+
+implementation
+
+{$R *.dfm}
+
+end.

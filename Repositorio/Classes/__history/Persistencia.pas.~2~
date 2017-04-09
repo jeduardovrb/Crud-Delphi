@@ -1,0 +1,17 @@
+unit Persistencia;
+
+interface
+
+type
+  TMyClass = class
+  private
+
+  public
+    function GetId(AEmpresa: Variant; AId: Integer;
+      ANomeTabela: String): Integer; virtual; abstract;
+    function ExecutarConsulta(ASql: String): OleVariant; virtual; abstract;
+  end;
+
+implementation
+
+end.

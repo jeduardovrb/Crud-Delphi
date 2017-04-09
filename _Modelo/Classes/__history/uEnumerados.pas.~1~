@@ -1,0 +1,10 @@
+unit sEnumerados;
+
+interface
+
+type
+  TAcao = (acIndefinido, acIncluir, acAlterar, acExcluir, acVisualizar);
+
+implementation
+
+end.

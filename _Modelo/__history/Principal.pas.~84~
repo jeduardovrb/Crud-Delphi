@@ -1,0 +1,82 @@
+unit Principal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, ActnCtrls,ToolWin, ActnMan,
+  ActnMenus, ImgList, ActnList, StdActns, ComCtrls, ExtCtrls, jpeg, Menus, CustomizeDlg, StdCtrls,
+  System.Actions, Vcl.PlatformDefaultStyleActnCtrls, System.ImageList;
+
+type
+  TfrmPrincipal = class(TForm)
+    Imagens: TImageList;
+    Img16Ativada: TImageList;
+    BarInforDoSistema: TStatusBar;
+    Menu: TActionManager;
+    Action1: TAction;
+    Image1: TImage;
+    procedure EditCopy1Execute(Sender: TObject);
+    procedure ClientesExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Action2Execute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    procedure SairDoSistema;
+    procedure CarregarInformacoesDaBarraDeStatus;
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmPrincipal.Action2Execute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmPrincipal.CarregarInformacoesDaBarraDeStatus;
+begin
+  //BarInforDoSistema.Panels[0].Text := 'Versão: ' +
+    //sConstantes.VERSAO_DO_SISTEMA_GESTAO;
+  //BarInforDoSistema.Panels[1].Text := 'Usuário: ' + 'Celso Dornellas';
+  //BarInforDoSistema.Panels[2].Text := 'Empresa: ' + 'Lanches Bom de Mais';
+end;
+
+procedure TfrmPrincipal.ClientesExecute(Sender: TObject);
+begin
+  ShowMessage('Método não implementado.');
+end;
+
+procedure TfrmPrincipal.EditCopy1Execute(Sender: TObject);
+begin
+  ShowMessage('Teste ok');
+end;
+
+procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Self.SairDoSistema();
+end;
+
+procedure TfrmPrincipal.FormCreate(Sender: TObject);
+begin
+//  Self.ApresentarLogo();
+end;
+
+procedure TfrmPrincipal.FormShow(Sender: TObject);
+begin
+  Self.CarregarInformacoesDaBarraDeStatus();
+end;
+
+procedure TfrmPrincipal.SairDoSistema;
+begin
+ // if TFuncoes.SolicitarConfirmacao('Deseja sair do Sistema?') then
+  //  Application.Terminate
+ // else
+  //  Abort;
+end;
+
+end.

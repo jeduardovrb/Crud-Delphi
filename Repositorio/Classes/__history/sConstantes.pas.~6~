@@ -1,0 +1,10 @@
+unit sConstantes;
+
+interface
+
+const
+  VERSAO_DO_SISTEMA_GESTAO: String = '2.0';
+
+implementation
+
+end.

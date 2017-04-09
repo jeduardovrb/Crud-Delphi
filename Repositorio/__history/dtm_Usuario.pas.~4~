@@ -1,0 +1,30 @@
+unit dtm_Usuario;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DBClient, Provider, DB, SqlExpr;
+
+type
+  Tdm_Usuario = class(TDataModule)
+    dst_Usuario: TSQLDataSet;
+    dsp_Usuario: TDataSetProvider;
+    cds_Usuario: TClientDataSet;
+    dst_UsuarioUSU_ID: TIntegerField;
+    dst_UsuarioUSU_NOME: TStringField;
+    dst_UsuarioUSU_LOGIN: TStringField;
+    dst_UsuarioUSU_SENHA: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Usuario: Tdm_Usuario;
+
+implementation
+
+{$R *.dfm}
+
+end.

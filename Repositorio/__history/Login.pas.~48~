@@ -1,0 +1,189 @@
+unit Login;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons, ExtCtrls,
+  DBCtrls, BuilderLogDialogo, sEnumerados, Logger, Usuario, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider,
+  Empresa_Corrente, IniFiles;
+
+type
+  TfrmLogin = class(TForm)
+    pnlFundo: TPanel;
+    lblBemVindo: TLabel;
+    lblIdentifique: TLabel;
+    Image1: TImage;
+    lblLogin: TLabel;
+    lblSenha: TLabel;
+    edtLogin: TEdit;
+    edtSenha: TEdit;
+    btnEntrar: TBitBtn;
+    btnCancelar: TBitBtn;
+    Label3: TLabel;
+    dbcbEmpresa: TDBLookupComboBox;
+    lblEmpresa: TLabel;
+    dsp_Empresa: TDataSetProvider;
+    cds_Empresa: TClientDataSet;
+    cds_EmpresaEMP_ID_PK: TIntegerField;
+    cds_EmpresaEMP_RSOCIAL: TStringField;
+    cds_EmpresaEMP_FANTASIA: TStringField;
+    cds_EmpresaEMP_NOME_FICTICIO: TStringField;
+    cds_EmpresaEMP_ENDERECO: TStringField;
+    cds_EmpresaEMP_COMPLEMENTO: TStringField;
+    cds_EmpresaEMP_NUMERO: TStringField;
+    cds_EmpresaEMP_BAIRRO: TStringField;
+    cds_EmpresaEMP_ID_CIDADE_FK: TIntegerField;
+    cds_EmpresaEMP_ESTADO: TStringField;
+    cds_EmpresaEMP_CEP: TStringField;
+    cds_EmpresaEMP_TELEFONE: TStringField;
+    cds_EmpresaEMP_EMAIL: TStringField;
+    cds_EmpresaEMP_PIS: TFMTBCDField;
+    cds_EmpresaEMP_COFINS: TFMTBCDField;
+    cds_EmpresaEMP_VLR_FRETE: TFMTBCDField;
+    dst_Empresa: TSQLDataSet;
+    dst_EmpresaEMP_ID_PK: TIntegerField;
+    dst_EmpresaEMP_RSOCIAL: TStringField;
+    dst_EmpresaEMP_FANTASIA: TStringField;
+    dst_EmpresaEMP_NOME_FICTICIO: TStringField;
+    dst_EmpresaEMP_ENDERECO: TStringField;
+    dst_EmpresaEMP_COMPLEMENTO: TStringField;
+    dst_EmpresaEMP_NUMERO: TStringField;
+    dst_EmpresaEMP_BAIRRO: TStringField;
+    dst_EmpresaEMP_ID_CIDADE_FK: TIntegerField;
+    dst_EmpresaEMP_ESTADO: TStringField;
+    dst_EmpresaEMP_CEP: TStringField;
+    dst_EmpresaEMP_TELEFONE: TStringField;
+    dst_EmpresaEMP_EMAIL: TStringField;
+    dst_EmpresaEMP_PIS: TFMTBCDField;
+    dst_EmpresaEMP_COFINS: TFMTBCDField;
+    dst_EmpresaEMP_VLR_FRETE: TFMTBCDField;
+    dts_Empresa: TDataSource;
+    procedure btnEntrarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    FNrTentativas: Integer;
+
+    procedure ArrendondarCantosDoFormulario;
+    procedure ValidarCampos;
+    procedure GravarIni;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+implementation
+
+uses Principal;
+
+{$R *.dfm}
+
+procedure TfrmLogin.ArrendondarCantosDoFormulario;
+var
+  VRegion : HRGN;
+begin
+  VRegion := CreateRoundRectRgn(0, 0, width, height, 30, 30);
+  SetWindowRgn(Handle, VRegion, True);
+end;
+
+procedure TfrmLogin.btnCancelarClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TfrmLogin.btnEntrarClick(Sender: TObject);
+begin
+  if FNrTentativas < 2 then
+  begin
+    Inc(FNrTentativas);
+    Self.ValidarCampos();
+    Self.GravarIni();
+
+    try
+      if TUsuario.GetInstance.LogarNoSistema(edtLogin.Text, edtSenha.Text) then
+      begin
+        EmpresaCorrente.Id := dbcbEmpresa.KeyValue;
+        EmpresaCorrente.CarregarEmpresaCorrente();
+
+        Close;
+      end
+      else
+      begin
+        raise Exception.Create('Usuário ou senha inválida.');
+      end;
+    except
+      on E: Exception do
+      begin
+        raise;
+      end;
+    end;
+  end
+  else
+    Application.Terminate;
+end;
+
+procedure TfrmLogin.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  cds_Empresa.Close;
+end;
+
+procedure TfrmLogin.FormCreate(Sender: TObject);
+begin
+  Self.ArrendondarCantosDoFormulario();
+end;
+
+procedure TfrmLogin.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmLogin.FormShow(Sender: TObject);
+begin
+  cds_Empresa.Open;
+  FNrTentativas := 0;
+
+  cds_Empresa.First;
+  dbcbEmpresa.KeyValue := cds_EmpresaEMP_ID_PK.AsInteger;
+end;
+
+procedure TfrmLogin.GravarIni;
+var
+  VIniObj: TIniFile;
+begin
+  VIniObj := TIniFile.Create('Login.ini');
+  try
+    VIniObj.WriteString('Login', 'Usuário', edtLogin.Text);
+		VIniObj.UpdateFile;
+  finally
+    VIniObj.Free;
+  end;
+end;
+
+procedure TfrmLogin.ValidarCampos;
+begin
+  if Trim(edtLogin.Text) = EmptyStr then
+  begin
+    Self.edtLogin.SetFocus;
+    raise Exception.Create('O campo "login" é de prenchimento obrigatório.');
+  end;
+
+  if Trim(edtSenha.Text) = EmptyStr then
+  begin
+    Self.edtSenha.SetFocus;
+    raise Exception.Create('O campo "senha" é de prenchimento obrigatório.');
+  end;
+end;
+
+initialization
+  RegisterClass(TfrmLogin);
+
+end.

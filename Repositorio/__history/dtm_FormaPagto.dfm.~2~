@@ -1,0 +1,37 @@
+object dm_FormaPagto: Tdm_FormaPagto
+  OldCreateOrder = False
+  Height = 122
+  Width = 576
+  object dsp_FormaPagto: TDataSetProvider
+    DataSet = dst_FormaPagto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    Left = 176
+    Top = 24
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 304
+    Top = 24
+  end
+  object dst_FormaPagto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   plano_pagamento.pp_id,'#13#10'   plano_pagamento.pp_status,' +
+      #13#10'   plano_pagamento.pp_descricao,'#13#10'   plano_pagamento.pp_com_en' +
+      'trada,'#13#10'   plano_pagamento.pp_nm_apresentacao,'#13#10'   plano_pagamen' +
+      'to.pp_qt_parcelas,'#13#10'   plano_pagamento.pp_id_cond_pgto'#13#10'from pla' +
+      'no_pagamento'#13#10'where'#13#10'   plano_pagamento.pp_id = :pp_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pp_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+  end
+end

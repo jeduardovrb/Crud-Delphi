@@ -1,0 +1,32 @@
+unit sConversor;
+
+interface
+
+uses sEnumerados;
+
+type
+  TConversor = Class
+    class function SomenteNumeroStr(Text: String): String;
+    class function TipoPessoasParaStr(ATipo: TTipoPessoas): String;
+  end;
+
+implementation
+
+{ TFuncoes_v3 }
+
+class function TConversor.SomenteNumeroStr(Text: String): String;
+begin
+
+end;
+
+class function TConversor.TipoPessoasParaStr(ATipo: TTipoPessoas): String;
+begin
+  case ATipo of
+    sEnumerados.tpFisico:
+      Result := 'F';
+    sEnumerados.tpJuridico:
+      Result := 'J';
+  end;
+end;
+
+end.

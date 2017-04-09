@@ -1,0 +1,25 @@
+unit FormBase;
+
+interface
+
+uses
+  Forms;
+
+type
+  TFormBase = class(TForm)
+
+  public
+    constructor Create(Aowner: TComponent);
+  end;
+
+implementation
+
+{ TFormBase }
+
+constructor TFormBase.Create(Aowner: TComponent);
+begin
+  inherited Create(Aowner);
+  KeyPreview := True;
+end;
+
+end.

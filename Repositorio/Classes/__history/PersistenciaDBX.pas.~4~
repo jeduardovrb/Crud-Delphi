@@ -1,0 +1,21 @@
+unit PersistenciaDBX;
+
+interface
+
+uses
+  DBClient, DBXCommon, SysUtils, Conexao, SqlExpr, Variants, DB, Provider, Logger,
+  Persistencia;
+
+type
+  TPersistenciaDBX = class(TPersistencia)
+  private
+
+  public
+    function GetId(AEmpresa: Variant; AId: Integer;
+      ANomeTabela: String): Integer; override;
+    function ExecutarConsulta(ASql: String): OleVariant; override;
+  end;
+
+implementation
+
+end.

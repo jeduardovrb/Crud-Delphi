@@ -1,0 +1,48 @@
+unit dtm_PlanoPagto;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider, TratamentoErro;
+
+type
+  Tdm_FormaPagto = class(TDataModule)
+    dsp_PlanoPagto: TDataSetProvider;
+    cds_PlanoPagto: TClientDataSet;
+    dst_PlanoPagto: TSQLDataSet;
+    dst_PlanoPagtoPP_ID: TIntegerField;
+    dst_PlanoPagtoPP_STATUS: TStringField;
+    dst_PlanoPagtoPP_DESCRICAO: TStringField;
+    dst_PlanoPagtoPP_COM_ENTRADA: TStringField;
+    dst_PlanoPagtoPP_NM_APRESENTACAO: TStringField;
+    dst_PlanoPagtoPP_QT_PARCELAS: TSmallintField;
+    dst_PlanoPagtoPP_ID_COND_PGTO: TIntegerField;
+    cds_PlanoPagtoPP_ID: TIntegerField;
+    cds_PlanoPagtoPP_STATUS: TStringField;
+    cds_PlanoPagtoPP_DESCRICAO: TStringField;
+    cds_PlanoPagtoPP_COM_ENTRADA: TStringField;
+    cds_PlanoPagtoPP_NM_APRESENTACAO: TStringField;
+    cds_PlanoPagtoPP_QT_PARCELAS: TSmallintField;
+    cds_PlanoPagtoPP_ID_COND_PGTO: TIntegerField;
+    procedure cds_PlanoPagtoReconcileError(DataSet: TCustomClientDataSet; E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_FormaPagto: Tdm_FormaPagto;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tdm_FormaPagto.cds_PlanoPagtoReconcileError(DataSet: TCustomClientDataSet; E: EReconcileError;
+  UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  TTratamentoErro.HandleReconcileError(E.Message, Action);
+end;
+
+end.

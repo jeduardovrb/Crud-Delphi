@@ -1,0 +1,26 @@
+unit Mov_Pedidos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ScreenTips, ActnList, DB, ImgList, ComCtrls, ToolWin,
+  StdCtrls, Buttons, ExtCtrls;
+
+type
+  TfrmForm_Modelo1 = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmForm_Modelo1: TfrmForm_Modelo1;
+
+implementation
+
+{$R *.dfm}
+
+end.

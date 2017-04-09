@@ -1,0 +1,28 @@
+unit dtm_Pesquisar;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  Tdm_Pesquisar = class(TDataModule)
+    cds_Pesquisar: TClientDataSet;
+    dsp_Pesquisar: TDataSetProvider;
+    dst_Pesquisar: TSQLDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Pesquisar: Tdm_Pesquisar;
+
+implementation
+
+uses dtm_Conexao;
+
+{$R *.dfm}
+
+end.

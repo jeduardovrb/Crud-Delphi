@@ -1,0 +1,1912 @@
+object dm_Clientes: Tdm_Clientes
+  OldCreateOrder = False
+  Height = 468
+  Width = 899
+  object dst_PessoaEndereco: TSQLDataSet
+    SchemaName = 'ADPAROPAS'
+    CommandText = 
+      'select '#13#10'   pessoa_endereco.pe_id_pessoa,'#13#10'   pessoa_endereco.pe' +
+      '_tipo,'#13#10'   case pessoa_endereco.pe_tipo'#13#10'     when 1 then '#39'Entre' +
+      'ga'#39#13#10'     when 2 then '#39'Outros'#39#13#10'   end pe_nm_tipo,'#13#10'   pessoa_en' +
+      'dereco.pe_endereco,'#13#10'   pessoa_endereco.pe_numero,'#13#10'   pessoa_en' +
+      'dereco.pe_complemento,'#13#10'   pessoa_endereco.pe_bairro,'#13#10'   pessoa' +
+      '_endereco.pe_id_cidade,'#13#10'   pessoa_endereco.pe_cep,'#13#10'   pessoa_e' +
+      'ndereco.pe_contato,'#13#10'   pessoa_endereco.pe_seq,'#13#10'   cidade.cid_n' +
+      'ome,'#13#10'   cidade.cid_estado'#13#10'from pessoa_endereco'#13#10'   left outer ' +
+      'join cidade on (pessoa_endereco.pe_id_cidade = cidade.cid_id)'#13#10'w' +
+      'here '#13#10'   (pessoa_endereco.pe_id_pessoa = :pes_id)'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 72
+    Top = 188
+    object dst_PessoaEnderecoPE_ID_PESSOA: TIntegerField
+      FieldName = 'PE_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaEnderecoPE_TIPO: TSmallintField
+      FieldName = 'PE_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaEnderecoPE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      ProviderFlags = [pfInUpdate]
+      Size = 255
+    end
+    object dst_PessoaEnderecoPE_NUMERO: TStringField
+      DisplayLabel = 'N'#250'mero'
+      FieldName = 'PE_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object dst_PessoaEnderecoPE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_PessoaEnderecoPE_ID_CIDADE: TIntegerField
+      FieldName = 'PE_ID_CIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaEnderecoPE_CEP: TStringField
+      FieldName = 'PE_CEP'
+      ProviderFlags = [pfInUpdate]
+      EditMask = '99999\-999;0;_'
+      Size = 10
+    end
+    object dst_PessoaEnderecoPE_CONTATO: TStringField
+      FieldName = 'PE_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PessoaEnderecoCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      ProviderFlags = []
+      Size = 40
+    end
+    object dst_PessoaEnderecoCID_ESTADO: TStringField
+      FieldName = 'CID_ESTADO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 2
+    end
+    object dst_PessoaEnderecoPE_NM_TIPO: TStringField
+      DisplayLabel = 'Tipo de Endere'#231'o'
+      FieldName = 'PE_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 7
+    end
+    object dst_PessoaEnderecoPE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaEnderecoPE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 80
+    end
+  end
+  object cds_PessoaEndereco: TClientDataSet
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_PessoaEndereco
+    FetchOnDemand = False
+    Params = <>
+    Left = 320
+    Top = 188
+    object cds_PessoaEnderecoPE_ID_PESSOA: TIntegerField
+      FieldName = 'PE_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaEnderecoPE_TIPO: TSmallintField
+      FieldName = 'PE_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaEnderecoPE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PessoaEnderecoPE_NUMERO: TStringField
+      FieldName = 'PE_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_PessoaEnderecoPE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_PessoaEnderecoPE_ID_CIDADE: TIntegerField
+      FieldName = 'PE_ID_CIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaEnderecoPE_CEP: TStringField
+      FieldName = 'PE_CEP'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_PessoaEnderecoPE_CONTATO: TStringField
+      FieldName = 'PE_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PessoaEnderecoCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      ProviderFlags = []
+      Size = 40
+    end
+    object cds_PessoaEnderecoCID_ESTADO: TStringField
+      FieldName = 'CID_ESTADO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 2
+    end
+    object cds_PessoaEnderecoPE_NM_TIPO: TStringField
+      FieldName = 'PE_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 7
+    end
+    object cds_PessoaEnderecoPE_SEQ: TIntegerField
+      FieldName = 'PE_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaEnderecoPE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 80
+    end
+  end
+  object dts_LinkPessoa: TDataSource
+    DataSet = dst_Pessoa
+    Left = 202
+    Top = 108
+  end
+  object dst_PessoaTelefone: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   PESSOA_TELEFONE.PT_ID_PESSOA,'#13#10'   PESSOA_TELEFONE.PT' +
+      '_TIPO,'#13#10'   CASE PESSOA_TELEFONE.PT_TIPO'#13#10'      WHEN 1 THEN '#39'RESI' +
+      'D'#202'NCIA / SEDE'#39#13#10'      WHEN 2 THEN '#39'COMERCIAL'#39#13#10'      WHEN 3 THEN' +
+      ' '#39'CELULAR'#39#13#10'      WHEN 4 THEN '#39'FAX'#39#13#10'      WHEN 5 THEN '#39'OUTRO'#39#13#10 +
+      '   END PT_NM_TIPO,'#13#10'   PESSOA_TELEFONE.PT_NUMERO,'#13#10'   PESSOA_TEL' +
+      'EFONE.PT_CONTATO,'#13#10'    PESSOA_TELEFONE.PT_SEQ'#13#10'FROM PESSOA_TELEF' +
+      'ONE'#13#10'WHERE '#13#10'      (PESSOA_TELEFONE.PT_ID_PESSOA = :PES_ID)'#13#10'ORD' +
+      'ER BY '#13#10'   PESSOA_TELEFONE.PT_TIPO'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 80
+    Top = 112
+    object dst_PessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaTelefonePT_NM_TIPO: TStringField
+      DisplayLabel = 'Tipo de Telefone'
+      FieldName = 'PT_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 17
+    end
+    object dst_PessoaTelefonePT_NUMERO: TStringField
+      DisplayLabel = 'N'#250'mero'
+      FieldName = 'PT_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object dst_PessoaTelefonePT_CONTATO: TStringField
+      DisplayLabel = 'Contato'
+      FieldName = 'PT_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object cds_PessoaTelefone: TClientDataSet
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_PessoaTelefone
+    Params = <>
+    Left = 320
+    Top = 112
+    object cds_PessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaTelefonePT_NM_TIPO: TStringField
+      FieldName = 'PT_NM_TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 17
+    end
+    object cds_PessoaTelefonePT_NUMERO: TStringField
+      FieldName = 'PT_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      EditMask = '!\(99\)0000-0000;0;_'
+      Size = 14
+    end
+    object cds_PessoaTelefonePT_CONTATO: TStringField
+      FieldName = 'PT_CONTATO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object dst_Cliente: TSQLDataSet
+    SchemaName = 'ADPAROPAS'
+    CommandText = 
+      'SELECT '#13#10'   CLIENTE.CLI_ID_PESSOA,'#13#10'   CLIENTE.CLI_TP_CADASTRO,'#13 +
+      #10'   CLIENTE.CLI_DT_CADASTRO,'#13#10'   CLIENTE.CLI_DT_RECADASTRO,'#13#10'   ' +
+      'CLIENTE.CLI_ID_CTB,'#13#10'   CLIENTE.CLI_FIDELIDADE'#13#10'FROM CLIENTE'#13#10'WH' +
+      'ERE '#13#10'   (CLIENTE.CLI_ID_PESSOA = :PES_ID)'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 72
+    Top = 323
+    object dst_ClienteCLI_ID_PESSOA: TIntegerField
+      FieldName = 'CLI_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_ClienteCLI_DT_CADASTRO: TDateField
+      FieldName = 'CLI_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ClienteCLI_DT_RECADASTRO: TDateField
+      FieldName = 'CLI_DT_RECADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ClienteCLI_ID_CTB: TIntegerField
+      FieldName = 'CLI_ID_CTB'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ClienteCLI_TP_CADASTRO: TStringField
+      FieldName = 'CLI_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_ClienteCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object cds_Cliente: TClientDataSet
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_Cliente
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    Left = 320
+    Top = 315
+    object cds_ClienteCLI_ID_PESSOA: TIntegerField
+      FieldName = 'CLI_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_ClienteCLI_DT_CADASTRO: TDateField
+      FieldName = 'CLI_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ClienteCLI_DT_RECADASTRO: TDateField
+      FieldName = 'CLI_DT_RECADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ClienteCLI_ID_CTB: TIntegerField
+      FieldName = 'CLI_ID_CTB'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ClienteCLI_TP_CADASTRO: TStringField
+      FieldName = 'CLI_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_ClienteCLI_FIDELIDADE: TIntegerField
+      FieldName = 'CLI_FIDELIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_Pessoa: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pes_id,'#13#10'   pes_emp,'#13#10'   pes_tp_pessoa,'#13#10'   pes_situa' +
+      'cao,'#13#10'   pes_rsocial,'#13#10'   pes_fantasia,'#13#10'   pes_cnpj_cpf,'#13#10'   pe' +
+      's_insc_rg,'#13#10'   pes_rg_org_expedidor,'#13#10'   pes_rg_dt_expedicao,'#13#10' ' +
+      '  pes_tp_sanguineo,'#13#10'   pes_dt_nascimento,'#13#10'   pessoa.pes_tp_cad' +
+      'astro,'#13#10'   pessoa.pes_id_interno'#13#10'from pessoa'#13#10'where'#13#10'   pessoa.' +
+      'pes_id = :pes_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 80
+    Top = 24
+    object dst_PessoaPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PessoaPES_EMP: TSmallintField
+      FieldName = 'PES_EMP'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaPES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PessoaPES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PessoaPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PessoaPES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PessoaPES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object dst_PessoaPES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_PessoaPES_RG_ORG_EXPEDIDOR: TStringField
+      FieldName = 'PES_RG_ORG_EXPEDIDOR'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object dst_PessoaPES_RG_DT_EXPEDICAO: TDateField
+      FieldName = 'PES_RG_DT_EXPEDICAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaPES_TP_SANGUINEO: TStringField
+      FieldName = 'PES_TP_SANGUINEO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object dst_PessoaPES_DT_NASCIMENTO: TDateField
+      FieldName = 'PES_DT_NASCIMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PessoaPES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PessoaPES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dsp_Pessoa: TDataSetProvider
+    DataSet = dst_Pessoa
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 192
+    Top = 24
+  end
+  object cds_Pessoa: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_Pessoa'
+    OnReconcileError = cds_PessoaReconcileError
+    Left = 320
+    Top = 24
+    object cds_PessoaPES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PessoaPES_EMP: TSmallintField
+      FieldName = 'PES_EMP'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaPES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_PessoaPES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_PessoaPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_PessoaPES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_PessoaPES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      ProviderFlags = [pfInUpdate]
+      Size = 14
+    end
+    object cds_PessoaPES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_PessoaPES_RG_ORG_EXPEDIDOR: TStringField
+      FieldName = 'PES_RG_ORG_EXPEDIDOR'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_PessoaPES_RG_DT_EXPEDICAO: TDateField
+      FieldName = 'PES_RG_DT_EXPEDICAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaPES_TP_SANGUINEO: TStringField
+      FieldName = 'PES_TP_SANGUINEO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 3
+    end
+    object cds_PessoaPES_DT_NASCIMENTO: TDateField
+      FieldName = 'PES_DT_NASCIMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PessoaPES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_Pessoadst_Email: TDataSetField
+      FieldName = 'dst_Email'
+    end
+    object cds_Pessoadst_Cliente: TDataSetField
+      FieldName = 'dst_Cliente'
+    end
+    object cds_Pessoadst_PessoaTelefone: TDataSetField
+      FieldName = 'dst_PessoaTelefone'
+    end
+    object cds_Pessoadst_PessoaEndereco: TDataSetField
+      FieldName = 'dst_PessoaEndereco'
+    end
+    object cds_Pessoadts_CreditoClienteFidelidade: TDataSetField
+      FieldName = 'dts_CreditoClienteFidelidade'
+    end
+    object cds_PessoaPES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_Email: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   PESSOA_EMAIL.PEM_ID_PESSOA,'#13#10'   PESSOA_EMAIL.PEM_SEQ' +
+      ','#13#10'   PESSOA_EMAIL.PEM_EMAIL'#13#10'FROM PESSOA_EMAIL'#13#10'WHERE '#13#10'   (PES' +
+      'SOA_EMAIL.PEM_ID_PESSOA = :PES_ID)'#13#10'ORDER BY'#13#10'   PESSOA_EMAIL.PE' +
+      'M_SEQ'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 72
+    Top = 256
+    object dst_EmailPEM_ID_PESSOA: TIntegerField
+      FieldName = 'PEM_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_EmailPEM_SEQ: TSmallintField
+      DisplayLabel = 'Seq.'
+      FieldName = 'PEM_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_EmailPEM_EMAIL: TStringField
+      DisplayLabel = 'Email'
+      FieldName = 'PEM_EMAIL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+  end
+  object cdsEmail: TClientDataSet
+    Aggregates = <>
+    DataSetField = cds_Pessoadst_Email
+    Params = <>
+    Left = 320
+    Top = 256
+    object cdsEmailPEM_ID_PESSOA: TIntegerField
+      FieldName = 'PEM_ID_PESSOA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cdsEmailPEM_SEQ: TSmallintField
+      FieldName = 'PEM_SEQ'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cdsEmailPEM_EMAIL: TStringField
+      FieldName = 'PEM_EMAIL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+  end
+  object dsp_DadosPessoaTelefone: TDataSetProvider
+    DataSet = dst_DadosPessoaTelefone
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 648
+    Top = 32
+  end
+  object cds_DadosPessoaTelefone: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_DadosPessoaTelefone'
+    Left = 800
+    Top = 32
+    object cds_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      Required = True
+    end
+    object cds_DadosPessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      Required = True
+    end
+    object cds_DadosPessoaTelefonePT_NM_TIPO: TStringField
+      DisplayLabel = 'Tipo de Telefone'
+      FieldName = 'PT_NM_TIPO'
+      FixedChar = True
+      Size = 17
+    end
+    object cds_DadosPessoaTelefonePT_NUMERO: TStringField
+      DisplayLabel = 'Telefone'
+      FieldName = 'PT_NUMERO'
+      Size = 14
+    end
+    object cds_DadosPessoaTelefonePT_CONTATO: TStringField
+      FieldName = 'PT_CONTATO'
+      Size = 30
+    end
+    object cds_DadosPessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      Required = True
+    end
+  end
+  object dst_DadosPessoaTelefone: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'SELECT '#13#10'   PESSOA_TELEFONE.PT_ID_PESSOA,'#13#10'   PESSOA_TELEFONE.PT' +
+      '_TIPO,'#13#10'   CASE PESSOA_TELEFONE.PT_TIPO'#13#10'      WHEN 1 THEN '#39'RESI' +
+      'D'#202'NCIA / SEDE'#39#13#10'      WHEN 2 THEN '#39'COMERCIAL'#39#13#10'      WHEN 3 THEN' +
+      ' '#39'CELULAR'#39#13#10'      WHEN 4 THEN '#39'FAX'#39#13#10'      WHEN 5 THEN '#39'OUTRO'#39#13#10 +
+      '   END PT_NM_TIPO,'#13#10'   PESSOA_TELEFONE.PT_NUMERO,'#13#10'   PESSOA_TEL' +
+      'EFONE.PT_CONTATO,'#13#10'    PESSOA_TELEFONE.PT_SEQ'#13#10'FROM PESSOA_TELEF' +
+      'ONE'#13#10'WHERE '#13#10'      (PESSOA_TELEFONE.PT_ID_PESSOA = :PES_ID)'#13#10'ORD' +
+      'ER BY '#13#10'   PESSOA_TELEFONE.PT_TIPO'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'PES_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 504
+    Top = 32
+    object dst_DadosPessoaTelefonePT_ID_PESSOA: TIntegerField
+      FieldName = 'PT_ID_PESSOA'
+      Required = True
+    end
+    object dst_DadosPessoaTelefonePT_TIPO: TSmallintField
+      FieldName = 'PT_TIPO'
+      Required = True
+    end
+    object dst_DadosPessoaTelefonePT_NM_TIPO: TStringField
+      FieldName = 'PT_NM_TIPO'
+      FixedChar = True
+      Size = 17
+    end
+    object dst_DadosPessoaTelefonePT_NUMERO: TStringField
+      FieldName = 'PT_NUMERO'
+      Size = 14
+    end
+    object dst_DadosPessoaTelefonePT_CONTATO: TStringField
+      FieldName = 'PT_CONTATO'
+      Size = 30
+    end
+    object dst_DadosPessoaTelefonePT_SEQ: TIntegerField
+      FieldName = 'PT_SEQ'
+      Required = True
+    end
+  end
+  object dts_CreditoClienteFidelidade: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   credito_cliente_fidelidade.ccf_id_cliente,'#13#10'   credit' +
+      'o_cliente_fidelidade.ccf_id_empresa,'#13#10'   credito_cliente_fidelid' +
+      'ade.ccf_vlr_credito_entrega,'#13#10'   credito_cliente_fidelidade.ccf_' +
+      'vlr_credito_estabelecimento,'#13#10'   credito_cliente_fidelidade.ccf_' +
+      'vlr_credito'#13#10'from credito_cliente_fidelidade'#13#10'where'#13#10'   (credito' +
+      '_cliente_fidelidade.ccf_id_cliente = :pes_id) and'#13#10'   (credito_c' +
+      'liente_fidelidade.ccf_id_empresa = :pes_emp)'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkPessoa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'pes_emp'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 72
+    Top = 400
+    object dts_CreditoClienteFidelidadeCCF_ID_CLIENTE: TIntegerField
+      FieldName = 'CCF_ID_CLIENTE'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dts_CreditoClienteFidelidadeCCF_ID_EMPRESA: TIntegerField
+      FieldName = 'CCF_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dts_CreditoClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ENTREGA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_CreditoClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ESTABELECIMENTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_CreditoClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object cds_CreditoClienteFidelidade: TClientDataSet
+    Aggregates = <>
+    DataSetField = cds_Pessoadts_CreditoClienteFidelidade
+    Params = <>
+    Left = 319
+    Top = 399
+    object cds_CreditoClienteFidelidadeCCF_ID_CLIENTE: TIntegerField
+      FieldName = 'CCF_ID_CLIENTE'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_CreditoClienteFidelidadeCCF_ID_EMPRESA: TIntegerField
+      FieldName = 'CCF_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_CreditoClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ENTREGA'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_CreditoClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ESTABELECIMENTO'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_CreditoClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dsp_ClienteFidelidade: TDataSetProvider
+    DataSet = dst_ClienteFidelidade
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 608
+    Top = 128
+  end
+  object cds_ClienteFidelidade: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_ClienteFidelidade'
+    Left = 728
+    Top = 128
+    object cds_ClienteFidelidadeCCF_ID_CLIENTE: TIntegerField
+      FieldName = 'CCF_ID_CLIENTE'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_ClienteFidelidadeCCF_ID_EMPRESA: TIntegerField
+      FieldName = 'CCF_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ENTREGA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_ClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ESTABELECIMENTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_ClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dst_ClienteFidelidade: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   credito_cliente_fidelidade.ccf_id_cliente,'#13#10'   credit' +
+      'o_cliente_fidelidade.ccf_id_empresa,'#13#10'   credito_cliente_fidelid' +
+      'ade.ccf_vlr_credito_entrega,'#13#10'   credito_cliente_fidelidade.ccf_' +
+      'vlr_credito_estabelecimento,'#13#10'   credito_cliente_fidelidade.ccf_' +
+      'vlr_credito'#13#10'from credito_cliente_fidelidade'#13#10'where'#13#10'   (credito' +
+      '_cliente_fidelidade.ccf_id_cliente = :pes_id) and'#13#10'   (credito_c' +
+      'liente_fidelidade.ccf_id_empresa = :ccf_id_empresa)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pes_id'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'ccf_id_empresa'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 488
+    Top = 128
+    object dst_ClienteFidelidadeCCF_ID_CLIENTE: TIntegerField
+      FieldName = 'CCF_ID_CLIENTE'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_ClienteFidelidadeCCF_ID_EMPRESA: TIntegerField
+      FieldName = 'CCF_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object dst_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ENTREGA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ClienteFidelidadeCCF_VLR_CREDITO_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO_ESTABELECIMENTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ClienteFidelidadeCCF_VLR_CREDITO: TFMTBCDField
+      FieldName = 'CCF_VLR_CREDITO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object frxClienteFidelidade: TfrxReport
+    Version = '4.11.14'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42078.640645381950000000
+    ReportOptions.LastChange = 42078.672077997680000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 608
+    Top = 208
+    Datasets = <
+      item
+        DataSet = frbDst_ClienteFidelidade
+        DataSetName = 'frxDBDataset1'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object MasterData1: TfrxMasterData
+        Height = 181.417440000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        DataSet = frbDst_ClienteFidelidade
+        DataSetName = 'frxDBDataset1'
+        RowCount = 0
+        object Picture1: TfrxPictureView
+          Left = 86.929190000000000000
+          Top = 7.559060000000000000
+          Width = 529.134200000000000000
+          Height = 173.858380000000000000
+          ShowHint = False
+          HightQuality = False
+          Transparent = False
+          TransparentColor = clWhite
+        end
+        object frxDBDataset1PES_RSOCIAL: TfrxMemoView
+          Left = 385.512060000000000000
+          Top = 147.401670000000000000
+          Width = 200.315090000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PES_RSOCIAL'
+          DataSet = frbDst_ClienteFidelidade
+          DataSetName = 'frxDBDataset1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            '[frxDBDataset1."PES_RSOCIAL"]')
+          ParentFont = False
+        end
+        object BarCode1: TfrxBarCodeView
+          Left = 396.850650000000000000
+          Top = 56.692950000000000000
+          Width = 190.000000000000000000
+          Height = 86.929190000000000000
+          ShowHint = False
+          BarType = bcCodeEAN13
+          Expression = '<frxDBDataset1."PES_ID">'
+          Rotation = 0
+          Text = '12345678'
+          WideBarRatio = 2.000000000000000000
+          Zoom = 2.000000000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+        end
+        object Memo1: TfrxMemoView
+          Left = 381.732530000000000000
+          Top = 18.897650000000000000
+          Width = 222.992270000000000000
+          Height = 26.456710000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlue
+          Font.Height = -24
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Acumule Pontos!')
+          ParentFont = False
+        end
+      end
+    end
+  end
+  object frbDst_ClienteFidelidade: TfrxDBDataset
+    UserName = 'frxDBDataset1'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'PES_ID=PES_ID'
+      'PES_EMP=PES_EMP'
+      'PES_TP_PESSOA=PES_TP_PESSOA'
+      'PES_SITUACAO=PES_SITUACAO'
+      'PES_RSOCIAL=PES_RSOCIAL'
+      'PES_FANTASIA=PES_FANTASIA'
+      'PES_CNPJ_CPF=PES_CNPJ_CPF'
+      'PES_INSC_RG=PES_INSC_RG'
+      'PES_RG_ORG_EXPEDIDOR=PES_RG_ORG_EXPEDIDOR'
+      'PES_RG_DT_EXPEDICAO=PES_RG_DT_EXPEDICAO'
+      'PES_TP_SANGUINEO=PES_TP_SANGUINEO'
+      'PES_DT_NASCIMENTO=PES_DT_NASCIMENTO'
+      'PES_TP_CADASTRO=PES_TP_CADASTRO'
+      'dst_Email=dst_Email'
+      'dst_Cliente=dst_Cliente'
+      'dst_PessoaTelefone=dst_PessoaTelefone'
+      'dst_PessoaEndereco=dst_PessoaEndereco'
+      'dts_CreditoClienteFidelidade=dts_CreditoClienteFidelidade')
+    DataSet = cds_Pessoa
+    BCDToCurrency = False
+    Left = 488
+    Top = 208
+  end
+  object frxBarCodeObject1: TfrxBarCodeObject
+    Left = 720
+    Top = 208
+  end
+  object dst_IdInternoCliente: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pessoa.pes_id,'#13#10'   pessoa.pes_id_interno,'#13#10'   pessoa.' +
+      'pes_emp,'#13#10'   pessoa.pes_tp_cadastro,'#13#10'   pessoa.pes_tp_pessoa,'#13#10 +
+      '   pessoa.pes_situacao,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa.pes_f' +
+      'antasia,'#13#10'   pessoa.pes_cnpj_cpf,'#13#10'   pessoa.pes_insc_rg,'#13#10'   pe' +
+      'ssoa.pes_rg_org_expedidor,'#13#10'   pessoa.pes_rg_dt_expedicao,'#13#10'   p' +
+      'essoa.pes_tp_sanguineo'#13#10'from pessoa'#13#10'where'#13#10'   pessoa.pes_tp_cad' +
+      'astro = '#39'C'#39
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 488
+    Top = 288
+    object dst_IdInternoClientePES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object dst_IdInternoClientePES_EMP: TSmallintField
+      FieldName = 'PES_EMP'
+    end
+    object dst_IdInternoClientePES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_IdInternoClientePES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_IdInternoClientePES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_IdInternoClientePES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_IdInternoClientePES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      Size = 50
+    end
+    object dst_IdInternoClientePES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      Size = 14
+    end
+    object dst_IdInternoClientePES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      Size = 18
+    end
+    object dst_IdInternoClientePES_RG_ORG_EXPEDIDOR: TStringField
+      FieldName = 'PES_RG_ORG_EXPEDIDOR'
+      Size = 10
+    end
+    object dst_IdInternoClientePES_RG_DT_EXPEDICAO: TDateField
+      FieldName = 'PES_RG_DT_EXPEDICAO'
+    end
+    object dst_IdInternoClientePES_TP_SANGUINEO: TStringField
+      FieldName = 'PES_TP_SANGUINEO'
+      FixedChar = True
+      Size = 3
+    end
+    object dst_IdInternoClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+  object dst_RelCliente: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   cliente.cli_id_pessoa,'#13#10'   pessoa.pes_rsocial,'#13#10'   cl' +
+      'iente.cli_dt_cadastro,'#13#10'   pessoa.pes_dt_nascimento,'#13#10'   pessoa.' +
+      'PES_ID_INTERNO'#13#10'from pessoa'#13#10'   left outer join cliente on (pess' +
+      'oa.pes_id = cliente.cli_id_pessoa)'#13#10'where'#13#10'  pessoa.pes_tp_cadas' +
+      'tro = '#39'C'#39#13#10'order by'#13#10'   pessoa.PES_ID_INTERNO'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 496
+    Top = 352
+    object dst_RelClienteCLI_ID_PESSOA: TIntegerField
+      FieldName = 'CLI_ID_PESSOA'
+    end
+    object dst_RelClientePES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_RelClienteCLI_DT_CADASTRO: TDateField
+      FieldName = 'CLI_DT_CADASTRO'
+    end
+    object dst_RelClientePES_DT_NASCIMENTO: TDateField
+      FieldName = 'PES_DT_NASCIMENTO'
+    end
+    object dst_RelClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+  object frxRelCliente: TfrxReport
+    Version = '4.11.14'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42078.640645382000000000
+    ReportOptions.LastChange = 42147.515670520840000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    OnGetValue = frxRelClienteGetValue
+    Left = 728
+    Top = 352
+    Datasets = <
+      item
+        DataSet = frxDst_RelCliente
+        DataSetName = 'frxDst_RelCliente'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object ReportTitle1: TfrxReportTitle
+        Height = 18.897650000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        object Memo1: TfrxMemoView
+          Align = baCenter
+          Left = 5.669294999999976000
+          Width = 706.772110000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          AutoWidth = True
+          Color = 14211288
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Relat'#243'rio de Clientes')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        Height = 17.007874020000000000
+        Top = 143.622140000000000000
+        Width = 718.110700000000000000
+        DataSet = frxDst_RelCliente
+        DataSetName = 'frxDst_RelCliente'
+        RowCount = 0
+        object Memo6: TfrxMemoView
+          Left = 3.779530000000000000
+          Width = 710.551640000000000000
+          Height = 15.118110240000000000
+          ShowHint = False
+          Highlight.Font.Charset = DEFAULT_CHARSET
+          Highlight.Font.Color = clRed
+          Highlight.Font.Height = -13
+          Highlight.Font.Name = 'Arial'
+          Highlight.Font.Style = []
+          Highlight.Color = 13158600
+          Highlight.Condition = '<Line#> mod 2'
+        end
+        object frxDst_RelClienteCLI_ID_PESSOA: TfrxMemoView
+          Left = 7.559060000000000000
+          Width = 79.370130000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataSet = frxDst_RelCliente
+          DataSetName = 'frxDst_RelCliente'
+          DisplayFormat.FormatStr = '000000'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[VIDCLIENTE]')
+          ParentFont = False
+        end
+        object frxDst_RelClientePES_RSOCIAL: TfrxMemoView
+          Left = 151.181200000000000000
+          Top = 0.779529999999994100
+          Width = 204.094620000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'PES_RSOCIAL'
+          DataSet = frxDst_RelCliente
+          DataSetName = 'frxDst_RelCliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frxDst_RelCliente."PES_RSOCIAL"]')
+          ParentFont = False
+        end
+        object frxDst_RelClienteCLI_DT_CADASTRO: TfrxMemoView
+          Left = 456.102660000000000000
+          Width = 79.370130000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'CLI_DT_CADASTRO'
+          DataSet = frxDst_RelCliente
+          DataSetName = 'frxDst_RelCliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frxDst_RelCliente."CLI_DT_CADASTRO"]')
+          ParentFont = False
+        end
+        object frxDst_RelClientePES_DT_NASCIMENTO: TfrxMemoView
+          Left = 566.693260000000000000
+          Width = 79.370130000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataField = 'PES_DT_NASCIMENTO'
+          DataSet = frxDst_RelCliente
+          DataSetName = 'frxDst_RelCliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frxDst_RelCliente."PES_DT_NASCIMENTO"]')
+          ParentFont = False
+        end
+      end
+      object PageHeader1: TfrxPageHeader
+        Height = 22.677180000000000000
+        Top = 60.472480000000000000
+        Width = 718.110700000000000000
+        object Memo3: TfrxMemoView
+          Left = 151.181200000000000000
+          Top = 4.999999999999993000
+          Width = 49.133890000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            'Nome')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          Left = 453.543600000000000000
+          Top = 4.999999999999993000
+          Width = 94.488250000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            'Data de Cadastro')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 566.929500000000000000
+          Top = 4.999999999999993000
+          Width = 113.385900000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            'Data de Nascimento')
+          ParentFont = False
+        end
+        object Memo2: TfrxMemoView
+          Left = 7.559060000000000000
+          Top = 5.779530000000001000
+          Width = 49.133890000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            'C'#243'digo')
+          ParentFont = False
+        end
+      end
+    end
+  end
+  object frxDst_RelCliente: TfrxDBDataset
+    UserName = 'frxDst_RelCliente'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'CLI_ID_PESSOA=CLI_ID_PESSOA'
+      'PES_RSOCIAL=PES_RSOCIAL'
+      'CLI_DT_CADASTRO=CLI_DT_CADASTRO'
+      'PES_DT_NASCIMENTO=PES_DT_NASCIMENTO'
+      'PES_ID_INTERNO=PES_ID_INTERNO')
+    DataSet = dst_RelCliente
+    BCDToCurrency = False
+    Left = 608
+    Top = 352
+  end
+  object cds_IdInternoCliente: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_IdInternoCliente'
+    Left = 720
+    Top = 288
+    object cds_IdInternoClientePES_ID: TIntegerField
+      FieldName = 'PES_ID'
+      Required = True
+    end
+    object cds_IdInternoClientePES_EMP: TSmallintField
+      FieldName = 'PES_EMP'
+    end
+    object cds_IdInternoClientePES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      FixedChar = True
+      Size = 1
+    end
+    object cds_IdInternoClientePES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      FixedChar = True
+      Size = 1
+    end
+    object cds_IdInternoClientePES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
+    object cds_IdInternoClientePES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object cds_IdInternoClientePES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      Size = 50
+    end
+    object cds_IdInternoClientePES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      Size = 14
+    end
+    object cds_IdInternoClientePES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      Size = 18
+    end
+    object cds_IdInternoClientePES_RG_ORG_EXPEDIDOR: TStringField
+      FieldName = 'PES_RG_ORG_EXPEDIDOR'
+      Size = 10
+    end
+    object cds_IdInternoClientePES_RG_DT_EXPEDICAO: TDateField
+      FieldName = 'PES_RG_DT_EXPEDICAO'
+    end
+    object cds_IdInternoClientePES_TP_SANGUINEO: TStringField
+      FieldName = 'PES_TP_SANGUINEO'
+      FixedChar = True
+      Size = 3
+    end
+    object cds_IdInternoClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+  end
+  object dsp_IdInternoCliente: TDataSetProvider
+    DataSet = dst_IdInternoCliente
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 600
+    Top = 288
+  end
+  object dst_RelatorioCliente: TSQLDataSet
+    CommandText = 
+      'select  '#13#10'   cliente.cli_id_pessoa,'#13#10'   pessoa.pes_id_interno,'#13#10 +
+      '   pessoa.pes_tp_cadastro,'#13#10'   pessoa.pes_tp_pessoa,'#13#10'   pessoa.' +
+      'pes_situacao,'#13#10'   pessoa.pes_rsocial,'#13#10'   pessoa.pes_fantasia,'#13#10 +
+      '   pessoa.pes_cnpj_cpf,'#13#10'   pessoa.pes_insc_rg,'#13#10'   pessoa_ender' +
+      'eco.pe_tipo,'#13#10'   pessoa_endereco.pe_endereco,'#13#10'   pessoa_enderec' +
+      'o.pe_numero,'#13#10'   pessoa_endereco.pe_complemento,'#13#10'   pessoa_ende' +
+      'reco.pe_bairro,'#13#10'   pessoa_endereco.pe_id_cidade,'#13#10'   pessoa_end' +
+      'ereco.pe_cep,'#13#10'   pessoa_telefone.pt_numero,'#13#10'   pessoa_email.pe' +
+      'm_email,'#13#10'   pessoa.pes_insert_date,'#13#10'   pessoa.pes_update_date'#13 +
+      #10'from cliente'#13#10'   left outer join pessoa on (cliente.cli_id_pess' +
+      'oa =  pessoa.pes_id)'#13#10'   left outer join pessoa_endereco on (cli' +
+      'ente.cli_id_pessoa = pessoa_endereco.pe_id_pessoa and pessoa_end' +
+      'ereco.pe_tipo = 1)'#13#10'   left outer join pessoa_telefone on (clien' +
+      'te.cli_id_pessoa = pessoa_telefone.pt_id_pessoa and pessoa_telef' +
+      'one.pt_tipo = 1)'#13#10'   left outer join pessoa_email on (cliente.cl' +
+      'i_id_pessoa = pessoa_email.pem_id_pessoa and pessoa_email.pem_se' +
+      'q = 1)'#13#10'where'#13#10'   cliente.cli_id_pessoa = :Id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'Id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 496
+    Top = 408
+    object dst_RelatorioClienteCLI_ID_PESSOA: TIntegerField
+      FieldName = 'CLI_ID_PESSOA'
+      Required = True
+    end
+    object dst_RelatorioClientePES_ID_INTERNO: TIntegerField
+      FieldName = 'PES_ID_INTERNO'
+    end
+    object dst_RelatorioClientePES_TP_CADASTRO: TStringField
+      FieldName = 'PES_TP_CADASTRO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_RelatorioClientePES_TP_PESSOA: TStringField
+      FieldName = 'PES_TP_PESSOA'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_RelatorioClientePES_SITUACAO: TStringField
+      FieldName = 'PES_SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
+    object dst_RelatorioClientePES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_RelatorioClientePES_FANTASIA: TStringField
+      FieldName = 'PES_FANTASIA'
+      Size = 50
+    end
+    object dst_RelatorioClientePES_CNPJ_CPF: TStringField
+      FieldName = 'PES_CNPJ_CPF'
+      Size = 14
+    end
+    object dst_RelatorioClientePES_INSC_RG: TStringField
+      FieldName = 'PES_INSC_RG'
+      Size = 18
+    end
+    object dst_RelatorioClientePE_TIPO: TSmallintField
+      FieldName = 'PE_TIPO'
+    end
+    object dst_RelatorioClientePE_ENDERECO: TStringField
+      FieldName = 'PE_ENDERECO'
+      Size = 100
+    end
+    object dst_RelatorioClientePE_NUMERO: TStringField
+      FieldName = 'PE_NUMERO'
+      Size = 10
+    end
+    object dst_RelatorioClientePE_COMPLEMENTO: TStringField
+      FieldName = 'PE_COMPLEMENTO'
+      Size = 80
+    end
+    object dst_RelatorioClientePE_BAIRRO: TStringField
+      FieldName = 'PE_BAIRRO'
+      Size = 40
+    end
+    object dst_RelatorioClientePE_ID_CIDADE: TIntegerField
+      FieldName = 'PE_ID_CIDADE'
+    end
+    object dst_RelatorioClientePE_CEP: TStringField
+      FieldName = 'PE_CEP'
+      Size = 10
+    end
+    object dst_RelatorioClientePT_NUMERO: TStringField
+      FieldName = 'PT_NUMERO'
+      Size = 14
+    end
+    object dst_RelatorioClientePEM_EMAIL: TStringField
+      FieldName = 'PEM_EMAIL'
+      Size = 100
+    end
+    object dst_RelatorioClientePES_INSERT_DATE: TSQLTimeStampField
+      FieldName = 'PES_INSERT_DATE'
+    end
+    object dst_RelatorioClientePES_UPDATE_DATE: TSQLTimeStampField
+      FieldName = 'PES_UPDATE_DATE'
+    end
+  end
+  object frxDst_RelatorioCliente: TfrxDBDataset
+    UserName = 'frxDst_RelatorioCliente'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'CLI_ID_PESSOA=CLI_ID_PESSOA'
+      'PES_ID_INTERNO=PES_ID_INTERNO'
+      'PES_TP_CADASTRO=PES_TP_CADASTRO'
+      'PES_TP_PESSOA=PES_TP_PESSOA'
+      'PES_SITUACAO=PES_SITUACAO'
+      'PES_RSOCIAL=PES_RSOCIAL'
+      'PES_FANTASIA=PES_FANTASIA'
+      'PES_CNPJ_CPF=PES_CNPJ_CPF'
+      'PES_INSC_RG=PES_INSC_RG'
+      'PE_TIPO=PE_TIPO'
+      'PE_ENDERECO=PE_ENDERECO'
+      'PE_NUMERO=PE_NUMERO'
+      'PE_COMPLEMENTO=PE_COMPLEMENTO'
+      'PE_BAIRRO=PE_BAIRRO'
+      'PE_ID_CIDADE=PE_ID_CIDADE'
+      'PE_CEP=PE_CEP'
+      'PT_NUMERO=PT_NUMERO'
+      'PEM_EMAIL=PEM_EMAIL'
+      'PES_INSERT_DATE=PES_INSERT_DATE'
+      'PES_UPDATE_DATE=PES_UPDATE_DATE')
+    DataSet = dst_RelatorioCliente
+    BCDToCurrency = False
+    Left = 608
+    Top = 408
+  end
+  object frxRelatorioCliente: TfrxReport
+    Version = '4.11.14'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42475.849882789350000000
+    ReportOptions.LastChange = 42475.851247534730000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 736
+    Top = 408
+    Datasets = <
+      item
+        DataSet = frxDst_RelatorioCliente
+        DataSetName = 'frxDst_RelatorioCliente'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 100.000000000000000000
+      PaperHeight = 148.000000000000000000
+      PaperSize = 256
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object ReportTitle1: TfrxReportTitle
+        Height = 30.236240000000000000
+        Top = 18.897650000000000000
+        Width = 302.362400000000000000
+        object Memo1: TfrxMemoView
+          Align = baCenter
+          Left = 81.259894999999990000
+          Top = 3.779530000000001000
+          Width = 139.842610000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Relat'#243'rio de Cliente')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        Height = 302.362400000000000000
+        Top = 109.606370000000000000
+        Width = 302.362400000000000000
+        DataSet = frxDst_RelatorioCliente
+        DataSetName = 'frxDst_RelatorioCliente'
+        RowCount = 0
+        object frxDst_RelatorioClientePES_ID_INTERNO: TfrxMemoView
+          Left = 41.574830000000000000
+          Top = 3.779529999999994000
+          Width = 37.795300000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PES_ID_INTERNO'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PES_ID_INTERNO"]')
+        end
+        object Memo2: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 3.779529999999994000
+          Width = 22.677180000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Id:')
+          ParentFont = False
+        end
+        object frxDst_RelatorioClientePES_RSOCIAL: TfrxMemoView
+          Left = 60.472480000000000000
+          Top = 34.015770000000010000
+          Width = 234.330860000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PES_RSOCIAL'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PES_RSOCIAL"]')
+        end
+        object frxDst_RelatorioClientePES_CNPJ_CPF: TfrxMemoView
+          Left = 90.708720000000000000
+          Top = 64.015770000000030000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PES_CNPJ_CPF'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PES_CNPJ_CPF"]')
+        end
+        object frxDst_RelatorioClientePES_INSC_RG: TfrxMemoView
+          Left = 45.354360000000000000
+          Top = 92.472479999999990000
+          Width = 143.622140000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PES_INSC_RG'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PES_INSC_RG"]')
+        end
+        object frxDst_RelatorioClientePE_ENDERECO: TfrxMemoView
+          Left = 83.149660000000000000
+          Top = 119.472480000000000000
+          Width = 211.653680000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PE_ENDERECO'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PE_ENDERECO"]')
+        end
+        object frxDst_RelatorioClientePE_NUMERO: TfrxMemoView
+          Left = 79.370130000000000000
+          Top = 147.708720000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PE_NUMERO'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PE_NUMERO"]')
+        end
+        object frxDst_RelatorioClientePE_COMPLEMENTO: TfrxMemoView
+          Left = 68.031540000000010000
+          Top = 173.488250000000000000
+          Width = 226.771800000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PE_COMPLEMENTO'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PE_COMPLEMENTO"]')
+        end
+        object frxDst_RelatorioClientePE_BAIRRO: TfrxMemoView
+          Left = 71.811070000000000000
+          Top = 201.724490000000000000
+          Width = 222.992270000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PE_BAIRRO'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PE_BAIRRO"]')
+        end
+        object frxDst_RelatorioClientePT_NUMERO: TfrxMemoView
+          Left = 109.606370000000000000
+          Top = 232.724490000000000000
+          Width = 128.504020000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PT_NUMERO'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PT_NUMERO"]')
+        end
+        object frxDst_RelatorioClientePEM_EMAIL: TfrxMemoView
+          Left = 64.252010000000000000
+          Top = 262.960730000000000000
+          Width = 230.551330000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PEM_EMAIL'
+          DataSet = frxDst_RelatorioCliente
+          DataSetName = 'frxDst_RelatorioCliente'
+          Memo.UTF8W = (
+            '[frxDst_RelatorioCliente."PEM_EMAIL"]')
+        end
+        object Memo3: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 64.015770000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'CPF/CNPJ:')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 92.472479999999990000
+          Width = 26.456710000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'RG:')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 119.252010000000000000
+          Width = 68.031540000000010000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Endere'#231'o:')
+          ParentFont = False
+        end
+        object Memo6: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 147.708720000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'N'#250'mero:')
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 173.488250000000000000
+          Width = 52.913420000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Comp.:')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 201.724490000000000000
+          Width = 56.692950000000010000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Bairro:')
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 232.724490000000000000
+          Width = 90.708720000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Telefone:')
+          ParentFont = False
+        end
+        object Memo10: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 262.960730000000000000
+          Width = 49.133890000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'E-mail:')
+          ParentFont = False
+        end
+        object Memo11: TfrxMemoView
+          Left = 11.338590000000000000
+          Top = 34.015770000000010000
+          Width = 45.354360000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Nome:')
+          ParentFont = False
+        end
+      end
+    end
+  end
+end

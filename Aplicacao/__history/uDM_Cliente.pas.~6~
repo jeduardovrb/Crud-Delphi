@@ -1,0 +1,36 @@
+unit uDM_Cliente;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, uDM_Conexao, Data.FMTBcd, Data.DB, Data.SqlExpr, Datasnap.Provider, Datasnap.DBClient;
+
+type
+  Tdm_Cliente = class(TDataModule)
+    dst_Cliente: TSQLDataSet;
+    dsp_Cliente: TDataSetProvider;
+    cds_Cliente: TClientDataSet;
+    dst_ClienteCODIGO: TIntegerField;
+    dst_ClienteRSOCIAL: TStringField;
+    dst_ClienteCIDADE: TIntegerField;
+    dst_ClienteNOME: TStringField;
+    cds_ClienteCODIGO: TIntegerField;
+    cds_ClienteRSOCIAL: TStringField;
+    cds_ClienteCIDADE: TIntegerField;
+    cds_ClienteNOME: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Cliente: Tdm_Cliente;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

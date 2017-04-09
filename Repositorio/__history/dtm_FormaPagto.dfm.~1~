@@ -1,0 +1,5 @@
+object dm_FormaPagto: Tdm_FormaPagto
+  OldCreateOrder = False
+  Height = 122
+  Width = 576
+end

@@ -1,0 +1,26 @@
+object dm_Conexao: Tdm_Conexao
+  OldCreateOrder = False
+  Height = 76
+  Width = 330
+  object Conn: TSQLConnection
+    ConnectionName = 'PGESTAO'
+    DriverName = 'FIREBIRD'
+    LoadParamsOnConnect = True
+    LoginPrompt = False
+    Params.Strings = (
+      'drivername=FIREBIRD'
+      'blobsize=-1'
+      'commitretain=False'
+      'Database=C:\Root\BD_GESTAO.FDB'
+      'localecode=0000'
+      'password=masterkey'
+      'rolename=RoleName'
+      'sqldialect=3'
+      'isolationlevel=ReadCommitted'
+      'user_name=sysdba'
+      'waitonlocks=True'
+      'trim char=False')
+    Left = 40
+    Top = 16
+  end
+end

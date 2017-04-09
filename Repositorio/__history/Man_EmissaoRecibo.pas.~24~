@@ -1,0 +1,122 @@
+unit Man_EmissaoRecibo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, JvExMask, JvToolEdit, StdCtrls, JvBaseEdits, Buttons, frxClass,
+  dtm_Conexao, FMTBcd, DB, SqlExpr, frxDBSet, Empresa_Corrente, ValorPorExtenso;
+
+type
+  TfrmMan_EmissaoRecibo = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    edtRecebi: TEdit;
+    edtReferente: TEdit;
+    edtData: TJvDateEdit;
+    edtValorTotal: TJvCalcEdit;
+    btnVisualizar: TBitBtn;
+    frxReport: TfrxReport;
+    dst_Recibo: TSQLDataSet;
+    frxDst_Recibo: TfrxDBDataset;
+    dst_ReciboEMP_ID_PK: TIntegerField;
+    dst_ReciboEMP_RSOCIAL: TStringField;
+    dst_ReciboEMP_FANTASIA: TStringField;
+    dst_ReciboEMP_NOME_FICTICIO: TStringField;
+    dst_ReciboEMP_ENDERECO: TStringField;
+    dst_ReciboEMP_COMPLEMENTO: TStringField;
+    dst_ReciboEMP_NUMERO: TStringField;
+    dst_ReciboEMP_BAIRRO: TStringField;
+    dst_ReciboEMP_ID_CIDADE_FK: TIntegerField;
+    dst_ReciboEMP_ESTADO: TStringField;
+    dst_ReciboEMP_CEP: TStringField;
+    dst_ReciboEMP_CNPJ_CPF: TStringField;
+    dst_ReciboEMP_INSC_RG: TStringField;
+    procedure btnVisualizarClick(Sender: TObject);
+    procedure frxReportGetValue(const VarName: string; var Value: Variant);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMan_EmissaoRecibo: TfrmMan_EmissaoRecibo;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmMan_EmissaoRecibo.btnVisualizarClick(Sender: TObject);
+begin
+
+
+  frxReport.ShowReport();
+end;
+
+procedure TfrmMan_EmissaoRecibo.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  ValorExtenso.Free;
+end;
+
+procedure TfrmMan_EmissaoRecibo.FormCreate(Sender: TObject);
+begin
+  ValorExtenso := TValorPorExtenso.Create;
+end;
+
+procedure TfrmMan_EmissaoRecibo.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmMan_EmissaoRecibo.FormShow(Sender: TObject);
+begin
+  dst_Recibo.Close;
+  dst_Recibo.Params[0].AsInteger := EmpresaCorrente.Id;
+  dst_Recibo.Open;
+end;
+
+procedure TfrmMan_EmissaoRecibo.frxReportGetValue(const VarName: string;
+  var Value: Variant);
+begin
+  if VarName = 'VVALORTOTAL' then
+  begin
+    Value := Self.edtValorTotal.Text;
+  end;
+
+  if VarName = 'VNOME' then
+  begin
+    Value := Self.edtRecebi.Text;
+  end;
+
+  if VarName = 'VDATA' then
+  begin
+    Value := Self.edtData.Text;
+  end;
+
+  if VarName = 'VREFERENCIA' then
+  begin
+    Value := Self.edtReferente.Text;
+  end;
+
+  if VarName = 'VVALOR' then
+  begin
+    Value := ValorExtenso.Extenso(StrToCurr(Self.edtValorTotal.Text));
+  end;
+end;
+
+initialization
+  RegisterClass(TfrmMan_EmissaoRecibo);
+
+end.

@@ -1,0 +1,26 @@
+unit uDM_Cidade;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.FMTBcd, Data.DB, Data.SqlExpr;
+
+type
+  TDataModule1 = class(TDataModule)
+    dst_CarregarCidade: TSQLDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule1: TDataModule1;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

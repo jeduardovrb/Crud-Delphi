@@ -1,0 +1,32 @@
+unit dtm_Conexao;
+
+interface
+
+uses
+  SysUtils, Classes, DB, SqlExpr, DBXFirebird;
+
+type
+  Tdm_Conexao = class(TDataModule)
+    Conn: TSQLConnection;
+    procedure ConnAfterConnect(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_Conexao: Tdm_Conexao;
+
+implementation
+
+uses Class_Conexao;
+
+{$R *.dfm}
+
+procedure Tdm_Conexao.ConnAfterConnect(Sender: TObject);
+begin
+  ConexaoDBX := ConexaoDBX.Create(Conn);
+end;
+
+end.

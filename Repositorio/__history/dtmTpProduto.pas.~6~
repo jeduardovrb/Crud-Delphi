@@ -1,0 +1,35 @@
+unit dtmTpProduto;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DB, SqlExpr, Provider, DBClient;
+
+type
+  Tdm_TpProduto = class(TDataModule)
+    dts_Pesquisar: TSQLDataSet;
+    dsp_Pesquisar: TDataSetProvider;
+    cds_Pesquisar: TClientDataSet;
+    SQLDataSet1: TSQLDataSet;
+    DataSetProvider1: TDataSetProvider;
+    ClientDataSet1: TClientDataSet;
+    dts_PesquisarTP_ID_PK: TIntegerField;
+    dts_PesquisarTP_NOME: TStringField;
+    cds_PesquisarTP_ID_PK: TIntegerField;
+    cds_PesquisarTP_NOME: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_TpProduto: Tdm_TpProduto;
+
+implementation
+
+uses dtm_Conexao;
+
+{$R *.dfm}
+
+end.

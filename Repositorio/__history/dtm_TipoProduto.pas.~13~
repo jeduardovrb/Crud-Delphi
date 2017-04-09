@@ -1,0 +1,56 @@
+unit dtm_TipoProduto;
+
+interface
+
+uses
+  SysUtils, Classes, FMTBcd, DBClient, Provider, DB, SqlExpr;
+
+type
+  Tdm_TipoProduto = class(TDataModule)
+    dst_Pesquisar: TSQLDataSet;
+    dsp_Pesquisar: TDataSetProvider;
+    cds_Pesquisar: TClientDataSet;
+    dst_PesquisarTP_ID_PK: TIntegerField;
+    dst_PesquisarTP_NOME: TStringField;
+    cds_PesquisarTP_ID_PK: TIntegerField;
+    cds_PesquisarTP_NOME: TStringField;
+    dst_TipoProduto: TSQLDataSet;
+    dsp_TipoProduto: TDataSetProvider;
+    cds_TipoProduto: TClientDataSet;
+    dst_TipoProdutoTP_ID_PK: TIntegerField;
+    dst_TipoProdutoTP_EMPRESA: TIntegerField;
+    dst_TipoProdutoTP_NOME: TStringField;
+    dst_TipoProdutoTP_DT_CADASTRO: TSQLTimeStampField;
+    dst_TipoProdutoTP_DT_ALTERACAO: TSQLTimeStampField;
+    cds_TipoProdutoTP_ID_PK: TIntegerField;
+    cds_TipoProdutoTP_EMPRESA: TIntegerField;
+    cds_TipoProdutoTP_NOME: TStringField;
+    cds_TipoProdutoTP_DT_CADASTRO: TSQLTimeStampField;
+    cds_TipoProdutoTP_DT_ALTERACAO: TSQLTimeStampField;
+    procedure cds_TipoProdutoReconcileError(DataSet: TCustomClientDataSet;
+      E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_TipoProduto: Tdm_TipoProduto;
+
+implementation
+
+uses
+  dtm_Conexao, TratamentoErro;
+
+{$R *.dfm}
+
+procedure Tdm_TipoProduto.cds_TipoProdutoReconcileError(
+  DataSet: TCustomClientDataSet; E: EReconcileError; UpdateKind: TUpdateKind;
+  var Action: TReconcileAction);
+begin
+  TTratamentoErro.HandleReconcileError(E.Message, Action);
+end;
+
+end.

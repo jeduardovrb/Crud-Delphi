@@ -1,0 +1,20 @@
+program PTamplate;
+
+uses
+  Forms,
+  dtm_Conexao in 'dtm_Conexao.pas' {dm_Conexao: TDataModule},
+  uFrmPrincipal in 'uFrmPrincipal.pas' {frmPrincipal},
+  sConstantes in '..\Repositorio\Classes\sConstantes.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.Title := 'Sistena de Gestão de Lanches';
+  Application.CreateForm(Tdm_Conexao, dm_Conexao);
+  Application.CreateForm(Tdm_Conexao, dm_Conexao);
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.Run;
+
+end.

@@ -1,0 +1,17 @@
+unit Persistencia;
+
+interface
+
+type
+  TPersistencia = class
+  private
+
+  public
+    function GetId(AEmpresa: Variant; AId: Integer;
+      ANomeTabela: String): Integer; override;
+    function ExecutarConsulta(ASql: String): OleVariant; override;
+  end;
+
+implementation
+
+end.

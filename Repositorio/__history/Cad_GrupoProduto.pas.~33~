@@ -1,0 +1,114 @@
+unit Cad_GrupoProduto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, StdCtrls, Buttons, ExtCtrls, ScreenTips, Mask, DBCtrls, dtm_Pesquisar,
+  Grids, DBGrids, ActnList, DB, ImgList, ComCtrls, ToolWin, sFuncoes;
+
+type
+  TfrmCad_GrupoProduto = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    gpCadastro: TGroupBox;
+    lblId: TLabel;
+    lblNome: TLabel;
+    dbtId: TDBText;
+    dbeDescricao: TDBEdit;
+    dbgGrupoProduto: TDBGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure dbgGrupoProdutoDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_GrupoProduto: TfrmCad_GrupoProduto;
+
+implementation
+
+uses BuilderLogDialogo, sEnumerados, Logger, dtm_GrupoProduto;
+
+{$R *.dfm}
+
+{ TfrmForm_Modelo }
+
+procedure TfrmCad_GrupoProduto.dbgGrupoProdutoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_GrupoProduto.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_GrupoProduto);
+end;
+
+procedure TfrmCad_GrupoProduto.FormCreate(Sender: TObject);
+begin
+  dm_GrupoProduto := Tdm_GrupoProduto.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Descrição');
+end;
+
+procedure TfrmCad_GrupoProduto.IniciarFields;
+begin
+  FNomeCadastro := 'Grupo de Produto';
+  FNomeTabela := 'GRUPO_PRODUTO';
+  FComponenteFoco := dbeDescricao;
+  FDbgCadastro := dbgGrupoProduto;
+
+  FSqlDefault :=
+    ' select ' +
+    '    grupo_produto.gru_id, ' +
+    '    grupo_produto.gru_descricao ' +
+    ' from grupo_produto' +
+    ' where ' +
+    '    grupo_produto.gru_id = -1';
+end;
+
+procedure TfrmCad_GrupoProduto.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('gru_id').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    FId := Dts.DataSet.FieldByName('gru_id').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_GrupoProduto.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_GrupoProduto.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+end.

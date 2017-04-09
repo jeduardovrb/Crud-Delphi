@@ -1,0 +1,62 @@
+unit uSistemaControl;
+
+interface
+
+uses
+  uEmpresaCorrente, System.SysUtils, Data.SqlExpr;
+
+type
+  TSistemaControl = class
+  private
+    FEmpresaCorrente: TEmpresaCorrente;
+    FConexaoDBX     : TConexaoDBX;
+    FConn           : TSQLConnection;
+    FLoggerErro     : TLoggerErro;
+    FUsuario        : TUsuario;
+    FControleUsuario: TControleUsuario;
+
+    class var FInstance: TSistemaControl;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure CriarConexao(AConn: TSQLConnection; ANomeConexao: String);
+    procedure DestruirConexao;
+
+    class function GetInstance: TSistemaControl;
+
+    property EmpresaCorrente: TEmpresaCorrente read FEmpresaCorrente write FEmpresaCorrente;
+  end;
+
+implementation
+
+{ TSistema }
+
+constructor TSistemaControl.Create;
+begin
+  Self.FEmpresaCorrente := TEmpresaCorrente.Create;
+end;
+
+destructor TSistemaControl.Destroy;
+begin
+  FreeAndNil(Self.FEmpresaCorrente);
+
+  inherited;
+end;
+
+procedure TSistemaControl.DestruirConexao;
+begin
+  FreeAndNil(Self.FConexaoDBX);
+end;
+
+class function TSistemaControl.GetInstance: TSistemaControl;
+begin
+  if not Assigned(Self.FInstance) then
+  begin
+    Self.FInstance := TSistemaControl.Create();
+  end;
+
+  Result := Self.FInstance;
+end;
+
+end.

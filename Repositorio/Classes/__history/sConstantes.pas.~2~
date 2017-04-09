@@ -1,0 +1,10 @@
+unit sConstantes;
+
+interface
+
+const
+  VERSAO_SISTEMA: String = '1.0';
+
+implementation
+
+end.

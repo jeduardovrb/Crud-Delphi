@@ -1,0 +1,30 @@
+object dm_Pesquisar: Tdm_Pesquisar
+  OldCreateOrder = False
+  Height = 172
+  Width = 425
+  object cds_Pesquisar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 32
+    Top = 24
+  end
+  object Dst_Localizar: TSQLDataSet
+    DbxCommandType = 'Dbx.SQL'
+    Params = <>
+    Left = 40
+    Top = 104
+  end
+  object dsp_Localizar: TDataSetProvider
+    DataSet = Dst_Localizar
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 168
+    Top = 104
+  end
+  object cds_Localizar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 296
+    Top = 104
+  end
+end

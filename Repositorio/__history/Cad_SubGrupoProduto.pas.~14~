@@ -1,0 +1,109 @@
+unit Cad_SubGrupoProduto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Cad_Modelo, StdCtrls, Buttons, ExtCtrls, Mask, DBCtrls, ScreenTips,
+  ActnList, DB, ImgList, ComCtrls, ToolWin, Grids, DBGrids;
+
+type
+  TfrmCad_SubGrupoProduto = class(TfrmCad_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    gbCadastro: TGroupBox;
+    lblId: TLabel;
+    dbtId: TDBText;
+    lblNome: TLabel;
+    dbeDescricao: TDBEdit;
+    dbgsubGrupo: TDBGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_SubGrupoProduto: TfrmCad_SubGrupoProduto;
+
+implementation
+
+uses dtm_Pesquisar, dtm_SubGrupoProduto, BuilderLogDialogo, sEnumerados, Logger,
+  sDBUtils;
+
+{$R *.dfm}
+
+{ TfrmCad_SubGrupoProduto }
+
+procedure TfrmCad_SubGrupoProduto.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+
+  FreeAndNil(dm_SubGrupoProduto);
+end;
+
+procedure TfrmCad_SubGrupoProduto.FormCreate(Sender: TObject);
+begin
+  dm_SubGrupoProduto := Tdm_SubGrupoProduto.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Descrição');
+end;
+
+procedure TfrmCad_SubGrupoProduto.IniciarFields;
+begin
+  inherited;
+
+  FNomeCadastro := 'Sub Gurpo de Produto';
+  FNomeTabela := 'SUB_GRUPO_PRODUTO';
+  FComponenteFoco := dbeDescricao;
+
+  FSqlDefault :=
+    ' select ' +
+    '    sub_grupo_produto.subgru_id, ' +
+    '    sub_grupo_produto.subgru_descricao ' +
+    ' from sub_grupo_produto ' +
+    ' where ' +
+    ' sub_grupo_produto.subgru_id = -1';
+end;
+
+procedure TfrmCad_SubGrupoProduto.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('subgru_id').AsInteger := TDBUtils.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    FId := Dts.DataSet.FieldByName('subgru_id').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_SubGrupoProduto.TratarExceptionCampoObrigatorio(
+  MensagemErro: String);
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_SubGrupoProduto.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+end.

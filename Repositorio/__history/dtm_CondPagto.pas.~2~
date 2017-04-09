@@ -1,0 +1,30 @@
+unit dtm_CondPagto;
+
+interface
+
+uses
+  SysUtils, Classes, dtm_Conexao, FMTBcd, DB, SqlExpr, DBClient, Provider;
+
+type
+  Tdm_CondPagto = class(TDataModule)
+    dsp_CondPagto: TDataSetProvider;
+    cds_CondPagto: TClientDataSet;
+    dst_CondPagto: TSQLDataSet;
+    dst_CondPagtoCPA_ID: TIntegerField;
+    dst_CondPagtoCPA_DESCRICAO: TStringField;
+    cds_CondPagtoCPA_ID: TIntegerField;
+    cds_CondPagtoCPA_DESCRICAO: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_CondPagto: Tdm_CondPagto;
+
+implementation
+
+{$R *.dfm}
+
+end.

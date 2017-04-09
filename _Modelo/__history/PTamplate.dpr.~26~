@@ -1,0 +1,35 @@
+program PTamplate;
+
+uses
+  Forms,
+  Principal in 'Principal.pas' {frmPrincipal},
+  sConstantes in '..\Repositorio\Classes\sConstantes.pas',
+  sFuncoes in '..\Repositorio\Classes\sFuncoes.pas',
+  sEnumerados in '..\Repositorio\Classes\sEnumerados.pas',
+  sConversor in '..\Repositorio\Classes\sConversor.pas',
+  dtm_Conexao in 'dtm_Conexao.pas' {dm_Conexao: TDataModule},
+  Conexao in '..\Repositorio\Classes\Conexao.pas',
+  FormBase in '..\Repositorio\Formulario Base\FormBase.pas',
+  TratamentoErro in '..\Repositorio\Classes\TratamentoErro.pas',
+  Cad_Modelo in '..\Repositorio\Formulario Base\Cad_Modelo.pas' {frmCad_Modelo},
+  sDBUtils in '..\Repositorio\Classes\sDBUtils.pas',
+  sException in '..\Repositorio\Classes\sException.pas',
+  LogoSilver in 'LogoSilver.pas' {frmLogoSilver},
+  Mov_Modelo in '..\Repositorio\Formulario Base\Mov_Modelo.pas' {frmMov_Modelo},
+  BuilderLogDialogo in '..\Repositorio\Classes\BuilderLogDialogo.pas',
+  Logger in '..\Repositorio\Classes\Logger.pas',
+  frmLogDialogo in '..\Repositorio\Formulario Base\frmLogDialogo.pas' {LogDialogo},
+  Form_Modelo in '..\Repositorio\Formulario Base\Form_Modelo.pas' {frmForm_Modelo};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.Title := 'Sistena de Gestão de Lanches';
+  Application.CreateForm(Tdm_Conexao, dm_Conexao);
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TfrmForm_Modelo, frmForm_Modelo);
+  Application.Run;
+
+end.

@@ -1,0 +1,37 @@
+unit Legenda;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons;
+
+type
+  TfrmMan_Legenda = class(TForm)
+    Panel1: TPanel;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    btnOK: TBitBtn;
+    procedure btnOKClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMan_Legenda: TfrmMan_Legenda;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmMan_Legenda.btnOKClick(Sender: TObject);
+begin
+  Close();
+end;
+
+end.

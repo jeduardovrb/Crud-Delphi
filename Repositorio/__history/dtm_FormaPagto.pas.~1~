@@ -1,0 +1,23 @@
+unit dtm_FormaPagto;
+
+interface
+
+uses
+  SysUtils, Classes;
+
+type
+  Tdm_FormaPagto = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm_FormaPagto: Tdm_FormaPagto;
+
+implementation
+
+{$R *.dfm}
+
+end.

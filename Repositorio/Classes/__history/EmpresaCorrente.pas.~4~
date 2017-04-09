@@ -1,0 +1,34 @@
+unit EmpresaCorrente;
+
+interface
+
+uses
+   SysUtils;
+
+type
+  TEmpresaCorrente = Class
+    private
+      FId          : Integer;
+      FRSocial     : String;
+      FFantasia    : String;
+      FNomeFicticio: String;
+      FEndereco    : String;
+      FComplemento : String;
+      FNumero      : String;
+      FBAIRRO      : String;
+      FIdCidade    : Integer;
+      FEstado      : String;
+      FCEP         : String;
+      FID_TELEFONE : Integer;
+      FEmail       : String;
+      FPIS         : Currency;
+      FCOFINS      : Currency;
+      FVLR_FRETE   : Currency;
+
+    public
+
+  end;
+
+implementation
+
+end.

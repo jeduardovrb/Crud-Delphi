@@ -1,0 +1,62 @@
+object dm_CondPagto: Tdm_CondPagto
+  OldCreateOrder = False
+  Height = 96
+  Width = 410
+  object dsp_CondPagto: TDataSetProvider
+    DataSet = dst_CondPagto
+    Options = [poIncFieldProps, poCascadeDeletes, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 176
+    Top = 24
+  end
+  object cds_CondPagto: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cpa_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_CondPagto'
+    Left = 304
+    Top = 24
+    object cds_CondPagtoCPA_ID: TIntegerField
+      FieldName = 'CPA_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_CondPagtoCPA_DESCRICAO: TStringField
+      FieldName = 'CPA_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+  end
+  object dst_CondPagto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   cond_pagamento.cpa_id,'#13#10'   cond_pagamento.cpa_descric' +
+      'ao'#13#10'from cond_pagamento'#13#10'where'#13#10'   cond_pagamento.cpa_id = :cpa_' +
+      'id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cpa_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dst_CondPagtoCPA_ID: TIntegerField
+      FieldName = 'CPA_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_CondPagtoCPA_DESCRICAO: TStringField
+      FieldName = 'CPA_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+  end
+end

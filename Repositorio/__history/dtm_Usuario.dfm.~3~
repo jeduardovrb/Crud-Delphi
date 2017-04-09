@@ -1,0 +1,33 @@
+object dm_Usuario: Tdm_Usuario
+  OldCreateOrder = False
+  Height = 158
+  Width = 481
+  object dst_Usuario: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   USU_ID,'#13#10'   USU_NOME,'#13#10'   USU_LOGIN,'#13#10'   USU_SENHA'#13#10'f' +
+      'rom USUARIO'#13#10'where'#13#10'   USU_ID = :USU_ID'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'USU_ID'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 56
+  end
+  object dsp_Usuario: TDataSetProvider
+    Options = [poCascadeDeletes, poCascadeUpdates, poPropogateChanges, poAllowCommandText, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 224
+    Top = 56
+  end
+  object cds_Usuario: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 384
+    Top = 64
+  end
+end

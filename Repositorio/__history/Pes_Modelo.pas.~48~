@@ -1,0 +1,198 @@
+unit Pes_Modelo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls,
+  DBClient, Provider, SqlExpr, Generics.Collections, Grids, DBGrids, DB,
+  PersistenciaDBX;
+
+type
+  TfrmPes_ = class(TForm)
+    pnlPesquisa: TPanel;
+    lblCampos: TLabel;
+    Label2: TLabel;
+    cbxField: TComboBox;
+    edtValor: TEdit;
+    btnPesquisar: TBitBtn;
+    pnlRodape: TPanel;
+    OK: TBitBtn;
+    DtsLocalizar: TDataSource;
+    dbgPesquisar: TDBGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure OKClick(Sender: TObject);
+    procedure gdDadosPesquisaDBTableView1DblClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+  private
+    FId: Integer;
+    FMapCampo: TDictionary<Integer, String>;
+
+    procedure CarregarSqlDefault;
+  protected
+    FSql: String;
+    FSqlDefault: String;
+    FCamposNomeExibicao: TStringList;
+    FPersistencia: TPersistenciaDBX;
+
+  public
+    procedure Localizar; virtual;
+    procedure Confirmar; virtual;
+    procedure SetCamposNomeExibicao;
+    procedure CarregarComboBoxPesquisa;
+
+    property Id: Integer read FId write FId;
+  end;
+
+var
+  frmPes_: TfrmPes_;
+
+implementation
+
+
+
+uses BuilderLogDialogo, sEnumerados, Logger, sFuncoes, dtm_Pesquisar;{$R *.dfm}
+
+{ TfrmPes_ }
+
+procedure TfrmPes_.Confirmar;
+begin
+  Self.FId := DtsLocalizar.DataSet.Fields[0].AsInteger;
+
+  Close();
+end;
+
+procedure TfrmPes_.btnPesquisarClick(Sender: TObject);
+begin
+  Self.Localizar();
+end;
+
+procedure TfrmPes_.CarregarComboBoxPesquisa;
+var
+  I: Integer;
+begin
+  try
+    for I := 0 to Pred(DtsLocalizar.DataSet.FieldCount) do
+    begin
+      cbxField.Items.Add(DtsLocalizar.DataSet.Fields[I].DisplayLabel);
+    end;
+
+    cbxField.ItemIndex := 1;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmPes_.CarregarSqlDefault;
+var
+  VProvider: TDataSetProvider;
+begin
+  VProvider :=
+    TDataSetProvider(TClientDataSet(DtsLocalizar.DataSet).Owner.FindComponent(TClientDataSet(DtsLocalizar.DataSet).ProviderName));
+
+  Self.FSqlDefault := TSQLDataSet(VProvider.DataSet).CommandText;
+end;
+
+procedure TfrmPes_.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  DtsLocalizar.DataSet.Close();
+
+  FreeAndNil(FPersistencia);
+  FreeAndNil(FMapCampo);
+  FreeAndNil(FCamposNomeExibicao);
+end;
+
+procedure TfrmPes_.FormCreate(Sender: TObject);
+begin
+  Self.FCamposNomeExibicao := TStringList.Create;
+  FMapCampo := TDictionary<Integer, String>.Create;
+  FPersistencia := TPersistenciaDBX.Create;
+
+  dm_Pesquisar.cds_Pesquisar.Data := FPersistencia.ExecutarConsulta(FSqlDefault);
+end;
+
+procedure TfrmPes_.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    Close();
+  end;
+end;
+
+procedure TfrmPes_.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    Perform(Wm_NextDlgCtl, 0, 0);
+  end;
+end;
+
+procedure TfrmPes_.FormShow(Sender: TObject);
+begin
+  Self.SetCamposNomeExibicao();
+  Self.CarregarComboBoxPesquisa();
+end;
+
+procedure TfrmPes_.gdDadosPesquisaDBTableView1DblClick(Sender: TObject);
+begin
+  Self.Confirmar();
+end;
+
+procedure TfrmPes_.Localizar;
+var
+  VMontarSql: String;
+  VCampo: String;
+  Indice: Integer;
+  Value: Integer;
+begin
+  VMontarSql := EmptyStr;
+
+  Indice := cbxField.ItemIndex;
+
+  for Value in FMapCampo.Keys do
+  begin
+    VCampo := FMapCampo.Items[Indice];
+  end;
+
+  try
+    VMontarSql := ' where upper(' + VCampo + ')' + ' like ' + ' upper( ' +
+      QuotedStr(edtValor.Text + '%') + ') order by ' + VCampo;
+
+    dm_Pesquisar.cds_Pesquisar.Data :=
+      FPersistencia.ExecutarConsulta(TFuncoes.MontarSqlComponente(Self.FSqlDefault) + VMontarSql);
+
+    dbgPesquisar.SetFocus();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmPes_.OKClick(Sender: TObject);
+begin
+  Self.Confirmar();
+end;
+
+procedure TfrmPes_.SetCamposNomeExibicao;
+var
+  I: Integer;
+begin
+  for I := 0 to Pred(Self.FCamposNomeExibicao.Count) do
+  begin
+    DtsLocalizar.DataSet.Fields[I].DisplayLabel := Self.FCamposNomeExibicao[I];
+    FMapCampo.Add(I, DtsLocalizar.DataSet.Fields[I].FieldName);
+  end;
+end;
+
+end.

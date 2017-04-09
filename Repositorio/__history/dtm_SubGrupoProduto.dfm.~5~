@@ -1,0 +1,39 @@
+object dm_SubGrupoProduto: Tdm_SubGrupoProduto
+  OldCreateOrder = False
+  Height = 115
+  Width = 560
+  object dsp_SubGrupo: TDataSetProvider
+    DataSet = dst_SubGrupo
+    Left = 176
+    Top = 32
+  end
+  object cds_SubGrupo: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'subgru_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_SubGrupo'
+    Left = 304
+    Top = 32
+  end
+  object dst_SubGrupo: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select * from sub_grupo_produto'#13#10'where'#13#10'   sub_grupo_produto.sub' +
+      'gru_id = :subgru_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftUnknown
+        Name = 'subgru_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 32
+  end
+end

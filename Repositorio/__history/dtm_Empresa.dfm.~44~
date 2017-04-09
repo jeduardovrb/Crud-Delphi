@@ -1,0 +1,475 @@
+object dm_Empresa: Tdm_Empresa
+  OldCreateOrder = False
+  Height = 202
+  Width = 415
+  object dsp_Empresa: TDataSetProvider
+    DataSet = dts_Empresa
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 176
+    Top = 24
+  end
+  object cds_Empresa: TClientDataSet
+    Active = True
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'emp_id_pk'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_Empresa'
+    Left = 304
+    Top = 24
+    object cds_EmpresaEMP_ID_PK: TIntegerField
+      FieldName = 'EMP_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_EmpresaEMP_RSOCIAL: TStringField
+      FieldName = 'EMP_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_EmpresaEMP_FANTASIA: TStringField
+      FieldName = 'EMP_FANTASIA'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_EmpresaEMP_NOME_FICTICIO: TStringField
+      FieldName = 'EMP_NOME_FICTICIO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_EmpresaEMP_ENDERECO: TStringField
+      FieldName = 'EMP_ENDERECO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_EmpresaEMP_COMPLEMENTO: TStringField
+      FieldName = 'EMP_COMPLEMENTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_EmpresaEMP_NUMERO: TStringField
+      FieldName = 'EMP_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_EmpresaEMP_BAIRRO: TStringField
+      FieldName = 'EMP_BAIRRO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_EmpresaEMP_ID_CIDADE_FK: TIntegerField
+      FieldName = 'EMP_ID_CIDADE_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_ESTADO: TStringField
+      FieldName = 'EMP_ESTADO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_EmpresaEMP_CEP: TStringField
+      FieldName = 'EMP_CEP'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object cds_EmpresaEMP_TELEFONE: TStringField
+      FieldName = 'EMP_TELEFONE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_EMAIL: TStringField
+      FieldName = 'EMP_EMAIL'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_EmpresaEMP_PIS: TFMTBCDField
+      FieldName = 'EMP_PIS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_EmpresaEMP_COFINS: TFMTBCDField
+      FieldName = 'EMP_COFINS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_EmpresaEMP_VLR_FRETE: TFMTBCDField
+      FieldName = 'EMP_VLR_FRETE'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_EmpresaEMP_ID_TELEFONE_FK: TIntegerField
+      FieldName = 'EMP_ID_TELEFONE_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'EMP_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'EMP_DT_ALTERACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_VLR_VENDA_ENTREGA: TFMTBCDField
+      FieldName = 'EMP_VLR_VENDA_ENTREGA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_EmpresaEMP_VLR_VENDA_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'EMP_VLR_VENDA_ESTABELECIMENTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_EmpresaEMP_CNPJ_CPF: TStringField
+      FieldName = 'EMP_CNPJ_CPF'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_INSC_RG: TStringField
+      FieldName = 'EMP_INSC_RG'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_EmpresaEMP_MSG: TStringField
+      FieldName = 'EMP_MSG'
+      ProviderFlags = [pfInUpdate]
+      Size = 500
+    end
+    object cds_Empresadst_Parametro: TDataSetField
+      FieldName = 'dst_Parametro'
+    end
+    object cds_EmpresaCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      ProviderFlags = []
+      Size = 40
+    end
+    object cds_EmpresaEMP_FOTO_EMPRESA: TBlobField
+      FieldName = 'EMP_FOTO_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Size = 1
+    end
+    object cds_EmpresaEMP_FOTO_AUXILIAR: TBlobField
+      FieldName = 'EMP_FOTO_AUXILIAR'
+      ProviderFlags = [pfInUpdate]
+      Size = 1
+    end
+  end
+  object dts_Empresa: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   empresa.emp_id_pk,'#13#10'   empresa.emp_rsocial,'#13#10'   empre' +
+      'sa.emp_fantasia,'#13#10'   empresa.emp_nome_ficticio,'#13#10'   empresa.emp_' +
+      'endereco,'#13#10'   empresa.emp_complemento,'#13#10'   empresa.emp_numero,'#13#10 +
+      '   empresa.emp_bairro,'#13#10'   empresa.emp_id_cidade_fk,'#13#10'   empresa' +
+      '.emp_estado,'#13#10'   empresa.emp_cep,'#13#10'   empresa.emp_id_telefone_fk' +
+      ','#13#10'   empresa.emp_email,'#13#10'   empresa.emp_pis,'#13#10'   empresa.emp_co' +
+      'fins,'#13#10'   empresa.emp_dt_cadastro,'#13#10'   empresa.emp_dt_alteracao,' +
+      #13#10'   empresa.emp_vlr_frete,'#13#10'   empresa.emp_telefone,'#13#10'   empres' +
+      'a.emp_msg,'#13#10'   empresa.emp_vlr_venda_entrega,'#13#10'   empresa.emp_vl' +
+      'r_venda_estabelecimento,'#13#10'   empresa.emp_cnpj_cpf,'#13#10'   empresa.e' +
+      'mp_insc_rg,'#13#10'   empresa.emp_foto_empresa,'#13#10'   empresa.emp_foto_a' +
+      'uxiliar,'#13#10'   cidade.cid_nome'#13#10'from empresa'#13#10'   left outer join c' +
+      'idade on (empresa.emp_id_cidade_fk = cidade.cid_id)'#13#10'where'#13#10'   e' +
+      'mpresa.emp_id_pk = :emp_id_pk'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = 1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'emp_id_pk'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dts_EmpresaEMP_ID_PK: TIntegerField
+      FieldName = 'EMP_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dts_EmpresaEMP_RSOCIAL: TStringField
+      FieldName = 'EMP_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dts_EmpresaEMP_FANTASIA: TStringField
+      FieldName = 'EMP_FANTASIA'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dts_EmpresaEMP_NOME_FICTICIO: TStringField
+      FieldName = 'EMP_NOME_FICTICIO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dts_EmpresaEMP_ENDERECO: TStringField
+      FieldName = 'EMP_ENDERECO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dts_EmpresaEMP_COMPLEMENTO: TStringField
+      FieldName = 'EMP_COMPLEMENTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dts_EmpresaEMP_NUMERO: TStringField
+      FieldName = 'EMP_NUMERO'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object dts_EmpresaEMP_BAIRRO: TStringField
+      FieldName = 'EMP_BAIRRO'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dts_EmpresaEMP_ID_CIDADE_FK: TIntegerField
+      FieldName = 'EMP_ID_CIDADE_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaEMP_ESTADO: TStringField
+      FieldName = 'EMP_ESTADO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dts_EmpresaEMP_CEP: TStringField
+      FieldName = 'EMP_CEP'
+      ProviderFlags = [pfInUpdate]
+      Size = 10
+    end
+    object dts_EmpresaEMP_TELEFONE: TStringField
+      FieldName = 'EMP_TELEFONE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaEMP_EMAIL: TStringField
+      FieldName = 'EMP_EMAIL'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dts_EmpresaEMP_PIS: TFMTBCDField
+      FieldName = 'EMP_PIS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_EmpresaEMP_COFINS: TFMTBCDField
+      FieldName = 'EMP_COFINS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_EmpresaEMP_VLR_FRETE: TFMTBCDField
+      FieldName = 'EMP_VLR_FRETE'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_EmpresaEMP_ID_TELEFONE_FK: TIntegerField
+      FieldName = 'EMP_ID_TELEFONE_FK'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaEMP_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'EMP_DT_CADASTRO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaEMP_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'EMP_DT_ALTERACAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaEMP_MSG: TStringField
+      FieldName = 'EMP_MSG'
+      ProviderFlags = [pfInUpdate]
+      Size = 500
+    end
+    object dts_EmpresaEMP_VLR_VENDA_ENTREGA: TFMTBCDField
+      FieldName = 'EMP_VLR_VENDA_ENTREGA'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_EmpresaEMP_VLR_VENDA_ESTABELECIMENTO: TFMTBCDField
+      FieldName = 'EMP_VLR_VENDA_ESTABELECIMENTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dts_EmpresaEMP_CNPJ_CPF: TStringField
+      FieldName = 'EMP_CNPJ_CPF'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaEMP_INSC_RG: TStringField
+      FieldName = 'EMP_INSC_RG'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dts_EmpresaCID_NOME: TStringField
+      FieldName = 'CID_NOME'
+      ProviderFlags = []
+      Size = 40
+    end
+    object dts_EmpresaEMP_FOTO_EMPRESA: TBlobField
+      FieldName = 'EMP_FOTO_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Size = 1
+    end
+    object dts_EmpresaEMP_FOTO_AUXILIAR: TBlobField
+      FieldName = 'EMP_FOTO_AUXILIAR'
+      ProviderFlags = [pfInUpdate]
+      Size = 1
+    end
+  end
+  object dst_Parametro: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   pa_empresa,'#13#10'   pa_cliente_fidelidade,'#13#10'   pa_plano_c' +
+      'onta_venda,'#13#10'   pc_venda.pc_descricao nm_descricao_plano_venda,'#13 +
+      #10'   pa_plano_conta_entrada,'#13#10'   pc_entrada.pc_descricao nm_descr' +
+      'ocao_plano_entrada,'#13#10'   pa_al_juros,'#13#10'   pa_qtde_prazo_dias,'#13#10'  ' +
+      ' pa_qtde_prazo_cc,'#13#10'   parametro.pa_venda_grid,'#13#10'   parametro.pa' +
+      '_pesquisa_rapida,'#13#10'   parametro.pa_editar_id_produto,'#13#10'   parame' +
+      'tro.pa_nao_digitar_virgula'#13#10'from parametro'#13#10'   left outer join p' +
+      'lano_conta pc_venda on (parametro.pa_plano_conta_venda = pc_vend' +
+      'a.pc_codconta)'#13#10'   left outer join plano_conta pc_Entrada on (pa' +
+      'rametro.pa_plano_conta_entrada = pc_Entrada.pc_codconta)'#13#10'where'#13 +
+      #10'   parametro.pa_empresa = :emp_id_pk'
+    DbxCommandType = 'Dbx.SQL'
+    DataSource = dts_LinkEmpresa
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'emp_id_pk'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 120
+    object dst_ParametroPA_EMPRESA: TIntegerField
+      FieldName = 'PA_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_ParametroPA_CLIENTE_FIDELIDADE: TIntegerField
+      FieldName = 'PA_CLIENTE_FIDELIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_PLANO_CONTA_VENDA: TIntegerField
+      FieldName = 'PA_PLANO_CONTA_VENDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_PLANO_CONTA_ENTRADA: TIntegerField
+      FieldName = 'PA_PLANO_CONTA_ENTRADA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_AL_JUROS: TFMTBCDField
+      FieldName = 'PA_AL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_ParametroPA_QTDE_PRAZO_DIAS: TIntegerField
+      FieldName = 'PA_QTDE_PRAZO_DIAS'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_QTDE_PRAZO_CC: TIntegerField
+      FieldName = 'PA_QTDE_PRAZO_CC'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroNM_DESCRICAO_PLANO_VENDA: TStringField
+      FieldName = 'NM_DESCRICAO_PLANO_VENDA'
+      ProviderFlags = []
+      Size = 40
+    end
+    object dst_ParametroNM_DESCROCAO_PLANO_ENTRADA: TStringField
+      FieldName = 'NM_DESCROCAO_PLANO_ENTRADA'
+      ProviderFlags = []
+      Size = 40
+    end
+    object dst_ParametroPA_VENDA_GRID: TIntegerField
+      FieldName = 'PA_VENDA_GRID'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_PESQUISA_RAPIDA: TIntegerField
+      FieldName = 'PA_PESQUISA_RAPIDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_EDITAR_ID_PRODUTO: TIntegerField
+      FieldName = 'PA_EDITAR_ID_PRODUTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_ParametroPA_NAO_DIGITAR_VIRGULA: TIntegerField
+      FieldName = 'PA_NAO_DIGITAR_VIRGULA'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dts_LinkEmpresa: TDataSource
+    DataSet = dts_Empresa
+    Left = 176
+    Top = 120
+  end
+  object cds_Parametro: TClientDataSet
+    Active = True
+    Aggregates = <>
+    DataSetField = cds_Empresadst_Parametro
+    Params = <>
+    Left = 304
+    Top = 120
+    object cds_ParametroPA_EMPRESA: TIntegerField
+      FieldName = 'PA_EMPRESA'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_ParametroPA_CLIENTE_FIDELIDADE: TIntegerField
+      FieldName = 'PA_CLIENTE_FIDELIDADE'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroPA_PLANO_CONTA_VENDA: TIntegerField
+      FieldName = 'PA_PLANO_CONTA_VENDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroPA_PLANO_CONTA_ENTRADA: TIntegerField
+      FieldName = 'PA_PLANO_CONTA_ENTRADA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroPA_AL_JUROS: TFMTBCDField
+      FieldName = 'PA_AL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_ParametroPA_QTDE_PRAZO_DIAS: TIntegerField
+      FieldName = 'PA_QTDE_PRAZO_DIAS'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroPA_QTDE_PRAZO_CC: TIntegerField
+      FieldName = 'PA_QTDE_PRAZO_CC'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroNM_DESCRICAO_PLANO_VENDA: TStringField
+      FieldName = 'NM_DESCRICAO_PLANO_VENDA'
+      ProviderFlags = []
+      Size = 40
+    end
+    object cds_ParametroNM_DESCROCAO_PLANO_ENTRADA: TStringField
+      FieldName = 'NM_DESCROCAO_PLANO_ENTRADA'
+      ProviderFlags = []
+      Size = 40
+    end
+    object cds_ParametroPA_VENDA_GRID: TIntegerField
+      FieldName = 'PA_VENDA_GRID'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroPA_PESQUISA_RAPIDA: TIntegerField
+      FieldName = 'PA_PESQUISA_RAPIDA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_ParametroPA_EDITAR_ID_PRODUTO: TIntegerField
+      FieldName = 'PA_EDITAR_ID_PRODUTO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+end

@@ -1,0 +1,1110 @@
+unit Mov_Venda;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls, ScreenTips, Grids,
+  DBGrids, dtm_Nota, BuilderLogDialogo, sEnumerados, Logger, Empresa_Corrente, Mask, DBCtrls, dtm_Pesquisar, sFuncoes,
+  DBClient, SqlExpr, Provider, dtm_CarregarDados, dtm_Clientes, Pesquisar, frxClass, sException, Conexao, TratamentoErro,
+  Man_FecharVenda, sConstantes, dtm_Relatorios, Cad_Clientes;
+
+type
+  TfrmMov_Venda = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgVendas: TDBGrid;
+    dgManuntecao: TGroupBox;
+    Panel1: TPanel;
+    dbgItemVenda: TDBGrid;
+    btnGravarItem: TBitBtn;
+    dbeQtdeDoProduto: TDBEdit;
+    dbeIdDoProduto: TDBEdit;
+    dbeDescricaoOpicinal: TDBEdit;
+    dbeVlrOpcinal: TDBEdit;
+    Dts_Item: TDataSource;
+    dbClientes: TGroupBox;
+    dbeIdPessoa: TDBEdit;
+    dbtNmCliente: TDBText;
+    lblIdCliente: TLabel;
+    dbtNmProduto: TDBText;
+    Label1: TLabel;
+    lblIdProduto: TLabel;
+    lblDescricaoOpicinal: TLabel;
+    lblVlrOpcinal: TLabel;
+    btnGrupo: TBitBtn;
+    btnNovoItem: TBitBtn;
+    btnDeletarItem: TBitBtn;
+    actNovoItem: TAction;
+    actGravarItem: TAction;
+    actDeletarItem: TAction;
+    actAlterarItem: TAction;
+    lblPercentualDesconto: TLabel;
+    lblVlrDesconto: TLabel;
+    dbePercentualDoDesconto: TDBEdit;
+    dbeVlrDesconto: TDBEdit;
+    dbeIdEndereco: TDBEdit;
+    Label3: TLabel;
+    dbtEndereco: TDBText;
+    dbtBairro: TDBText;
+    dbtReferencia: TDBText;
+    DBGrid2: TDBGrid;
+    lblTelefones: TLabel;
+    lblBairro: TLabel;
+    lblReferencia: TLabel;
+    btnAlterarItem: TBitBtn;
+    dbtNumero: TDBText;
+    dts_DadosPessoaTelefone: TDataSource;
+    dbtVlrTotal: TDBText;
+    lblVlrTotal: TLabel;
+    lblVlrUnitario: TLabel;
+    lblVlrFrete: TLabel;
+    lblPercentualDescontoNota: TLabel;
+    lblVlrDescontoNota: TLabel;
+    dbePercentualDesconto: TDBEdit;
+    dbeValorDoDesconto: TDBEdit;
+    dbeVlrUnitário: TDBEdit;
+    Label4: TLabel;
+    dbtId: TDBText;
+    btnCancelarItem: TBitBtn;
+    actCancelarItem: TAction;
+    dbeVlrFrete: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure actVisualizarExecute(Sender: TObject);
+    procedure actLocalizarExecute(Sender: TObject);
+    procedure dbeIdPessoaExit(Sender: TObject);
+    procedure actNovoItemExecute(Sender: TObject);
+    procedure actGravarItemExecute(Sender: TObject);
+    procedure actDeletarItemExecute(Sender: TObject);
+    procedure actAlterarItemExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure dbeIdDoProdutoExit(Sender: TObject);
+    procedure dbeIdEnderecoExit(Sender: TObject);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure dbgItemVendaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure dbeQtdeDoProdutoExit(Sender: TObject);
+    procedure dbeVlrDescontoExit(Sender: TObject);
+    procedure dbeVlrOpcinalExit(Sender: TObject);
+    procedure dbeValorDoDescontoExit(Sender: TObject);
+    procedure dbePercentualDoDescontoExit(Sender: TObject);
+    procedure dbeIdDoProdutoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure dbeVlrUnitárioExit(Sender: TObject);
+    procedure dbeIdEnderecoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure dbeIdPessoaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure actGravarExecute(Sender: TObject);
+    procedure actCancelarItemExecute(Sender: TObject);
+    procedure btnGrupoClick(Sender: TObject);
+    procedure actNovoExecute(Sender: TObject);
+    procedure dbgVendasDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure dbeVlrFreteExit(Sender: TObject);
+  private
+    FDm_Cliente: Tdm_Clientes;
+
+    procedure NovoItem;
+    procedure GravaItem;
+    procedure AlterarItem;
+    procedure DeletarItem;
+    procedure CancelarItem;
+    procedure CarregarProduto;
+    procedure CarregarCliente;
+    procedure CarregarEndereco;
+    procedure AbrirCdsDadosPessoaTelefone;
+    procedure Sumarizar;
+    procedure CalcularValorDoDescontoDoItem;
+    procedure CalcularPercentualDoDescontoDoItem;
+    procedure CarregarValorUnitario;
+    procedure PesquisarProduto;
+    procedure CalcularValorDeCreditoClienteFidelidade;
+    procedure ReverterCalcularValorDeCreditoClienteFidelidade;
+  public
+    procedure ValidarCamposObrigatoriosItem;
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+    procedure Gravar; override;
+  end;
+
+var
+  frmMov_Venda: TfrmMov_Venda;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmMov_Venda }
+
+procedure TfrmMov_Venda.AbrirCdsDadosPessoaTelefone;
+begin
+  dm_CarregarDados.cds_DadosPessoaTelefone.Close;
+  dm_CarregarDados.dst_DadosPessoaTelefone.Params[0].AsInteger := Dts.DataSet.FieldByName('nt_id_empresa').AsInteger;
+  dm_CarregarDados.cds_DadosPessoaTelefone.Open;
+end;
+
+procedure TfrmMov_Venda.actAlterarExecute(Sender: TObject);
+begin
+  try
+    Self.Alterar(True);
+    Self.CarregarProduto();
+    Self.CarregarCliente();
+
+    if Dts.DataSet.FieldByName('nt_id_empresa').AsInteger > 0 then
+      Self.AbrirCdsDadosPessoaTelefone();
+
+     Self.ReverterCalcularValorDeCreditoClienteFidelidade();
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+
+end;
+
+procedure TfrmMov_Venda.actAlterarItemExecute(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.AlterarItem();
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      TFuncoes.SetFocusCampoObrigatorio('QUANTIDADE', E.Message, dbeQtdeDoProduto);
+      TFuncoes.SetFocusCampoObrigatorio('PRODUTO', E.Message, dbeIdDoProduto);
+      TFuncoes.SetFocusCampoObrigatorio('VALOR  ', E.Message, dbeVlrUnitário);
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end
+  end;
+end;
+
+procedure TfrmMov_Venda.actCancelarItemExecute(Sender: TObject);
+begin
+  inherited;
+
+  Self.CancelarItem();
+end;
+
+procedure TfrmMov_Venda.actDeletarItemExecute(Sender: TObject);
+begin
+  inherited;
+
+  Self.DeletarItem();
+end;
+
+procedure TfrmMov_Venda.actGravarExecute(Sender: TObject);
+begin
+  Self.Gravar();
+ end;
+
+procedure TfrmMov_Venda.actGravarItemExecute(Sender: TObject);
+begin
+  inherited;
+  try
+
+    Self.ValidarCamposObrigatoriosItem();
+
+    Self.GravaItem();
+    btnNovoItem.SetFocus;
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      TFuncoes.SetFocusCampoObrigatorio('QUANTIDADE', E.Message, dbeQtdeDoProduto);
+      TFuncoes.SetFocusCampoObrigatorio('PRODUTO', E.Message, dbeIdDoProduto);
+      TFuncoes.SetFocusCampoObrigatorio('VALOR  ', E.Message, dbeVlrUnitário);
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end
+  end;
+end;
+
+procedure TfrmMov_Venda.actImprimirExecute(Sender: TObject);
+begin
+  if not DtsLocalizar.DataSet.IsEmpty then
+  begin
+    DtsRelatorio.DataSet.Close;
+
+    TClientDataSet(DtsRelatorio.DataSet).Params[0].AsInteger := EmpresaCorrente.Id;
+    TClientDataSet(DtsRelatorio.DataSet).Params[1].AsInteger := DtsLocalizar.DataSet.Fields[0].AsInteger;
+
+    DtsRelatorio.DataSet.Open;
+    DtsLocalizar.DataSet.Close;
+  end
+  else
+    raise Exception.Create('Não existe registro selecionado. Verifique!');
+
+  dm_Nota.frxRelNota.ShowReport(True);
+end;
+
+procedure TfrmMov_Venda.actLocalizarExecute(Sender: TObject);
+begin
+  Self.Localizar(True);
+end;
+
+procedure TfrmMov_Venda.actNovoExecute(Sender: TObject);
+begin
+  inherited;
+
+  Self.dbtNmCliente.Caption  := EmptyStr;
+  Self.dbtEndereco.Caption   := EmptyStr;
+  Self.dbtBairro.Caption     := EmptyStr;
+  Self.dbtReferencia.Caption := EmptyStr;
+end;
+
+procedure TfrmMov_Venda.actNovoItemExecute(Sender: TObject);
+begin
+  Self.NovoItem();
+end;
+
+procedure TfrmMov_Venda.actVisualizarExecute(Sender: TObject);
+begin
+  Self.Visualizar(True);
+  Self.CarregarProduto();
+  Self.CarregarCliente();
+
+  if Dts.DataSet.FieldByName('nt_id_empresa').AsInteger > 0 then
+    Self.AbrirCdsDadosPessoaTelefone();
+end;
+
+procedure TfrmMov_Venda.AlterarItem;
+begin
+  try
+    Dts_Item.DataSet.Edit;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.btnGrupoClick(Sender: TObject);
+begin
+  inherited;
+
+  Application.CreateForm(TfrmCad_Clientes, frmCad_Clientes);
+  try
+    frmCad_Clientes.ShowModal;
+
+    Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger := frmCad_Clientes.Codigo;
+    dbeIdPessoa.SetFocus;
+  finally
+    frmCad_Clientes.Release;
+  end;
+end;
+
+procedure TfrmMov_Venda.CalcularPercentualDoDescontoDoItem;
+begin
+ if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+    Dts_Item.DataSet.Edit;
+
+  Dts_Item.DataSet.FieldByName('itnt_vl_desc').AsCurrency := (Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency *
+    Dts_Item.DataSet.FieldByName('itnt_al_desc').AsCurrency) / 100;
+end;
+
+procedure TfrmMov_Venda.CalcularValorDeCreditoClienteFidelidade;
+var
+  VResto        : Currency;
+  VCredito      : Currency;
+  VResultDicisao: Currency;
+  VTotalSaldo   : Currency;
+begin
+  VResto         := 0;
+  VCredito       := 0;
+  VResultDicisao := 0;
+  VTotalSaldo    := 0;
+
+  dm_CarregarDados.CarregarCreditoCliente(Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger);
+
+  VTotalSaldo := Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency +
+    dm_CarregarDados.dst_CarregarCreditoClienteCCF_VLR_CREDITO_ENTREGA.AsCurrency;
+  try
+    if dm_CarregarDados.dst_CarregarClienteCLI_FIDELIDADE.AsInteger = sConstantes.CLIENTE_FIDELIDADE then
+    begin
+      if VTotalSaldo > EmpresaCorrente.VlrVendaEntrega then
+      begin
+        VResultDicisao := VTotalSaldo / EmpresaCorrente.VlrVendaEntrega;
+
+        VCredito := Trunc(VResultDicisao);
+
+        VResto := (VResultDicisao - VCredito) * EmpresaCorrente.VlrVendaEntrega;
+
+        if FDm_Cliente.IsClienteFidelidade(Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger) then
+        begin
+          FDm_Cliente.cds_ClienteFidelidade.Edit;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency := VResto;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO.AsCurrency := FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO.AsCurrency
+            + VCredito;
+          FDm_Cliente.cds_ClienteFidelidade.Post;
+
+          if FDm_Cliente.cds_ClienteFidelidade.ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+        end
+        else
+        begin
+          FDm_Cliente.cds_ClienteFidelidade.Insert;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_ID_EMPRESA.AsInteger := EmpresaCorrente.Id;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_ID_CLIENTE.AsInteger :=
+            Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency := VResto;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO.AsCurrency := VCredito;
+          FDm_Cliente.cds_ClienteFidelidade.Post;
+
+          if FDm_Cliente.cds_ClienteFidelidade.ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+        end;
+      end
+      else
+      begin
+        if FDm_Cliente.IsClienteFidelidade(Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger) then
+        begin
+          FDm_Cliente.cds_ClienteFidelidade.Edit;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency := VTotalSaldo;
+          FDm_Cliente.cds_ClienteFidelidade.Post;
+
+          if FDm_Cliente.cds_ClienteFidelidade.ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+        end
+        else
+        begin
+          FDm_Cliente.cds_ClienteFidelidade.Insert;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_ID_EMPRESA.AsInteger := EmpresaCorrente.Id;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_ID_CLIENTE.AsInteger :=
+            Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger;
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency := VTotalSaldo;
+          FDm_Cliente.cds_ClienteFidelidade.Post;
+
+          if FDm_Cliente.cds_ClienteFidelidade.ApplyUpdates(0) > 0 then
+            raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+        end;
+      end;
+    end;
+
+  except
+    raise;
+  end;
+end;
+
+procedure TfrmMov_Venda.CalcularValorDoDescontoDoItem;
+begin
+  if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+      Dts_Item.DataSet.Edit;
+
+  if Dts_Item.DataSet.FieldByName('itnt_vl_desc').AsCurrency > 0 then
+  begin
+    Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency :=
+      Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency - Dts_Item.DataSet.FieldByName('itnt_vl_desc').AsCurrency;
+  end
+  else
+  begin
+    Self.CarregarProduto();
+    Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency :=
+      dm_CarregarDados.dst_CarregarProdutoPRO_VL_VENDA.AsCurrency;
+  end;
+
+  Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency := Dts_Item.DataSet.FieldByName('itnt_qtde').AsCurrency * Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency;
+end;
+
+procedure TfrmMov_Venda.CancelarItem;
+begin
+  try
+    Dts_Item.DataSet.Cancel;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.CarregarCliente;
+begin
+  try
+    if Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger > 0 then
+    begin
+      dm_CarregarDados.CarregarCliente(Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger);
+      dbtNmCliente.Caption  := dm_CarregarDados.dst_CarregarClientePES_RSOCIAL.AsString;
+      dbtEndereco.Caption   := dm_CarregarDados.dst_CarregarClientePE_ENDERECO.AsString;
+      dbtNumero.Caption     := dm_CarregarDados.dst_CarregarClientePE_NUMERO.AsString;
+      dbtReferencia.Caption := dm_CarregarDados.dst_CarregarClientePE_COMPLEMENTO.AsString;
+      dbtBairro.Caption     := dm_CarregarDados.dst_CarregarClientePE_BAIRRO.AsString;
+    end
+    else
+    begin
+      dbtNmCliente.Caption  := EmptyStr;
+      dbtEndereco.Caption   := EmptyStr;
+      dbtNumero.Caption     := EmptyStr;
+      dbtReferencia.Caption := EmptyStr;
+      dbtBairro.Caption     := EmptyStr;
+      dm_CarregarDados.dst_CarregarClientePE_SEQ.Clear;
+    end;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmMov_Venda.CarregarEndereco;
+begin
+  try
+    if Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger > 0 then
+    begin
+      dm_CarregarDados.CarregarEndereco(Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger,
+        Dts.DataSet.FieldByName('nt_seq_endereco').AsInteger);
+      dbtNmCliente.Caption  := dm_CarregarDados.dst_CarregarEnderecoPES_RSOCIAL.AsString;
+      dbtEndereco.Caption   := dm_CarregarDados.dst_CarregarEnderecoPE_ENDERECO.AsString;
+      dbtNumero.Caption     := dm_CarregarDados.dst_CarregarEnderecoPE_NUMERO.AsString;
+      dbtReferencia.Caption := dm_CarregarDados.dst_CarregarEnderecoPE_COMPLEMENTO.AsString;
+      dbtBairro.Caption     := dm_CarregarDados.dst_CarregarEnderecoPE_BAIRRO.AsString;
+    end
+    else
+    begin
+      dbtNmCliente.Caption  := EmptyStr;
+      dbtEndereco.Caption   := EmptyStr;
+      dbtNumero.Caption     := EmptyStr;
+      dbtReferencia.Caption := EmptyStr;
+      dbtBairro.Caption     := EmptyStr;
+      dm_CarregarDados.dst_CarregarEnderecoPE_SEQ.Clear;
+    end;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmMov_Venda.CarregarProduto;
+begin
+  try
+    if Dts_Item.DataSet.FieldByName('itnt_id_produto').AsInteger > 0 then
+    begin
+      dm_CarregarDados.CarregarProduto(Dts_Item.DataSet.FieldByName('itnt_id_produto').AsInteger);
+      dbtNmProduto.Caption := dm_CarregarDados.dst_CarregarProdutoPRO_NOME.AsString;
+    end
+    else
+      begin
+        dbtNmProduto.Caption := EmptyStr;
+      end;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmMov_Venda.CarregarValorUnitario;
+begin
+  Self.CarregarProduto();
+
+  if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+    Dts_Item.DataSet.Edit;
+
+  Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency :=
+      dm_CarregarDados.dst_CarregarProdutoPRO_VL_VENDA.AsCurrency;
+end;
+
+procedure TfrmMov_Venda.dbeIdEnderecoExit(Sender: TObject);
+begin
+  inherited;
+
+  if not (Dts.DataSet.State in [dsEdit, dsInsert]) then
+    Dts.DataSet.Edit;
+
+  if Dts.DataSet.FieldByName('nt_seq_endereco').AsInteger > 0 then
+    Self.CarregarEndereco();
+end;
+
+procedure TfrmMov_Venda.dbeIdEnderecoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F10) then
+  begin
+    frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    pessoa_endereco.pe_seq, ' +
+        '    pessoa_endereco.pe_endereco, ' +
+        '    pessoa_endereco.pe_numero, ' +
+        '    pessoa_endereco.pe_complemento, ' +
+        '    pessoa_endereco.pe_bairro ' +
+        ' from pessoa_endereco ' +
+        ' where ' +
+        '   pessoa_endereco.pe_id_pessoa = -1';
+
+      frmPesquisar.CamposNomeExibicao.Add('Número');
+      frmPesquisar.CamposNomeExibicao.Add('Endereço');
+      frmPesquisar.CamposNomeExibicao.Add('Complemento');
+      frmPesquisar.CamposNomeExibicao.Add('Bairro');
+      frmPesquisar.IdCliente := Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger;
+      frmPesquisar.ShowModal();
+
+      if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+        Dts_Item.DataSet.Edit;
+
+      Dts.DataSet.FieldByName('nt_seq_endereco').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.dbeIdDoProdutoExit(Sender: TObject);
+begin
+  inherited;
+
+  if Dts_Item.DataSet.FieldByName('itnt_id_produto').AsInteger > 0 then
+  begin
+    Self.CarregarProduto();
+
+    if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+      Dts_Item.DataSet.Edit;
+
+    Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency :=
+        dm_CarregarDados.dst_CarregarProdutoPRO_VL_VENDA.AsCurrency;
+    Dts_Item.DataSet.FieldByName('itnt_nm_produto').AsString := dm_CarregarDados.dst_CarregarProdutoPRO_NOME.AsString;
+  end;
+end;
+
+procedure TfrmMov_Venda.dbeIdDoProdutoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F10) then
+    Self.PesquisarProduto();
+end;
+
+procedure TfrmMov_Venda.dbeIdPessoaExit(Sender: TObject);
+begin
+  inherited;
+
+  if not (Dts.DataSet.State in [dsEdit, dsInsert]) then
+    Dts.DataSet.Edit;
+
+  if Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger > 0 then
+  begin
+    Self.CarregarCliente();
+
+    Dts.DataSet.FieldByName('nt_seq_endereco').AsInteger := dm_CarregarDados.dst_CarregarClientePE_SEQ.AsInteger;
+
+    if Dts.DataSet.FieldByName('nt_id_empresa').AsInteger > 0 then
+      Self.AbrirCdsDadosPessoaTelefone();
+  end;
+end;
+
+procedure TfrmMov_Venda.dbeIdPessoaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    pessoa.pes_id, ' +
+        '    pessoa.pes_rsocial, ' +
+        '    pessoa.pes_cnpj_cpf ' +
+        ' from pessoa ' +
+        '    left join cliente on (pessoa.pes_id = cliente.cli_id_pessoa) ' +
+        ' where ' +
+        '    pessoa.pes_tp_cadastro = ''C'' and ' +
+        '    pessoa.pes_id = -1';
+
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+      frmPesquisar.CamposNomeExibicao.Add('Nome');
+      frmPesquisar.CamposNomeExibicao.Add('CPF/CNPJ');
+
+      frmPesquisar.ShowModal();
+      Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.dbePercentualDoDescontoExit(Sender: TObject);
+begin
+  inherited;
+
+  if Dts_Item.DataSet.FieldByName('itnt_vl_opcional').AsCurrency > 0 then
+  begin
+    Self.CarregarValorUnitario();
+
+    Self.CalcularPercentualDoDescontoDoItem();
+
+    Self.CalcularValorDoDescontoDoItem();
+
+    Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency := Dts_Item.DataSet.FieldByName('itnt_qtde').AsCurrency *
+      (Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency + Dts_Item.DataSet.FieldByName('itnt_vl_opcional').AsCurrency);
+
+    Self.Sumarizar();
+  end;
+end;
+
+procedure TfrmMov_Venda.dbeQtdeDoProdutoExit(Sender: TObject);
+begin
+  inherited;
+
+  if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+      Dts_Item.DataSet.Edit;
+
+  if Dts_Item.DataSet.FieldByName('itnt_qtde').AsInteger > 0 then
+  begin
+    if Self.FAcao = sEnumerados.acAlterar then
+      Self.CarregarProduto();
+
+    Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency := Dts_Item.DataSet.FieldByName('itnt_qtde').AsCurrency *
+      Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency;
+
+    Self.Sumarizar();
+  end;
+end;
+
+procedure TfrmMov_Venda.dbeValorDoDescontoExit(Sender: TObject);
+begin
+  inherited;
+
+  Self.Sumarizar();
+end;
+
+procedure TfrmMov_Venda.dbeVlrDescontoExit(Sender: TObject);
+begin
+  inherited;
+
+  if Dts_Item.DataSet.FieldByName('itnt_vl_desc').AsCurrency > 0 then
+  begin
+    Self.CarregarValorUnitario();
+
+    Self.CalcularValorDoDescontoDoItem();
+
+    Dts_Item.DataSet.FieldByName('itnt_al_desc').AsCurrency := (Dts_Item.DataSet.FieldByName('itnt_vl_desc').AsCurrency * 100)
+      / (Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency);
+  end;
+
+  if Dts_Item.DataSet.FieldByName('itnt_vl_opcional').AsCurrency > 0 then
+  begin
+    Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency := Dts_Item.DataSet.FieldByName('itnt_qtde').AsCurrency *
+      (Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency + Dts_Item.DataSet.FieldByName('itnt_vl_opcional').AsCurrency);
+
+    Self.Sumarizar();
+  end;
+
+end;
+
+procedure TfrmMov_Venda.dbeVlrFreteExit(Sender: TObject);
+begin
+  inherited;
+
+  Self.Sumarizar();
+end;
+
+procedure TfrmMov_Venda.dbeVlrOpcinalExit(Sender: TObject);
+begin
+  inherited;
+  if Dts_Item.DataSet.FieldByName('itnt_vl_opcional').AsCurrency > 0 then
+  begin
+    Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency := Dts_Item.DataSet.FieldByName('itnt_qtde').AsCurrency *
+      (Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency + Dts_Item.DataSet.FieldByName('itnt_vl_opcional').AsCurrency);
+
+    Self.Sumarizar();
+  end;
+end;
+
+procedure TfrmMov_Venda.dbeVlrUnitárioExit(Sender: TObject);
+begin
+  inherited;
+
+  if Dts_Item.DataSet.FieldByName('itnt_qtde').AsInteger > 0 then
+  begin
+    Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency := Dts_Item.DataSet.FieldByName('itnt_qtde').AsCurrency *
+      Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsCurrency;
+
+    Self.Sumarizar();
+  end;
+end;
+
+procedure TfrmMov_Venda.dbgItemVendaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmMov_Venda.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmMov_Venda.dbgVendasDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmMov_Venda.DeletarItem;
+begin
+  try
+    if TFuncoes.SolicitarConfirmacao('Deseja Excluir o item do produto?') then
+      Dts_Item.DataSet.Delete;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+
+  dm_CarregarDados.cds_DadosPessoaTelefone.Close;
+
+  FreeAndNil(dm_Relatorios);
+  FreeAndNil(dm_CarregarDados);
+  FreeAndNil(FDm_Cliente);
+  FreeAndNil(dm_Nota);
+end;
+
+procedure TfrmMov_Venda.FormCreate(Sender: TObject);
+begin
+  dm_Nota       := Tdm_Nota.Create(nil);
+
+  dm_CarregarDados := Tdm_CarregarDados.Create(nil);
+  FDm_Cliente      := Tdm_Clientes.Create(nil);
+
+  if (Self.FAcao = sEnumerados.acAlterar) or (Self.FAcao = sEnumerados.acVisualizar) or
+    (Self.FAcao = sEnumerados.acExcluir) then
+  begin
+  if Dts.DataSet.FieldByName('nt_id_empresa').AsInteger > 0 then
+    Self.AbrirCdsDadosPessoaTelefone();
+  end;
+
+
+  inherited;
+  FCamposNomeExibicao.Add('Id. Nota');
+  FCamposNomeExibicao.Add('Razão Social');
+  FCamposNomeExibicao.Add('Status');
+  FCamposNomeExibicao.Add('Tipo Movimento');
+  FCamposNomeExibicao.Add('Id Pessoa');
+  FCamposNomeExibicao.Add('Vlr Produtos');
+  FCamposNomeExibicao.Add('Vlr Total Nota');
+end;
+
+procedure TfrmMov_Venda.GravaItem;
+begin
+  try
+    Dts_Item.DataSet.FieldByName('itnt_nm_produto').AsString := dm_CarregarDados.dst_CarregarProdutoPRO_NOME.AsString;
+    Dts_Item.DataSet.Post;
+
+    Self.Sumarizar();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.Gravar;
+var
+  VConfirmar: Boolean;
+begin
+  try
+    if FAcao <> sEnumerados.acVisualizar then
+    begin
+      Self.ValidarCamposObrigatoriosItem();
+      Self.ValidarCamposObrigatorios();
+
+      Application.CreateForm(TfrmMan_FecharVenda, frmMan_FecharVenda);
+      try
+        frmMan_FecharVenda.ShowModal;
+
+        VConfirmar := frmMan_FecharVenda.Confirma;
+      finally
+        FreeAndNil(frmMan_FecharVenda);
+      end;
+
+      if VConfirmar then
+      begin
+        ConexaoDBX.InicializaTransacaoBD();
+
+        if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+          raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+        Self.CalcularValorDeCreditoClienteFidelidade();
+
+        pgcAbasCadastro.ActivePage := tshConsultar;
+        cbxField.ItemIndex := 1;
+        cbxField.SetFocus();
+        edtValor.Clear();
+
+        ConexaoDBX.CommitTransacaoBD();
+
+        DtsRelatorio.DataSet.Close;
+
+        TClientDataSet(DtsRelatorio.DataSet).Params[0].AsInteger := EmpresaCorrente.Id;
+        TClientDataSet(DtsRelatorio.DataSet).Params[1].AsInteger := Dts.DataSet.FieldByName('nt_id').AsInteger;
+
+        DtsRelatorio.DataSet.Open;
+
+        dm_Nota.frxRelNota.ShowReport();
+      end;
+    end
+    else
+    begin
+      pgcAbasCadastro.ActivePage := tshConsultar;
+      cbxField.ItemIndex := 1;
+      cbxField.SetFocus();
+      edtValor.Clear();
+    end;
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      Self.TratarExceptionCampoObrigatorio(E.Message);
+
+      LogErro.NomeMetodo := 'Gravar';
+      LogErro.Add(ClassName, E.Message);
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.IniciarFields;
+begin
+  FNomeDoFormulario := 'Vendas';
+  FNomeTabela := 'NOTA';
+  FComponenteFoco := dbeIdPessoa;
+  FDbgCadastro := dbgVendas;
+
+  FSqlDefault :=
+    ' select ' +
+    '    nota.nt_id, ' +
+    '    pessoa.pes_rsocial, ' +
+    '    nota.nt_status, ' +
+    '    nota.nt_tp_movimentacao, ' +
+    '    nota.nt_id_pessoa, ' +
+    '    nota.nt_vl_produtos, ' +
+    '    nota.nt_vl_tot_nota ' +
+    ' from nota ' +
+    '    left outer join pessoa on (nota.nt_id_pessoa = pessoa.pes_id) ' +
+    ' where ' +
+    '    (nota.nt_id_empresa = -1) and ' +
+    '    (nota.nt_id = -1) ';
+end;
+
+procedure TfrmMov_Venda.NovoItem;
+var
+  VSeqItem: Integer;
+begin
+  try
+    if Dts.DataSet.State in [dsEdit, dsInsert] then
+      Dts.DataSet.Post;
+
+    Dts_Item.DataSet.Last;
+    VSeqItem := Dts_Item.DataSet.FieldByName('itnt_seq').AsInteger + 1;
+
+    Dts_Item.DataSet.Append;
+    Dts_Item.DataSet.FieldByName('itnt_seq').AsInteger        := VSeqItem;
+    Dts_Item.DataSet.FieldByName('itnt_id_nota').AsInteger    := Dts.DataSet.FieldByName('nt_id').AsInteger;
+    Dts_Item.DataSet.FieldByName('itnt_id_empresa').AsInteger := EmpresaCorrente.Id;
+    dbeIdDoProduto.SetFocus;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.PesquisarProduto;
+begin
+  frmPesquisar := TfrmPesquisar.Create(Application);
+  try
+    frmPesquisar.SqlDefault :=
+      ' select ' +
+      '    produto.pro_id_pk, ' +
+      '    produto.pro_ean, ' +
+      '    produto.pro_nome ' +
+      ' from produto ' +
+      ' where ' +
+      '   produto.pro_id_pk = -1';
+
+    frmPesquisar.CamposNomeExibicao.Add('Id.');
+    frmPesquisar.CamposNomeExibicao.Add('Ean');
+    frmPesquisar.CamposNomeExibicao.Add('Descrição');
+
+    frmPesquisar.ShowModal();
+
+    if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+      Dts_Item.DataSet.Edit;
+
+    Dts_Item.DataSet.FieldByName('itnt_id_produto').AsInteger := frmPesquisar.Id;
+  finally
+    FreeAndNil(frmPesquisar);
+  end;
+end;
+
+procedure TfrmMov_Venda.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux     : Integer;
+  VSeqItem: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := EmpresaCorrente.Id;
+
+  try
+    Dts.DataSet.FieldByName('nt_id').AsInteger            := FPersistencia.GetId(Self.FIdEmpresa, 0, Self.FNomeTabela);
+    Dts.DataSet.FieldByName('nt_id_empresa').AsInteger    := Self.FIdEmpresa;
+    Dts.DataSet.FieldByName('nt_status').AsInteger        := Integer(sEnumerados.snFaturado);
+    Dts.DataSet.FieldByName('nt_vl_frete').AsCurrency     := EmpresaCorrente.VlrFrete;
+    Dts.DataSet.FieldByName('nt_dt_emissao').AsDateTime   := now;
+    Dts.DataSet.FieldByName('nt_tp_operacao').AsInteger   := 1;
+    Dts.DataSet.FieldByName('nt_id_forma_pgto').AsInteger := 1;
+    Dts.DataSet.FieldByName('nt_id_plano_pgto').AsInteger := 1;
+    FId                                                   := Dts.DataSet.FieldByName('nt_id').AsInteger;
+    Dts.DataSet.Post;
+
+    Dts_Item.DataSet.Last;
+    VSeqItem := Dts_Item.DataSet.FieldByName('itnt_seq').AsInteger + 1;
+
+    Dts_Item.DataSet.Insert;
+    Dts_Item.DataSet.FieldByName('itnt_seq').AsInteger := VSeqItem;
+    Dts_Item.DataSet.FieldByName('itnt_id_nota').AsInteger    := FId;
+    Dts_Item.DataSet.FieldByName('itnt_id_empresa').AsInteger := Self.FIdEmpresa;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.ReverterCalcularValorDeCreditoClienteFidelidade;
+var
+  VResto        : Currency;
+  VCredito      : Currency;
+  VResultDicisao: Currency;
+  VTotalSaldo   : Currency;
+begin
+  VResto         := 0;
+  VCredito       := 0;
+  VResultDicisao := 0;
+  VTotalSaldo    := 0;
+
+  FDm_Cliente.AbrirCdsClienteFidelidade(Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger);
+
+  VTotalSaldo := Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency;
+  try
+    if dm_CarregarDados.dst_CarregarClienteCLI_FIDELIDADE.AsInteger = sConstantes.CLIENTE_FIDELIDADE then
+    begin
+      if VTotalSaldo > EmpresaCorrente.VlrVendaEntrega then
+      begin
+        VResultDicisao := VTotalSaldo / EmpresaCorrente.VlrVendaEntrega;
+
+        VCredito := Trunc(VResultDicisao);
+
+        VResto := (VResultDicisao - VCredito) * EmpresaCorrente.VlrVendaEntrega;
+
+        FDm_Cliente.cds_ClienteFidelidade.Edit;
+        FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency :=
+          FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency - VResto;
+        FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO.AsCurrency := FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO.AsCurrency
+          - VCredito;
+        FDm_Cliente.cds_ClienteFidelidade.Post;
+
+        if FDm_Cliente.cds_ClienteFidelidade.ApplyUpdates(0) > 0 then
+          raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+      end
+      else
+      begin
+         FDm_Cliente.cds_ClienteFidelidade.Edit;
+         FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency :=
+           FDm_Cliente.cds_ClienteFidelidadeCCF_VLR_CREDITO_ENTREGA.AsCurrency - VTotalSaldo;
+         FDm_Cliente.cds_ClienteFidelidade.Post;
+
+         if FDm_Cliente.cds_ClienteFidelidade.ApplyUpdates(0) > 0 then
+           raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+      end;
+    end;
+  except
+    raise;
+  end
+end;
+
+procedure TfrmMov_Venda.Sumarizar;
+begin
+  Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency := 0;
+  try
+    Dts_Item.DataSet.First;
+    while not Dts_Item.DataSet.Eof do
+    begin
+      Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency := Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency +
+        Dts_Item.DataSet.FieldByName('itnt_vl_total').AsCurrency;
+
+      Dts_Item.DataSet.Next;
+    end;
+    if not (Dts_Item.DataSet.State in [dsInsert, dsEdit]) then
+      Dts_Item.DataSet.Edit;
+
+    Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency := (Dts.DataSet.FieldByName('nt_vl_tot_nota').AsCurrency +
+      Dts.DataSet.FieldByName('nt_vl_frete').AsCurrency) - Dts.DataSet.FieldByName('nt_vl_desc').AsCurrency;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmMov_Venda.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  inherited;
+  TFuncoes.SetFocusCampoObrigatorio('CLIENTE', MensagemErro, dbeIdPessoa);
+  TFuncoes.SetFocusCampoObrigatorio('ENDEREÇO', MensagemErro, dbeIdEndereco);
+end;
+
+procedure TfrmMov_Venda.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+  if Dts.DataSet.FieldByName('nt_id_pessoa').AsInteger <= 0 then
+    raise ECampoObrigatorioError.Create('Campo "Id. Cliente" é de preenchimento Obrigatório.');
+
+  if Dts.DataSet.FieldByName('nt_seq_endereco').AsInteger <= 0 then
+    raise ECampoObrigatorioError.Create('Campo "Id. do Endereço" é de preenchimento Obrigatório.');
+end;
+
+procedure TfrmMov_Venda.ValidarCamposObrigatoriosItem;
+begin
+  if Dts_Item.DataSet.FieldByName('itnt_id_produto').AsInteger <= 0 then
+    raise ECampoObrigatorioError.Create('Campo "Id do Produto" é de preenchimento Obrigatório.');
+
+  if Dts_Item.DataSet.FieldByName('itnt_qtde').AsInteger <= 0 then
+    raise ECampoObrigatorioError.Create('Campo "Quantidade" é de preenchimento Obrigatório.');
+
+  if Dts_Item.DataSet.FieldByName('itnt_vl_unitario').AsInteger <= 0 then
+    raise ECampoObrigatorioError.Create('Campo "valor do produto" é de preenchimento Obrigatório.');
+end;
+
+initialization
+  RegisterClass(TfrmMov_Venda);
+
+end.

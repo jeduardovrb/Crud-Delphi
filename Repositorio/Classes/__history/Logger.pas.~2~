@@ -1,0 +1,123 @@
+unit Logger;
+
+interface
+
+uses
+  DB, SysUtils, Classes, IBCustomDataSet, SqlExpr, IBDatabase, DBXCommon;
+
+type
+  TLogger_v3 = class
+  private
+    FIdEmpresa : Integer;
+    FNomeMetodo: String;
+    FErros     : TStringList;
+
+  public
+    constructor Create;
+    destructor  Destroy; override;
+
+    procedure Limpar;
+    procedure Add(AClasse, AMsg: String);
+    procedure Gravar(AConn: TCustomConnection);
+    procedure SetIdEmpresa(AIdEmpresa: Integer);
+
+    function  GetLog: String;
+
+    property NomeMetodo: String read FNomeMetodo write FNomeMetodo;
+  end;
+
+var
+  Logger: TLogger_v3;
+
+implementation
+
+{ TLogger_v3 }
+
+constructor TLogger_v3.Create;
+begin
+  Self.FErros := TStringList.Create;
+end;
+
+destructor TLogger_v3.Destroy;
+begin
+  FreeAndNil(Self.FErros);
+  inherited;
+end;
+
+procedure TLogger_v3.Limpar;
+begin
+  Self.FErros.Clear;
+end;
+
+procedure TLogger_v3.Add(AClasse, AMsg: String);
+var
+  VTexto : String;
+  VPadrao: String;
+begin
+  VPadrao := '%s.%s - %s';
+
+  VTexto  := Format(VPadrao, [AClasse, Self.FNomeMetodo, AMsg]);
+
+  Self.FErros.Add(VTexto);
+end;
+
+procedure TLogger_v3.Gravar(AConn: TCustomConnection);
+var
+  VSql  : String;
+  VDst  : TDataSet;
+  VTrans: TDBXTransaction;
+begin
+  VSql := 'insert into erro (er_id_empresa, er_mensagem) values (%d, %s)';
+
+  VSql := Format(VSql, [Self.FIdEmpresa, QuotedStr(Self.GetLog())]);
+
+  if AConn.ClassType = TSQLConnection then
+  begin
+    VTrans := TSQLConnection(AConn).BeginTransaction();
+    try
+      TSQLConnection(AConn).ExecuteDirect(VSql);
+      TSQLConnection(AConn).CommitFreeAndNil(VTrans);
+    except
+      TSQLConnection(AConn).RollbackFreeAndNil(VTrans);
+      raise;
+    end;
+  end
+  else if AConn.ClassType = TIBDatabase then
+  begin
+    VDst := TIBDataSet.Create(nil);
+    try
+      TIBDataSet(VDst).Database       := TIBDatabase(AConn);
+      TIBDataSet(VDst).Transaction    := TIBDatabase(AConn).DefaultTransaction;
+      TIBDataSet(VDst).SelectSQL.Text := VSql;
+      try
+        TIBDataSet(VDst).ExecSQL();
+        TIBDataSet(VDst).Transaction.CommitRetaining();
+      except
+        TIBDataSet(VDst).Transaction.RollbackRetaining();
+        raise;
+      end;
+    finally
+      FreeAndNil(VDst);
+    end;
+  end;
+end;
+
+procedure TLogger_v3.SetIdEmpresa(AIdEmpresa: Integer);
+begin
+  Self.FIdEmpresa := AIdEmpresa;
+end;
+
+function TLogger_v3.GetLog: String;
+var
+  I   : Integer;
+  VLog: String;
+begin
+  VLog := EmptyStr;
+
+  for I := Pred(Self.FErros.Count) downto 0 do
+    VLog := VLog + Self.FErros[I] + sLineBreak + sLineBreak;
+
+  Result := VLog;
+end;
+
+end.

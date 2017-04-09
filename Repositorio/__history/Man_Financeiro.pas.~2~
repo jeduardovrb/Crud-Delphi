@@ -1,0 +1,26 @@
+unit Man_Financeiro;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, dtm_Receber, DB, Grids, DBGrids;
+
+type
+  TfrmMan_Financeiro = class(TForm)
+    DBGrid1: TDBGrid;
+    Dts: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMan_Financeiro: TfrmMan_Financeiro;
+
+implementation
+
+{$R *.dfm}
+
+end.

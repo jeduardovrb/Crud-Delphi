@@ -1,0 +1,56 @@
+unit Principal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, ActnCtrls,ToolWin, ActnMan,
+  ActnMenus, ImgList, ActnList, StdActns, ComCtrls, ExtCtrls, jpeg, Menus, CustomizeDlg, StdCtrls,
+  System.Actions, Vcl.PlatformDefaultStyleActnCtrls, System.ImageList;
+
+type
+  TfrmPrincipal = class(TForm)
+    Imagens: TImageList;
+    Img16Ativada: TImageList;
+    BarInforDoSistema: TStatusBar;
+    Menu: TActionManager;
+    Action1: TAction;
+    Image1: TImage;
+    ActionMainMenuBar1: TActionMainMenuBar;
+    ActionToolBar1: TActionToolBar;
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Action2Execute(Sender: TObject);
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmPrincipal.Action2Execute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if Application.MessageBox(PChar('Deseja sair do Sistema?'), 'Confirmação',
+    MB_YESNO + MB_DEFBUTTON2 + MB_ICONQUESTION) = mrYes then
+  begin
+    Application.Terminate;
+  end
+  else
+    Abort;
+end;
+
+procedure TfrmPrincipal.FormShow(Sender: TObject);
+begin
+  //BarInforDoSistema.Panels[0].Text := 'Versão: ' +
+    //sConstantes.VERSAO_DO_SISTEMA_GESTAO;
+  //BarInforDoSistema.Panels[1].Text := 'Usuário: ' + 'Celso Dornellas';
+  //BarInforDoSistema.Panels[2].Text := 'Empresa: ' + 'Lanches Bom de Mais';
+end;
+
+end.

@@ -1,0 +1,1034 @@
+object dm_Pagar: Tdm_Pagar
+  OldCreateOrder = False
+  Height = 337
+  Width = 489
+  object dsp_Pagar: TDataSetProvider
+    DataSet = dst_Pagar
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 176
+    Top = 24
+  end
+  object cds_Pagar: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cp_id_empresa'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'cp_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_Pagar'
+    OnReconcileError = cds_PagarReconcileError
+    Left = 304
+    Top = 24
+    object cds_PagarCP_ID: TIntegerField
+      FieldName = 'CP_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_PagarCP_ID_EMPRESA: TSmallintField
+      FieldName = 'CP_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object cds_PagarCP_ID_FORNECEDOR: TIntegerField
+      FieldName = 'CP_ID_FORNECEDOR'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_DOCTO: TStringField
+      FieldName = 'CP_DOCTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object cds_PagarCP_SITUACAO: TStringField
+      FieldName = 'CP_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_PagarCP_DT_MOVTO: TDateField
+      FieldName = 'CP_DT_MOVTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_DT_EMISSAO: TDateField
+      FieldName = 'CP_DT_EMISSAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_DT_VCTO: TDateField
+      FieldName = 'CP_DT_VCTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_DT_BAIXA: TDateField
+      FieldName = 'CP_DT_BAIXA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_VL_TITULO: TFMTBCDField
+      FieldName = 'CP_VL_TITULO'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_PagarCP_VL_JUROS: TFMTBCDField
+      FieldName = 'CP_VL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_PagarCP_VL_DESC: TFMTBCDField
+      FieldName = 'CP_VL_DESC'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_PagarCP_VL_PAGO: TFMTBCDField
+      FieldName = 'CP_VL_PAGO'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_PagarCP_ID_FORMA_PGTO: TIntegerField
+      FieldName = 'CP_ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_ID_NOTA: TIntegerField
+      FieldName = 'CP_ID_NOTA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_ID_ANALITICO: TIntegerField
+      FieldName = 'CP_ID_ANALITICO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_ID_PLANO: TIntegerField
+      FieldName = 'CP_ID_PLANO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_HIST_TITULO: TStringField
+      FieldName = 'CP_HIST_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_PagarCP_AUTORIZADO_POR: TStringField
+      FieldName = 'CP_AUTORIZADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PagarCP_DT_CANCELAMENTO: TDateField
+      FieldName = 'CP_DT_CANCELAMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_PagarCP_CANCELADO_POR: TStringField
+      FieldName = 'CP_CANCELADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_PagarCP_TIT_EM_ABERTO: TStringField
+      FieldName = 'CP_TIT_EM_ABERTO'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object cds_PagarCP_ALTERADO_POR: TStringField
+      FieldName = 'CP_ALTERADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_PagarCP_SEL: TStringField
+      FieldName = 'CP_SEL'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_PagarPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = []
+      Size = 50
+    end
+    object cds_PagarPC_DESCRICAO: TStringField
+      FieldName = 'PC_DESCRICAO'
+      ProviderFlags = []
+      Size = 40
+    end
+    object cds_PagarCP_VL_RESTO: TFMTBCDField
+      FieldName = 'CP_VL_RESTO'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cds_PagarCP_ID_FORNCEDOR_INTERNO: TIntegerField
+      FieldName = 'CP_ID_FORNCEDOR_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_Pagar: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   ct_pagar.cp_id,'#13#10'   ct_pagar.cp_id_empresa,'#13#10'   ct_pa' +
+      'gar.cp_id_fornecedor,'#13#10'   ct_pagar.CP_ID_FORNeCEDOR_INTERNO,'#13#10'  ' +
+      ' ct_pagar.cp_docto,'#13#10'   ct_pagar.cp_situacao,'#13#10'   ct_pagar.cp_dt' +
+      '_movto,'#13#10'   ct_pagar.cp_dt_emissao,'#13#10'   ct_pagar.cp_dt_vcto,'#13#10'  ' +
+      ' ct_pagar.cp_dt_baixa,'#13#10'   ct_pagar.cp_vl_titulo,'#13#10'   ct_pagar.c' +
+      'p_vl_juros,'#13#10'   ct_pagar.cp_vl_desc,'#13#10'   ct_pagar.cp_vl_pago,'#13#10' ' +
+      '  ct_pagar.cp_id_forma_pgto,'#13#10'   ct_pagar.cp_id_nota,'#13#10'   ct_pag' +
+      'ar.cp_id_analitico,'#13#10'   ct_pagar.cp_id_plano,'#13#10'   ct_pagar.cp_hi' +
+      'st_titulo,'#13#10'   ct_pagar.cp_autorizado_por,'#13#10'   ct_pagar.cp_dt_ca' +
+      'ncelamento,'#13#10'   ct_pagar.cp_cancelado_por,'#13#10'   ct_pagar.cp_tit_e' +
+      'm_aberto,'#13#10'   ct_pagar.cp_alterado_por,'#13#10'   ct_pagar.cp_sel,'#13#10'  ' +
+      ' pessoa.pes_rsocial,'#13#10'   plano_conta.pc_descricao,'#13#10'   ct_pagar.' +
+      'cp_vl_resto'#13#10'from ct_pagar'#13#10'   left outer join pessoa on (ct_pag' +
+      'ar.cp_id_fornecedor = pessoa.pes_id)'#13#10'   left outer join plano_c' +
+      'onta on (ct_pagar.cp_id_plano = plano_conta.pc_codconta)'#13#10'where'#13 +
+      #10'    (pessoa.pes_tp_cadastro = '#39'F'#39') and'#13#10'   (ct_pagar.cp_id_empr' +
+      'esa = :cp_id_empresa) and'#13#10'   (ct_pagar.cp_id = :cp_id)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cp_id_empresa'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'cp_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dst_PagarCP_ID: TIntegerField
+      FieldName = 'CP_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PagarCP_ID_EMPRESA: TSmallintField
+      FieldName = 'CP_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object dst_PagarCP_ID_FORNECEDOR: TIntegerField
+      FieldName = 'CP_ID_FORNECEDOR'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_DOCTO: TStringField
+      FieldName = 'CP_DOCTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object dst_PagarCP_SITUACAO: TStringField
+      FieldName = 'CP_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dst_PagarCP_DT_MOVTO: TDateField
+      FieldName = 'CP_DT_MOVTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_DT_EMISSAO: TDateField
+      FieldName = 'CP_DT_EMISSAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_DT_VCTO: TDateField
+      FieldName = 'CP_DT_VCTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_DT_BAIXA: TDateField
+      FieldName = 'CP_DT_BAIXA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_VL_TITULO: TFMTBCDField
+      FieldName = 'CP_VL_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_PagarCP_VL_JUROS: TFMTBCDField
+      FieldName = 'CP_VL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_PagarCP_VL_DESC: TFMTBCDField
+      FieldName = 'CP_VL_DESC'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_PagarCP_VL_PAGO: TFMTBCDField
+      FieldName = 'CP_VL_PAGO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_PagarCP_ID_FORMA_PGTO: TIntegerField
+      FieldName = 'CP_ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_ID_NOTA: TIntegerField
+      FieldName = 'CP_ID_NOTA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_ID_ANALITICO: TIntegerField
+      FieldName = 'CP_ID_ANALITICO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_ID_PLANO: TIntegerField
+      FieldName = 'CP_ID_PLANO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_HIST_TITULO: TStringField
+      FieldName = 'CP_HIST_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PagarCP_AUTORIZADO_POR: TStringField
+      FieldName = 'CP_AUTORIZADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PagarCP_DT_CANCELAMENTO: TDateField
+      FieldName = 'CP_DT_CANCELAMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PagarCP_CANCELADO_POR: TStringField
+      FieldName = 'CP_CANCELADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_PagarCP_TIT_EM_ABERTO: TStringField
+      FieldName = 'CP_TIT_EM_ABERTO'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PagarCP_ALTERADO_POR: TStringField
+      FieldName = 'CP_ALTERADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_PagarCP_SEL: TStringField
+      FieldName = 'CP_SEL'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PagarPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = []
+      Size = 50
+    end
+    object dst_PagarPC_DESCRICAO: TStringField
+      FieldName = 'PC_DESCRICAO'
+      ProviderFlags = []
+      Size = 40
+    end
+    object dst_PagarCP_VL_RESTO: TFMTBCDField
+      FieldName = 'CP_VL_RESTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_PagarCP_ID_FORNECEDOR_INTERNO: TIntegerField
+      FieldName = 'CP_ID_FORNECEDOR_INTERNO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_BaixarPagar: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   ct_pagar.cp_id,'#13#10'   ct_pagar.cp_id_empresa,'#13#10'   ct_pa' +
+      'gar.cp_id_fornecedor,'#13#10'   ct_pagar.cp_docto,'#13#10'   ct_pagar.cp_sit' +
+      'uacao,'#13#10'   ct_pagar.cp_dt_movto,'#13#10'   ct_pagar.cp_dt_emissao,'#13#10'  ' +
+      ' ct_pagar.cp_dt_vcto,'#13#10'   ct_pagar.cp_dt_baixa,'#13#10'   ct_pagar.cp_' +
+      'vl_titulo,'#13#10'   ct_pagar.cp_vl_juros,'#13#10'   ct_pagar.cp_vl_desc,'#13#10' ' +
+      '  ct_pagar.cp_vl_pago,'#13#10'   ct_pagar.cp_id_forma_pgto,'#13#10'   ct_pag' +
+      'ar.cp_id_nota,'#13#10'   ct_pagar.cp_id_analitico,'#13#10'   ct_pagar.cp_id_' +
+      'plano,'#13#10'   ct_pagar.cp_hist_titulo,'#13#10'   ct_pagar.cp_autorizado_p' +
+      'or,'#13#10'   ct_pagar.cp_dt_cancelamento,'#13#10'   ct_pagar.cp_cancelado_p' +
+      'or,'#13#10'   ct_pagar.cp_tit_em_aberto,'#13#10'   ct_pagar.cp_alterado_por,' +
+      #13#10'   ct_pagar.cp_sel,'#13#10'   pessoa.pes_rsocial,'#13#10'   plano_conta.pc' +
+      '_descricao,'#13#10'   ct_pagar.cp_vl_resto'#13#10'from ct_pagar'#13#10'   left out' +
+      'er join pessoa on (ct_pagar.cp_id_fornecedor = pessoa.pes_id)'#13#10' ' +
+      '  left outer join plano_conta on (ct_pagar.cp_id_plano = plano_c' +
+      'onta.pc_codconta)'#13#10'where'#13#10'    (pessoa.pes_tp_cadastro = '#39'F'#39') and' +
+      #13#10'   (ct_pagar.cp_id_empresa = :cp_id_empresa) and'#13#10'   (ct_pagar' +
+      '.cp_id = :cp_id)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'cp_id_empresa'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'cp_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 72
+    Top = 152
+    object dst_BaixarPagarCP_ID: TIntegerField
+      FieldName = 'CP_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_BaixarPagarCP_ID_EMPRESA: TSmallintField
+      FieldName = 'CP_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object dst_BaixarPagarCP_ID_FORNECEDOR: TIntegerField
+      FieldName = 'CP_ID_FORNECEDOR'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_DOCTO: TStringField
+      FieldName = 'CP_DOCTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object dst_BaixarPagarCP_SITUACAO: TStringField
+      FieldName = 'CP_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object dst_BaixarPagarCP_DT_MOVTO: TDateField
+      FieldName = 'CP_DT_MOVTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_DT_EMISSAO: TDateField
+      FieldName = 'CP_DT_EMISSAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_DT_VCTO: TDateField
+      FieldName = 'CP_DT_VCTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_DT_BAIXA: TDateField
+      FieldName = 'CP_DT_BAIXA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_VL_TITULO: TFMTBCDField
+      FieldName = 'CP_VL_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_BaixarPagarCP_VL_JUROS: TFMTBCDField
+      FieldName = 'CP_VL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_BaixarPagarCP_VL_DESC: TFMTBCDField
+      FieldName = 'CP_VL_DESC'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_BaixarPagarCP_VL_PAGO: TFMTBCDField
+      FieldName = 'CP_VL_PAGO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object dst_BaixarPagarCP_ID_FORMA_PGTO: TIntegerField
+      FieldName = 'CP_ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_ID_NOTA: TIntegerField
+      FieldName = 'CP_ID_NOTA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_ID_ANALITICO: TIntegerField
+      FieldName = 'CP_ID_ANALITICO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_ID_PLANO: TIntegerField
+      FieldName = 'CP_ID_PLANO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_HIST_TITULO: TStringField
+      FieldName = 'CP_HIST_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_BaixarPagarCP_AUTORIZADO_POR: TStringField
+      FieldName = 'CP_AUTORIZADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_BaixarPagarCP_DT_CANCELAMENTO: TDateField
+      FieldName = 'CP_DT_CANCELAMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_BaixarPagarCP_CANCELADO_POR: TStringField
+      FieldName = 'CP_CANCELADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object dst_BaixarPagarCP_TIT_EM_ABERTO: TStringField
+      FieldName = 'CP_TIT_EM_ABERTO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_BaixarPagarCP_ALTERADO_POR: TStringField
+      FieldName = 'CP_ALTERADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_BaixarPagarCP_SEL: TStringField
+      FieldName = 'CP_SEL'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_BaixarPagarPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_BaixarPagarPC_DESCRICAO: TStringField
+      FieldName = 'PC_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dst_BaixarPagarCP_VL_RESTO: TFMTBCDField
+      FieldName = 'CP_VL_RESTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dsp_BaixarPagar: TDataSetProvider
+    DataSet = dst_BaixarPagar
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 192
+    Top = 152
+  end
+  object cds_BaixarPagar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_BaixarPagar'
+    Left = 312
+    Top = 152
+    object cds_BaixarPagarCP_ID: TIntegerField
+      FieldName = 'CP_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_BaixarPagarCP_ID_EMPRESA: TSmallintField
+      FieldName = 'CP_ID_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+      Required = True
+    end
+    object cds_BaixarPagarCP_ID_FORNECEDOR: TIntegerField
+      FieldName = 'CP_ID_FORNECEDOR'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_DOCTO: TStringField
+      FieldName = 'CP_DOCTO'
+      ProviderFlags = [pfInUpdate]
+      Size = 15
+    end
+    object cds_BaixarPagarCP_SITUACAO: TStringField
+      FieldName = 'CP_SITUACAO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 2
+    end
+    object cds_BaixarPagarCP_DT_MOVTO: TDateField
+      FieldName = 'CP_DT_MOVTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_DT_EMISSAO: TDateField
+      FieldName = 'CP_DT_EMISSAO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_DT_VCTO: TDateField
+      FieldName = 'CP_DT_VCTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_DT_BAIXA: TDateField
+      FieldName = 'CP_DT_BAIXA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_VL_TITULO: TFMTBCDField
+      FieldName = 'CP_VL_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_BaixarPagarCP_VL_JUROS: TFMTBCDField
+      FieldName = 'CP_VL_JUROS'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_BaixarPagarCP_VL_DESC: TFMTBCDField
+      FieldName = 'CP_VL_DESC'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_BaixarPagarCP_VL_PAGO: TFMTBCDField
+      FieldName = 'CP_VL_PAGO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+    object cds_BaixarPagarCP_ID_FORMA_PGTO: TIntegerField
+      FieldName = 'CP_ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_ID_NOTA: TIntegerField
+      FieldName = 'CP_ID_NOTA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_ID_ANALITICO: TIntegerField
+      FieldName = 'CP_ID_ANALITICO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_ID_PLANO: TIntegerField
+      FieldName = 'CP_ID_PLANO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_HIST_TITULO: TStringField
+      FieldName = 'CP_HIST_TITULO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_BaixarPagarCP_AUTORIZADO_POR: TStringField
+      FieldName = 'CP_AUTORIZADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_BaixarPagarCP_DT_CANCELAMENTO: TDateField
+      FieldName = 'CP_DT_CANCELAMENTO'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_BaixarPagarCP_CANCELADO_POR: TStringField
+      FieldName = 'CP_CANCELADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 18
+    end
+    object cds_BaixarPagarCP_TIT_EM_ABERTO: TStringField
+      FieldName = 'CP_TIT_EM_ABERTO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_BaixarPagarCP_ALTERADO_POR: TStringField
+      FieldName = 'CP_ALTERADO_POR'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_BaixarPagarCP_SEL: TStringField
+      FieldName = 'CP_SEL'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_BaixarPagarPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_BaixarPagarPC_DESCRICAO: TStringField
+      FieldName = 'PC_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_BaixarPagarCP_VL_RESTO: TFMTBCDField
+      FieldName = 'CP_VL_RESTO'
+      ProviderFlags = [pfInUpdate]
+      Precision = 18
+      Size = 2
+    end
+  end
+  object dst_RelatorioPagar: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   ct_pagar.cp_id_fornecedor,'#13#10'   pessoa.pes_rsocial,'#13#10' ' +
+      '  ct_pagar.cp_dt_emissao,'#13#10'   ct_pagar.cp_dt_vcto,'#13#10'   ct_pagar.' +
+      'cp_dt_baixa,'#13#10'   ct_pagar.cp_vl_titulo'#13#10'from ct_pagar'#13#10'   left o' +
+      'uter join pessoa on (ct_pagar.cp_id_fornecedor = pessoa.pes_id)'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 248
+    object dst_RelatorioPagarCP_ID_FORNECEDOR: TIntegerField
+      FieldName = 'CP_ID_FORNECEDOR'
+    end
+    object dst_RelatorioPagarPES_RSOCIAL: TStringField
+      FieldName = 'PES_RSOCIAL'
+      Size = 50
+    end
+    object dst_RelatorioPagarCP_DT_EMISSAO: TDateField
+      FieldName = 'CP_DT_EMISSAO'
+    end
+    object dst_RelatorioPagarCP_DT_VCTO: TDateField
+      FieldName = 'CP_DT_VCTO'
+    end
+    object dst_RelatorioPagarCP_DT_BAIXA: TDateField
+      FieldName = 'CP_DT_BAIXA'
+    end
+    object dst_RelatorioPagarCP_VL_TITULO: TFMTBCDField
+      FieldName = 'CP_VL_TITULO'
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object frxDstRelatorioPagar: TfrxDBDataset
+    UserName = 'frxDstRelatorioPagar'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'CP_ID_FORNECEDOR=CP_ID_FORNECEDOR'
+      'PES_RSOCIAL=PES_RSOCIAL'
+      'CP_DT_EMISSAO=CP_DT_EMISSAO'
+      'CP_DT_VCTO=CP_DT_VCTO'
+      'CP_DT_BAIXA=CP_DT_BAIXA'
+      'CP_VL_TITULO=CP_VL_TITULO')
+    DataSet = dst_RelatorioPagar
+    BCDToCurrency = False
+    Left = 192
+    Top = 248
+  end
+  object frxRelatorioPagar: TfrxReport
+    Version = '4.11.14'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42113.934322129630000000
+    ReportOptions.LastChange = 42114.002294317130000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    OnGetValue = frxRelatorioPagarGetValue
+    Left = 336
+    Top = 248
+    Datasets = <
+      item
+        DataSet = frxDstRelatorioPagar
+        DataSetName = 'frxDstRelatorioPagar'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object ReportTitle1: TfrxReportTitle
+        Height = 45.354360000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        object Memo1: TfrxMemoView
+          Align = baCenter
+          Left = 243.779685000000000000
+          Width = 230.551330000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Rela'#231#227'o das contas a pagar')
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          Align = baCenter
+          Left = 330.708875000000000000
+          Top = 18.897650000000000000
+          Width = 56.692950000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          AutoWidth = True
+          Memo.UTF8W = (
+            '[TEXTO]')
+        end
+        object Memo10: TfrxMemoView
+          Left = 7.000000000000000000
+          Top = 24.677180000000000000
+          Width = 706.772110000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        Height = 18.897637800000000000
+        Top = 170.078850000000000000
+        Width = 718.110700000000000000
+        DataSet = frxDstRelatorioPagar
+        DataSetName = 'frxDstRelatorioPagar'
+        RowCount = 0
+        object Memo2: TfrxMemoView
+          Left = 3.779530000000000000
+          Width = 710.551640000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Highlight.Font.Charset = DEFAULT_CHARSET
+          Highlight.Font.Color = 13357521
+          Highlight.Font.Height = -13
+          Highlight.Font.Name = 'Arial'
+          Highlight.Font.Style = []
+          Highlight.Condition = '<Line#> mod 2'
+        end
+        object frxDstRelatorioReceberCR_ID_CLIENTE: TfrxMemoView
+          Left = 15.118120000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxDstRelatorioPagar
+          DataSetName = 'frxDstRelatorioPagar'
+          Memo.UTF8W = (
+            '[frxDstRelatorioPagar."CP_ID_FORNECEDOR"]')
+        end
+        object frxDstRelatorioReceberPES_RSOCIAL: TfrxMemoView
+          Left = 90.708720000000000000
+          Width = 173.858380000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataField = 'PES_RSOCIAL'
+          DataSet = frxDstRelatorioPagar
+          DataSetName = 'frxDstRelatorioPagar'
+          Memo.UTF8W = (
+            '[frxDstRelatorioPagar."PES_RSOCIAL"]')
+        end
+        object frxDstRelatorioReceberCR_DT_EMISSAO: TfrxMemoView
+          Left = 302.362400000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxDstRelatorioPagar
+          DataSetName = 'frxDstRelatorioPagar'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frxDstRelatorioPagar."CP_DT_EMISSAO"]')
+          ParentFont = False
+        end
+        object frxDstRelatorioReceberCR_DT_BAIXA: TfrxMemoView
+          Left = 415.748300000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxDstRelatorioPagar
+          DataSetName = 'frxDstRelatorioPagar'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frxDstRelatorioPagar."CP_DT_BAIXA"]')
+          ParentFont = False
+        end
+        object frxDstRelatorioReceberCR_VL_TITULO: TfrxMemoView
+          Left = 642.520100000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxDstRelatorioPagar
+          DataSetName = 'frxDstRelatorioPagar'
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Memo.UTF8W = (
+            '[frxDstRelatorioPagar."CP_VL_TITULO"]')
+          ParentFont = False
+        end
+        object frxDstRelatorioReceberCR_DT_BAIXA1: TfrxMemoView
+          Left = 529.134200000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frxDstRelatorioPagar
+          DataSetName = 'frxDstRelatorioPagar'
+          Memo.UTF8W = (
+            '[frxDstRelatorioPagar."CP_DT_BAIXA"]')
+        end
+      end
+      object PageHeader1: TfrxPageHeader
+        Height = 22.677180000000000000
+        Top = 86.929190000000000000
+        Width = 718.110700000000000000
+        object Memo3: TfrxMemoView
+          Left = 7.559060000000000000
+          Top = 3.779529999999994000
+          Width = 68.031540000000010000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Id.')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          Left = 90.708720000000000000
+          Top = 3.779529999999994000
+          Width = 173.858380000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Cliente')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 302.362400000000000000
+          Top = 3.779529999999994000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Data Emiss'#227'o')
+          ParentFont = False
+        end
+        object Memo6: TfrxMemoView
+          Left = 415.748300000000000000
+          Top = 3.779529999999994000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Data Vecto')
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          Left = 639.520100000000000000
+          Top = 3.779529999999994000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Valor')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          Left = 529.134200000000000000
+          Top = 3.779529999999994000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftBottom]
+          Memo.UTF8W = (
+            'Data Baixar'
+            '')
+          ParentFont = False
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        Height = 22.677180000000000000
+        Top = 249.448980000000000000
+        Width = 718.110700000000000000
+        object Memo11: TfrxMemoView
+          Left = 642.520100000000000000
+          Top = 1.000000000000000000
+          Width = 71.811070000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Memo.UTF8W = (
+            '[SUM(<frxDstRelatorioPagar."CP_VL_TITULO">,MasterData1)]')
+        end
+        object Memo12: TfrxMemoView
+          Left = 566.929499999999900000
+          Top = 1.000000000000000000
+          Width = 71.811070000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Memo.UTF8W = (
+            'Valor Total:')
+        end
+      end
+    end
+  end
+end

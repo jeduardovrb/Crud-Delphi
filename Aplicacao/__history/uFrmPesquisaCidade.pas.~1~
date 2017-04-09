@@ -1,0 +1,25 @@
+unit uFrmPesquisaCidade;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uFrmPesquisar, Data.FMTBcd, Datasnap.Provider, Data.SqlExpr, Data.DB,
+  Datasnap.DBClient, Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TfrmPesquisar1 = class(TfrmPesquisar)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPesquisar1: TfrmPesquisar1;
+
+implementation
+
+{$R *.dfm}
+
+end.

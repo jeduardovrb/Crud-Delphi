@@ -1,0 +1,23 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 150
+  Width = 567
+  object DataSetProvider1: TDataSetProvider
+    Left = 176
+    Top = 24
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 304
+    Top = 24
+  end
+  object dst_PlanoConta: TSQLDataSet
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+  end
+end

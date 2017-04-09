@@ -1,0 +1,110 @@
+unit PersistenciaDBX;
+
+interface
+
+uses
+  DBClient, DBXCommon, SysUtils, Conexao, SqlExpr, Variants, DB, Provider, Logger,
+  Persistencia;
+
+type
+  TPersistenciaDBX = class(TPersistencia)
+  private
+
+  public
+    function GetId(AEmpresa: Variant; AId: Integer;
+      ANomeTabela: String): Integer; override;
+    function ExecutarConsulta(ASql: String): OleVariant; override;
+  end;
+
+implementation
+
+{ TPersistenciaDBX }
+
+function TPersistenciaDBX.ExecutarConsulta(ASql: String): OleVariant;
+var
+  VProvider: TProvider;
+  VQry: TSQLQuery;
+begin
+  try
+    VProvider := TProvider.Create(nil);
+    VQry := ConexaoDBX.BuildQry();
+
+    try
+      VProvider.DataSet := VQry;
+
+      VQry.Close;
+      VQry.CommandText := ASql;
+      VQry.Open;
+
+      try
+        Result := VProvider.Data;
+      finally
+        VQry.Close;
+      end;
+    finally
+      FreeAndNil(VProvider);
+      FreeAndNil(VQry);
+    end;
+  except
+    on E: Exception do
+      begin
+        LogErro.NomeMetodo := 'ExecutarConsulta';
+        LogErro.Add(ClassName, E.Message);
+        raise;
+      end;
+  end;
+end;
+
+function TPersistenciaDBX.GetId(AEmpresa: Variant; AId: Integer;
+  ANomeTabela: String): Integer;
+const
+  ROTINA: String = 'GetId';
+var
+  VTransacao: TDBXTransaction;
+  VQry: TSQLQuery;
+begin
+  try
+    ConexaoDBX.InicializaTransacaoBD();
+
+    VQry := ConexaoDBX.BuildQry();
+
+    VQry.SQL.Text :=
+      ('select pk_id from sp_primary_key(:pk_emp, :pk_nm_tabela, :nr_id)');
+
+    VQry.Params[0].DataType := DB.ftInteger;
+    VQry.Params[1].DataType := DB.ftString;
+    VQry.Params[2].DataType := DB.ftInteger;
+
+    VQry.ParamByName('pk_emp').Value := AEmpresa;
+    VQry.ParamByName('pk_nm_tabela').AsString := ANomeTabela;
+
+    if AId > 0 then
+      VQry.ParamByName('nr_id').AsInteger := AId
+    else
+      VQry.ParamByName('nr_id').Value := Null;
+
+    VQry.Open;
+
+    try
+      Result := VQry.FieldByName('pk_id').AsInteger;
+    finally
+      VQry.Close;
+      FreeAndNil(VQry);
+    end;
+
+    ConexaoDBX.CommitTransacaoBD();
+  except
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+
+      if Pos('PRIMARY OR UNIQUE KEY', AnsiUpperCase(E.Message)) > 0 then
+        raise Exception.Create('Violação de chave primária. Este id já existe.')
+      else
+        raise Exception.Create(ClassName + ': ' + ROTINA + sLineBreak +
+          E.Message);
+    end;
+  end;
+end;
+
+end.

@@ -1,0 +1,42 @@
+unit uDM_Cidade;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.FMTBcd, Data.DB, Data.SqlExpr, uFrmPesquisaCidade;
+
+type
+  TDataModule1 = class(TDataModule)
+    dst_CarregarCidade: TSQLDataSet;
+  private
+    { Private declarations }
+  public
+    function Pesquisar: Integer;
+  end;
+
+var
+  DataModule1: TDataModule1;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TDataModule1 }
+
+function TDataModule1.Pesquisar: Integer;
+var
+  VPesquisa: TfrmPesquisarCidade;
+begin
+  VPesquisa := TfrmPesquisarCidade.Create(Self);
+  try
+    VPesquisa.ShowModal;
+
+    Result := VPesquisa.Id;
+  finally
+    FreeAndNil(VPesquisa);
+  end;
+end;
+
+end.

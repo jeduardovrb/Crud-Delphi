@@ -1,0 +1,90 @@
+unit Cad_TipoProduto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, Grids, DBGrids, DBClient,
+  ScreenTips, DBCtrls, Mask, StdCtrls, ActnList, DB, ImgList, ComCtrls, ToolWin,
+  Buttons, ExtCtrls;
+
+type
+  TfrmCad_TipoProduto = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    gbCorpo: TGroupBox;
+    lblId: TLabel;
+    lblNome: TLabel;
+    dbtId: TDBText;
+    dbeNome: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+  private
+
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_TipoProduto: TfrmCad_TipoProduto;
+
+implementation
+
+uses dtm_TipoProduto, BuilderLogDialogo, sEnumerados, Logger,
+  sException, sFuncoes;
+
+{$R *.dfm}
+
+procedure TfrmCad_TipoProduto.FormCreate(Sender: TObject);
+begin
+  try
+    dm_TipoProduto := Tdm_TipoProduto.Create(nil);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+
+  inherited;
+end;
+
+procedure TfrmCad_TipoProduto.IniciarFields;
+begin
+  inherited;
+
+  FNomeDoFormulario := 'Tipo de Produto';
+  FNomeTabela := 'TIPO_PRODUTOS';
+  FComponenteFoco := dbeNome;
+end;
+
+procedure TfrmCad_TipoProduto.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('TP_ID_PK').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, 'TIPO_PRODUTOS');
+    FId := Dts.DataSet.FieldByName('TP_ID_PK').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_TipoProduto.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  TFuncoes.SetFocusCampoObrigatorio('NOME', MensagemErro, dbeNome);
+end;
+
+procedure TfrmCad_TipoProduto.ValidarCamposObrigatorios;
+begin
+  if Trim(Dts.DataSet.FieldByName('TP_NOME').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "Nome" é de preenchimento Obrigatório.');
+end;
+
+end.

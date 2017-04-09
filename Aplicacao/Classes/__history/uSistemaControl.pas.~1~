@@ -1,0 +1,77 @@
+unit uSistemaControl;
+
+interface
+
+uses
+  uEmpresaCorrente, uLoggerErro, System.SysUtils, uConexao, Data.SqlExpr, Usuario, uControleUsuario;
+
+type
+  TSistemaControl = class
+  private
+    FEmpresaCorrente: TEmpresaCorrente;
+    FConexaoDBX     : TConexaoDBX;
+    FConn           : TSQLConnection;
+    FLoggerErro     : TLoggerErro;
+    FUsuario        : TUsuario;
+    FControleUsuario: TControleUsuario;
+
+    class var FInstance: TSistemaControl;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure CriarConexao(AConn: TSQLConnection; ANomeConexao: String);
+    procedure DestruirConexao;
+
+    class function GetInstance: TSistemaControl;
+
+    property EmpresaCorrente: TEmpresaCorrente read FEmpresaCorrente write FEmpresaCorrente;
+    property ConexaoDBX     : TConexaoDBX      read FConexaoDBX      write FConexaoDBX;
+    property LoggerErro     : TLoggerErro      read FLoggerErro      write FLoggerErro;
+    property Usuario        : TUsuario         read FUsuario         write FUsuario;
+    property ControleUsuario: TControleUsuario read FControleUsuario write FControleUsuario;
+  end;
+
+implementation
+
+{ TSistema }
+
+constructor TSistemaControl.Create;
+begin
+  Self.FLoggerErro      := TLoggerErro.Create;
+  Self.FEmpresaCorrente := TEmpresaCorrente.Create;
+  Self.FUsuario         := TUsuario.Create
+end;
+
+procedure TSistemaControl.CriarConexao(AConn: TSQLConnection; ANomeConexao: String);
+begin
+  Self.FConn       := AConn;
+  Self.FConexaoDBX := TConexaoDBX.Create(AConn, ANomeConexao);
+end;
+
+destructor TSistemaControl.Destroy;
+begin
+  FreeAndNil(Self.FUsuario);
+  FreeAndNil(Self.FEmpresaCorrente);
+  FreeAndNil(Self.FLoggerErro);
+  Self.DestruirConexao();
+
+  inherited;
+end;
+
+procedure TSistemaControl.DestruirConexao;
+begin
+  FreeAndNil(Self.FConexaoDBX);
+end;
+
+class function TSistemaControl.GetInstance: TSistemaControl;
+begin
+  if not Assigned(Self.FInstance) then
+  begin
+    Self.FInstance := TSistemaControl.Create();
+  end;
+
+  Result := Self.FInstance;
+end;
+
+end.

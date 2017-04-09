@@ -1,0 +1,114 @@
+object dm_FormaPagto: Tdm_FormaPagto
+  OldCreateOrder = False
+  Height = 96
+  Width = 404
+  object dsp_FormaPagto: TDataSetProvider
+    DataSet = dst_PlanoPagto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    Left = 176
+    Top = 24
+  end
+  object cds_FormaPagto: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pp_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_PlanoPagto'
+    OnReconcileError = cds_FormaPagtoReconcileError
+    Left = 304
+    Top = 24
+    object cds_FormaPagtoPP_ID: TIntegerField
+      FieldName = 'PP_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_FormaPagtoPP_STATUS: TStringField
+      FieldName = 'PP_STATUS'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_FormaPagtoPP_DESCRICAO: TStringField
+      FieldName = 'PP_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_FormaPagtoPP_COM_ENTRADA: TStringField
+      FieldName = 'PP_COM_ENTRADA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_FormaPagtoPP_NM_APRESENTACAO: TStringField
+      FieldName = 'PP_NM_APRESENTACAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object cds_FormaPagtoPP_QT_PARCELAS: TSmallintField
+      FieldName = 'PP_QT_PARCELAS'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_FormaPagtoPP_ID_COND_PGTO: TIntegerField
+      FieldName = 'PP_ID_COND_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dst_PlanoPagto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select'#13#10'   plano_pagamento.pp_id,'#13#10'   plano_pagamento.pp_status,' +
+      #13#10'   plano_pagamento.pp_descricao,'#13#10'   plano_pagamento.pp_com_en' +
+      'trada,'#13#10'   plano_pagamento.pp_nm_apresentacao,'#13#10'   plano_pagamen' +
+      'to.pp_qt_parcelas,'#13#10'   plano_pagamento.pp_id_cond_pgto'#13#10'from pla' +
+      'no_pagamento'#13#10'where'#13#10'   plano_pagamento.pp_id = :pp_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pp_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 64
+    Top = 24
+    object dst_PlanoPagtoPP_ID: TIntegerField
+      FieldName = 'PP_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_PlanoPagtoPP_STATUS: TStringField
+      FieldName = 'PP_STATUS'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PlanoPagtoPP_DESCRICAO: TStringField
+      FieldName = 'PP_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PlanoPagtoPP_COM_ENTRADA: TStringField
+      FieldName = 'PP_COM_ENTRADA'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_PlanoPagtoPP_NM_APRESENTACAO: TStringField
+      FieldName = 'PP_NM_APRESENTACAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 50
+    end
+    object dst_PlanoPagtoPP_QT_PARCELAS: TSmallintField
+      FieldName = 'PP_QT_PARCELAS'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_PlanoPagtoPP_ID_COND_PGTO: TIntegerField
+      FieldName = 'PP_ID_COND_PGTO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+end

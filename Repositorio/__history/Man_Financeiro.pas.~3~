@@ -1,0 +1,35 @@
+unit Man_Financeiro;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, dtm_Receber, DB, Grids, DBGrids, StdCtrls, Buttons, ExtCtrls;
+
+type
+  TfrmMan_Financeiro = class(TForm)
+    DBGrid1: TDBGrid;
+    Dts: TDataSource;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    procedure DBGrid1Exit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMan_Financeiro: TfrmMan_Financeiro;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmMan_Financeiro.DBGrid1Exit(Sender: TObject);
+begin
+  if (Dts.DataSet.State in [dsInsert, dsEdit]) then
+    Dts.DataSet.Post;
+end;
+
+end.

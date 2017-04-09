@@ -1,0 +1,118 @@
+unit frmLogDialogo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, StdCtrls, ExtCtrls, dxGDIPlusClasses, sEnumerados;
+
+type
+  TLogDialogo = class(TForm)
+    pnlFundo: TPanel;
+    memLog: TMemo;
+    bvlMemoLog: TBevel;
+    memErro: TMemo;
+    imgAtencao: TImage;
+    imgInformacao: TImage;
+    imgErro: TImage;
+    btnFechar: TBitBtn;
+    btnDetalhar: TBitBtn;
+    procedure btnFecharClick(Sender: TObject);
+    procedure btnDetalharClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+
+  private
+    FLog      : String;
+    FErro     : String;
+    FTitulo   : String;
+    FLogAberto: Boolean;
+    FIcone    : TIconeLog;
+
+  public
+    procedure CarregarMsgDeErro;
+    procedure CarregarTitulo;
+    procedure ExibirIcone;
+    procedure SetActiveControl;
+
+    property Log   : String    read FLog    write FLog;
+    property Erro  : String    read FErro   write FErro;
+    property Titulo: String    read FTitulo write FTitulo;
+    property Icone : TIconeLog read FIcone  write FIcone;
+  end;
+
+implementation
+
+uses Logger;
+
+{$R *.dfm}
+
+procedure TLogDialogo.btnDetalharClick(Sender: TObject);
+begin
+  if Self.FLogAberto then
+  begin
+    Self.btnDetalhar.Caption := 'Exibir Detalhes >>';
+    Self.Height              := 180;
+    Self.FLogAberto          := False;
+  end
+  else
+  begin
+    Self.btnDetalhar.Caption := 'Exibir Detalhes <<';
+    Self.Height              := 362;
+
+    Self.memLog.Clear;
+    Self.memLog.Text         := Self.FLog;
+    Self.FLogAberto          := True;
+  end;
+end;
+
+procedure TLogDialogo.btnFecharClick(Sender: TObject);
+begin
+  Self.Log    := EmptyStr;
+  Self.Erro   := EmptyStr;
+  Self.Titulo := EmptyStr;
+  Self.Icone  := sEnumerados.ilogIndefinido;
+
+  LogErro.Limpar();
+
+  Self.Close;
+end;
+
+procedure TLogDialogo.ExibirIcone;
+begin
+  Self.imgInformacao.Visible := (Self.FIcone = sEnumerados.ilogInformacao);
+  Self.imgAtencao.Visible    := (Self.FIcone = sEnumerados.ilogAtencao);
+  Self.imgErro.Visible       := (Self.FIcone = sEnumerados.ilogErro);
+end;
+
+procedure TLogDialogo.CarregarMsgDeErro;
+begin
+  Self.memErro.Text := Self.FErro;
+end;
+
+procedure TLogDialogo.CarregarTitulo;
+begin
+  if Self.FTitulo <> EmptyStr then
+    Self.Caption := Self.FTitulo;
+end;
+
+procedure TLogDialogo.FormCreate(Sender: TObject);
+begin
+  Self.Height     := 180;
+  Self.FLogAberto := False;
+end;
+
+procedure TLogDialogo.FormShow(Sender: TObject);
+begin
+  Self.SetActiveControl();
+  Self.CarregarMsgDeErro();
+  Self.CarregarTitulo();
+  Self.ExibirIcone();
+end;
+
+procedure TLogDialogo.SetActiveControl;
+begin
+  Self.btnFechar.SetFocus;
+end;
+
+end.

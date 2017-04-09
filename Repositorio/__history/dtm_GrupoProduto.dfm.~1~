@@ -1,0 +1,134 @@
+object dm_GrupoProduto: Tdm_GrupoProduto
+  OldCreateOrder = False
+  Height = 203
+  Width = 516
+  object dst_Pesquisar: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   grupo_produto.gru_id,'#13#10'   grupo_produto.gru_descricao' +
+      #13#10'from grupo_produto'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 32
+    object dst_PesquisarGRU_ID: TIntegerField
+      FieldName = 'GRU_ID'
+      Required = True
+    end
+    object dst_PesquisarGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      Size = 40
+    end
+  end
+  object dsp_Pesquisar: TDataSetProvider
+    DataSet = dst_Pesquisar
+    Left = 176
+    Top = 32
+  end
+  object cds_Pesquisar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_Pesquisar'
+    Left = 288
+    Top = 32
+    object cds_PesquisarGRU_ID: TIntegerField
+      DisplayLabel = 'Id.'
+      FieldName = 'GRU_ID'
+      Required = True
+    end
+    object cds_PesquisarGRU_DESCRICAO: TStringField
+      DisplayLabel = 'Descri'#231#227'o'
+      FieldName = 'GRU_DESCRICAO'
+      Size = 40
+    end
+  end
+  object dst_GrupoProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select * from grupo_produto'#13#10'where'#13#10'   grupo_produto.gru_id = :g' +
+      'ru_id'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'gru_id'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 120
+    object dst_GrupoProdutoGRU_ID: TIntegerField
+      FieldName = 'GRU_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_GrupoProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object dst_GrupoProdutoGRU_VERIFICAR_ESTOQUE: TStringField
+      FieldName = 'GRU_VERIFICAR_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_GrupoProdutoGRU_SERVICO: TStringField
+      FieldName = 'GRU_SERVICO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object dst_GrupoProdutoDTBLOQUEIO: TDateField
+      FieldName = 'DTBLOQUEIO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+  object dsp_GrupoProduto: TDataSetProvider
+    DataSet = dst_GrupoProduto
+    Options = [poCascadeDeletes, poCascadeUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 176
+    Top = 120
+  end
+  object cds_GrupoProduto: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'gru_id'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_GrupoProduto'
+    Left = 296
+    Top = 120
+    object cds_GrupoProdutoGRU_ID: TIntegerField
+      FieldName = 'GRU_ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_GrupoProdutoGRU_DESCRICAO: TStringField
+      FieldName = 'GRU_DESCRICAO'
+      ProviderFlags = [pfInUpdate]
+      Size = 40
+    end
+    object cds_GrupoProdutoGRU_VERIFICAR_ESTOQUE: TStringField
+      FieldName = 'GRU_VERIFICAR_ESTOQUE'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_GrupoProdutoGRU_SERVICO: TStringField
+      FieldName = 'GRU_SERVICO'
+      ProviderFlags = [pfInUpdate]
+      FixedChar = True
+      Size = 1
+    end
+    object cds_GrupoProdutoDTBLOQUEIO: TDateField
+      FieldName = 'DTBLOQUEIO'
+      ProviderFlags = [pfInUpdate]
+    end
+  end
+end

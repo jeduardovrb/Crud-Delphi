@@ -1,0 +1,316 @@
+unit ValorPorExtenso;
+
+interface
+
+uses
+  SysUtils, Dialogs;
+
+type
+  TValorPorExtenso = Class
+
+  private
+    function ifs( Expressao: Boolean; CasoVerdadeiro, CasoFalso: String): String;
+    function MiniExtenso(Valor: String): String;
+  public
+    function ValorPorExtenso(Valor: Currency): String;
+    function ValorExtenso(Valor: Double): String;
+
+    function Extenso(Valor: Double): String;
+  end;
+
+implementation
+const
+  Unidades: array [1..9] of string = ('Um', 'Dois', 'Tres', 'Quatro',
+    'Cinco', 'Seis', 'Sete', 'Oito',
+    'Nove');
+  Dez : array [1..9] of string = ('Onze', 'Doze', 'Treze',
+    'Quatorze', 'Quinze', 'Dezesseis', 'Dezessete',
+    'Dezoito', 'Dezenove');
+  Dezenas: array [1..9] of string = ('Dez', 'Vinte', 'Trinta',
+    'Quarenta', 'Cinquenta', 'Sessenta', 'Setenta',
+    'Oitenta', 'Noventa');
+  Centenas: array [1..9] of string = ('Cento', 'Duzentos',
+    'Trezentos', 'Quatrocentos', 'Quinhentos', 'Seiscentos',
+    'Setecentos', 'Oitocentos', 'Novecentos');
+
+{ TValorPorExtenso }
+
+function TValorPorExtenso.Extenso(Valor: Double): String;
+var Texto,Milhar,Centena,Centavos,msg: string;
+////////////////////////////////fucao auxiliar extenso////////////////////////////////
+  function ifs(Expressao: Boolean; CasoVerdadeiro, CasoFalso: String): String;
+    begin
+      if Expressao then
+      Result:=CasoVerdadeiro
+      else
+      Result:=CasoFalso;
+  end;
+////////////////////////////funcao auxiliar extenso/////////////////////////
+  function MiniExtenso (trio: string): string;
+    var
+      Unidade, Dezena, Centena: string;
+    begin
+      Unidade:='';
+      Dezena:='';
+      Centena:='';
+      if (trio[2]='1') and (trio[3]<>'0') then
+        begin
+          Unidade:=Dez[strtoint(trio[3])];
+          Dezena:='';
+        end
+      else
+        begin
+          if trio[2]<>'0' then Dezena:=Dezenas[strtoint(trio[2])];
+          if trio[3]<>'0' then Unidade:=Unidades[strtoint(trio[3])];
+      end;
+      if (trio[1]='1') and (Unidade='') and (Dezena='') then
+        Centena:='Cem'
+      else
+        if trio[1]<>'0' then
+          Centena:=Centenas[strtoint(trio[1])]
+        else Centena:='';
+      Result:= Centena + ifs((Centena<>'') and ((Dezena<>'') or (Unidade<>'')), ' e ', '')
+      + Dezena + ifs((Dezena<>'') and (Unidade<>''),' e ', '') + Unidade;
+  end;
+
+begin
+  if (valor>999999.99) or (valor<0) then
+    begin
+      msg:='O valor está fora do intervalo permitido.';
+      msg:=msg+'O número deve ser maior ou igual a zero e menor que 999.999,99.';
+      msg:=msg+' Se não for corrigido o número não será escrito por extenso.';
+      showmessage(msg);
+      Result:='';
+      exit;
+    end;
+  if valor=0 then
+    begin
+      Result:='';
+      Exit;
+  end;
+  Texto:=formatfloat('000000.00',valor);
+  Milhar:=MiniExtenso(Copy(Texto,1,3));
+  Centena:=MiniExtenso(Copy(Texto,4,3));
+  Centavos:=MiniExtenso('0'+Copy(Texto,8,2));
+  Result:=Milhar;
+  if Milhar<>'' then
+    begin
+      if copy(texto,4,3)='000' then
+        Result:=Result+' Mil Reais'
+      else
+        Result:=Result+' Mil, ';
+  end;
+  if (((copy(texto,4,2)='00') and (Milhar<>'') and (copy(texto,6,1)<>'0')))or (centavos='') and (milhar<>'')  then
+ // if (((copy(texto,4,2)='00') and (Milhar'') and (copy(texto,6,1)'0')))or (centavos='00') and (milhar'') then
+    Result:=Result+' e ';
+  if (Milhar+Centena <>'') then
+    Result:=Result+Centena;
+  if (Milhar='') and (copy(texto,4,3)='001') then
+    Result:=Result+' Real'
+  else
+  if (copy(texto,4,3)<>'000') then
+    Result:=Result+' Reais';
+  if Centavos='' then
+    begin
+      Result:=Result+'.';
+      Exit;
+  end
+  else
+    begin
+      if Milhar+Centena='' then
+        Result:=Centavos
+      else
+        Result:=Result+', e '+Centavos;
+  end;
+  if (copy(texto,8,2)='01') and (Centavos<>'') then
+      Result:=Result+' Centavo.'
+  else
+      Result:=Result+' Centavos.';
+end;
+
+function TValorPorExtenso.ifs(Expressao: Boolean; CasoVerdadeiro,
+  CasoFalso: String): String;
+begin
+  if Expressao then Result := CasoVerdadeiro else Result := CasoFalso;
+end;
+
+function TValorPorExtenso.MiniExtenso(Valor: String): String;
+var
+  Unidade, Dezena, Centena: String;
+begin
+
+  Unidade := '';
+  Dezena  := '';
+  Centena := '';
+
+  if (Valor[2] = '1') and (Valor[3] <> '0') then begin
+    Unidade := Dez[StrToInt(Valor[3])];
+    Dezena := '';
+  end else begin
+    if Valor[2] <> '0' then
+      Dezena := Dezenas[StrToInt(Valor[2])];
+    if Valor[3] <> '0' then
+      Unidade := Unidades[StrToInt(Valor[3])];
+  end;
+
+  if (Valor[1] = '1') and (Unidade = '') and (Dezena = '') then
+    Centena := 'cem'
+  else
+    if Valor[1] <> '0' then Centena :=
+      Centenas[StrToInt(Valor[1])]
+    else Centena := '';
+
+  Result := Centena +
+  ifs( (Centena <> '') and ((Dezena <> '') or (Unidade <> '')), ' e ', '') + Dezena +
+  ifs( (Dezena <> '') and (Unidade <> ''), ' e ', '') + Unidade;
+end;
+
+function TValorPorExtenso.ValorExtenso(Valor: Double): String;
+var
+  Centavos, Centena, Milhar, Milhao, Bilhao, Texto : string;
+
+begin
+  if Valor = 0 then begin
+    Result := '';
+    Exit;
+  end;
+
+  Texto := FormatFloat( '000000000000.00', Valor );
+  Centavos := MiniExtenso( '0' + Copy( Texto, 14, 2 ) );
+  Centena := MiniExtenso( Copy( Texto, 10, 3 ) );
+  Milhar := MiniExtenso( Copy( Texto, 7, 3 ) );
+
+  if Milhar <> '' then
+    Milhar := Milhar + ' mil';
+    Milhao := MiniExtenso( Copy( Texto, 4, 3 ) );
+
+  if Milhao <> '' then
+    Milhao := Milhao + ifs( Copy( Texto, 4, 3 ) = '001', ' milhao',
+      ' milhoes');
+    Bilhao := MiniExtenso( Copy( Texto, 1, 3 ) );
+
+  if Bilhao <> '' then
+    Bilhao := Bilhao + ifs( Copy( Texto, 1, 3 ) = '001', ' bilhao',
+      ' bilhoes');
+
+  if (Bilhao <> '') and (Milhao + Milhar + Centena = '') then
+    Result := Bilhao + ' de reais'
+  else if (Milhao <> '') and (Milhar + Centena = '') then
+    Result := Milhao + ' de reais'
+  else
+    Result := Bilhao +
+  ifs( (Bilhao <> '') and (Milhao + Milhar + Centena <> ''),
+  ifs((Pos(' e ', Bilhao) > 0) or (Pos( ' e ', Milhao + Milhar + Centena ) > 0 ), ', ', ' e '), '') + Milhao +
+  ifs( (Milhao <> '') and (Milhar + Centena <> ''),
+  ifs((Pos(' e ', Milhao) > 0) or (Pos( ' e ', Milhar + Centena ) > 0 ), ', ', ' e '), '') + Milhar +
+  ifs( (Milhar <> '') and (Centena <> ''),
+  ifs(Pos( ' e ', Centena ) > 0, ', ', ' e '), '') + Centena + ifs( Int(Valor) = 1, ' real',
+  ifs( Int(Valor)>1,' reais', '') );
+  if Centavos <> '' then
+    Result := Result + ifs(Centena <> '', ' e ', '') + Centavos +
+    ifs( Copy( Texto, 14, 2 )= '01', ' centavo', ' centavos' );
+end;
+
+function TValorPorExtenso.ValorPorExtenso(Valor: Currency): String;
+var
+  Centavos, Centena, Milhar, Milhao, Bilhao, Texto : string;
+const
+  Unidades: array [1..9] of string = ('um', 'dois', 'tres', 'quatro',
+    'cinco',
+    'seis', 'sete', 'oito',
+    'nove');
+  Dez : array [1..9] of string = ('onze', 'doze', 'treze',
+    'quatorze', 'quinze',
+    'dezesseis', 'dezessete',
+    'dezoito', 'dezenove');
+  Dezenas: array [1..9] of string = ('dez', 'vinte', 'trinta',
+    'quarenta', 'cinquenta',
+    'sessenta', 'setenta',
+    'oitenta', 'noventa');
+  Centenas: array [1..9] of string = ('cento', 'duzentos',
+    'trezentos', 'quatrocentos',
+    'quinhentos', 'seiscentos',
+    'setecentos',
+    'oitocentos', 'novecentos');
+
+function ifs( Expressao: Boolean; CasoVerdadeiro, CasoFalso: String): String;
+begin
+  if Expressao then Result := CasoVerdadeiro else Result := CasoFalso;
+end;
+
+function MiniExtenso( Valor: String ): string;
+var
+  Unidade, Dezena, Centena: String;
+begin
+
+  Unidade := '';
+  Dezena  := '';
+  Centena := '';
+
+  if (Valor[2] = '1') and (Valor[3] <> '0') then begin
+    Unidade := Dez[StrToInt(Valor[3])];
+    Dezena := '';
+  end else begin
+    if Valor[2] <> '0' then
+      Dezena := Dezenas[StrToInt(Valor[2])];
+    if Valor[3] <> '0' then
+      Unidade := Unidades[StrToInt(Valor[3])];
+  end;
+
+  if (Valor[1] = '1') and (Unidade = '') and (Dezena = '') then
+    Centena := 'cem'
+  else
+    if Valor[1] <> '0' then Centena :=
+      Centenas[StrToInt(Valor[1])]
+    else Centena := '';
+
+  Result := Centena +
+  ifs( (Centena <> '') and ((Dezena <> '') or (Unidade <> '')), ' e ', '') + Dezena +
+  ifs( (Dezena <> '') and (Unidade <> ''), ' e ', '') + Unidade;
+end;
+
+begin
+
+  if Valor = 0 then begin
+    Result := '';
+    Exit;
+  end;
+
+  Texto := FormatFloat( '000000000000.00', Valor );
+  Centavos := MiniExtenso( '0' + Copy( Texto, 14, 2 ) );
+  Centena := MiniExtenso( Copy( Texto, 10, 3 ) );
+  Milhar := MiniExtenso( Copy( Texto, 7, 3 ) );
+
+  if Milhar <> '' then
+    Milhar := Milhar + ' mil';
+    Milhao := MiniExtenso( Copy( Texto, 4, 3 ) );
+
+  if Milhao <> '' then
+    Milhao := Milhao + ifs( Copy( Texto, 4, 3 ) = '001', ' milhao',
+      ' milhoes');
+    Bilhao := MiniExtenso( Copy( Texto, 1, 3 ) );
+
+  if Bilhao <> '' then
+    Bilhao := Bilhao + ifs( Copy( Texto, 1, 3 ) = '001', ' bilhao',
+      ' bilhoes');
+
+  if (Bilhao <> '') and (Milhao + Milhar + Centena = '') then
+    Result := Bilhao + ' de reais'
+  else if (Milhao <> '') and (Milhar + Centena = '') then
+    Result := Milhao + ' de reais'
+  else
+    Result := Bilhao +
+  ifs( (Bilhao <> '') and (Milhao + Milhar + Centena <> ''),
+  ifs((Pos(' e ', Bilhao) > 0) or (Pos( ' e ', Milhao + Milhar + Centena ) > 0 ), ', ', ' e '), '') + Milhao +
+  ifs( (Milhao <> '') and (Milhar + Centena <> ''),
+  ifs((Pos(' e ', Milhao) > 0) or (Pos( ' e ', Milhar + Centena ) > 0 ), ', ', ' e '), '') + Milhar +
+  ifs( (Milhar <> '') and (Centena <> ''),
+  ifs(Pos( ' e ', Centena ) > 0, ', ', ' e '), '') + Centena + ifs( Int(Valor) = 1, ' real',
+  ifs( Int(Valor)>1,' reais', '') );
+  if Centavos <> '' then
+    Result := Result + ifs(Centena <> '', ' e ', '') + Centavos +
+    ifs( Copy( Texto, 14, 2 )= '01', ' centavo', ' centavos' );
+
+end;
+
+end.

@@ -1,0 +1,31 @@
+object dm_Pesquisar: Tdm_Pesquisar
+  OldCreateOrder = False
+  Height = 200
+  Width = 425
+  object cds_Pesquisar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_Pesquisar'
+    Left = 312
+    Top = 32
+  end
+  object dsp_Pesquisar: TDataSetProvider
+    DataSet = dst_Pesquisar
+    Left = 184
+    Top = 32
+  end
+  object dst_Pesquisar: TSQLDataSet
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 56
+    Top = 32
+  end
+  object cds_PesquisarClone: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 312
+    Top = 120
+  end
+end

@@ -1,0 +1,105 @@
+unit Cad_CondPagto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ScreenTips, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls, Buttons, ExtCtrls, dtm_CondPagto,
+  DBCtrls, Mask, Grids, DBGrids, BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TfrmCad_CondPagto = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgCondPagto: TDBGrid;
+    gb_CondPagto: TGroupBox;
+    lblId: TLabel;
+    lblDescricao: TLabel;
+    dbeDescricao: TDBEdit;
+    dbeId: TDBText;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+  end;
+
+var
+  frmCad_CondPagto: TfrmCad_CondPagto;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmCad_CondPagto }
+
+procedure TfrmCad_CondPagto.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(dm_CondPagto);
+end;
+
+procedure TfrmCad_CondPagto.FormCreate(Sender: TObject);
+begin
+  dm_CondPagto := Tdm_CondPagto.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Descrição');
+end;
+
+procedure TfrmCad_CondPagto.IniciarFields;
+begin
+  FNomeDoFormulario := 'forma de pagamento';
+  FNomeTabela := 'COND_PAGAMENTO';
+  FComponenteFoco := dbeDescricao;
+  FDbgCadastro := dbgCondPagto;
+
+  FSqlDefault :=
+    ' select ' +
+    '    cond_pagamento.cpa_id, ' +
+    '    cond_pagamento.cpa_descricao ' +
+    ' from cond_pagamento ' +
+    ' where ' +
+    '   cond_pagamento.cpa_id = -1 ';
+end;
+
+procedure TfrmCad_CondPagto.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('cpa_id').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    FId := Dts.DataSet.FieldByName('cpa_id').AsInteger ;
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_CondPagto.TratarExceptionCampoObrigatorio(MensagemErro: String);
+begin
+  inherited;
+
+end;
+
+procedure TfrmCad_CondPagto.ValidarCamposObrigatorios;
+begin
+  inherited;
+
+end;
+
+initialization
+  RegisterClass(TfrmCad_CondPagto);
+
+end.

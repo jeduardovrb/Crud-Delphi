@@ -1,0 +1,1233 @@
+unit Cad_Clientes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Form_Modelo, ActnList, DB, ImgList, ComCtrls, ToolWin, StdCtrls,
+  Buttons, ExtCtrls, Grids, DBGrids, ScreenTips, dtm_Clientes, Mask, DBCtrls,
+  BuilderLogDialogo, sEnumerados, Logger, sConversor, sFuncoes, Pesquisar,
+  dtm_CarregarDados, JvExStdCtrls, JvCombobox, JvDBCombobox, JvExMask, JvToolEdit, JvDBControls, DBClient,
+  Empresa_Corrente, Conexao, TratamentoErro, FMTBcd, Provider, SqlExpr;
+
+type
+  TfrmCad_Clientes = class(TfrmForm_Modelo)
+    ScreenTipsManager: TScreenTipsManager;
+    dbgCliente: TDBGrid;
+    pgcDadosClientes: TPageControl;
+    tshDados: TTabSheet;
+    tshEndereco: TTabSheet;
+    v: TTabSheet;
+    tshEmail: TTabSheet;
+    gbFundoDados: TGroupBox;
+    lblId: TLabel;
+    lblTpPessoa: TLabel;
+    lblRSocial: TLabel;
+    dbeRSocial: TDBEdit;
+    lblNFantasia: TLabel;
+    dbeNFantasia: TDBEdit;
+    lblCNPJCPF: TLabel;
+    dbeCNPJCPF: TDBEdit;
+    lblInscRG: TLabel;
+    dbeInscRg: TDBEdit;
+    lblDataNascimento: TLabel;
+    cbxtipoPessoa: TComboBox;
+    gbEndereco: TGroupBox;
+    Label94: TLabel;
+    gbTelefone: TGroupBox;
+    gbEmail: TGroupBox;
+    lblTpTelefone: TLabel;
+    lblNumeroTelefone: TLabel;
+    dbeNumeroTelefone: TDBEdit;
+    lblContato: TLabel;
+    dbeContato: TDBEdit;
+    lblEmail: TLabel;
+    dbeEmail: TDBEdit;
+    lblTpEndereco: TLabel;
+    lblEndereco: TLabel;
+    dbeEndereco: TDBEdit;
+    lblNumero: TLabel;
+    dbeNumero: TDBEdit;
+    lblComplemento: TLabel;
+    dbeComplemento: TDBEdit;
+    lblBairro: TLabel;
+    dbeBairro: TDBEdit;
+    lblIdCidade: TLabel;
+    dbeIdCidade: TDBEdit;
+    lblCEP: TLabel;
+    dbeCEP: TDBEdit;
+    lblNmCidade: TLabel;
+    lblEstado: TLabel;
+    Dts_Clientes: TDataSource;
+    DtsEmail: TDataSource;
+    DtsEndereco: TDataSource;
+    DtsTelefone: TDataSource;
+    dbtId: TDBText;
+    dbtDtCadastro: TDBText;
+    dbtNmCidade: TDBText;
+    dbtEstado: TDBText;
+    actNovoEndereco: TAction;
+    Action2: TAction;
+    Action3: TAction;
+    BitBtn10: TBitBtn;
+    BitBtn11: TBitBtn;
+    BitBtn12: TBitBtn;
+    BitBtn13: TBitBtn;
+    BitBtn14: TBitBtn;
+    BitBtn15: TBitBtn;
+    cbTipoEndereco: TJvDBComboBox;
+    cbTipoTelefone: TJvDBComboBox;
+    Panel1: TPanel;
+    btnIncluirEndereco: TBitBtn;
+    btnEditEndereco: TBitBtn;
+    btnExcluirEndereco: TBitBtn;
+    Panel3: TPanel;
+    btnIncluirEmail: TBitBtn;
+    btnAlterarEmail: TBitBtn;
+    btnExcluirEmail: TBitBtn;
+    dbeDtNascimento: TJvDBDateEdit;
+    dbgEndereco: TDBGrid;
+    Panel2: TPanel;
+    btnIncluirTelefone: TBitBtn;
+    btnEditTelefone: TBitBtn;
+    btnExcluirTelefone: TBitBtn;
+    dbgTelefone: TDBGrid;
+    dbgEmail: TDBGrid;
+    cbClienteFidelidade: TJvDBComboBox;
+    lblClienteFidelidade: TLabel;
+    tshClienteFidelidade: TTabSheet;
+    GroupBox1: TGroupBox;
+    Dts_CreditoClienteFidelidade: TDataSource;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    Panel4: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    dbtDadosNmCidade: TDBText;
+    dbtDadosNmUF: TDBText;
+    dbeDadasEndereco: TDBEdit;
+    dbeDadasNumero: TDBEdit;
+    dbeDadasReferencia: TDBEdit;
+    dbeDadasTelefone: TDBEdit;
+    dbeDadasCidades: TDBEdit;
+    dbeDadasCEP: TDBEdit;
+    Label13: TLabel;
+    dbeDadasTelefones: TDBEdit;
+    Label14: TLabel;
+    dbeDadasEmail: TDBEdit;
+    dbtTotalClientes: TDBText;
+    Label15: TLabel;
+    Label16: TLabel;
+    lblIdInterno: TLabel;
+    dbeIdInterno: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure dbgClienteDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgEnderecoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actAlterarExecute(Sender: TObject);
+    procedure cbxtipoPessoaExit(Sender: TObject);
+    procedure dbeIdCidadeKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actNovoExecute(Sender: TObject);
+    procedure dbgEmailKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dbgTelefoneKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dbgEnderecoDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgTelefoneDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgEmailDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbeIdCidadeExit(Sender: TObject);
+    procedure btnIncluirEnderecoClick(Sender: TObject);
+    procedure btnEditEnderecoClick(Sender: TObject);
+    procedure btnExcluirEnderecoClick(Sender: TObject);
+    procedure BitBtn10Click(Sender: TObject);
+    procedure BitBtn11Click(Sender: TObject);
+    procedure btnIncluirTelefoneClick(Sender: TObject);
+    procedure BitBtn12Click(Sender: TObject);
+    procedure BitBtn13Click(Sender: TObject);
+    procedure btnEditTelefoneClick(Sender: TObject);
+    procedure btnExcluirTelefoneClick(Sender: TObject);
+    procedure btnIncluirEmailClick(Sender: TObject);
+    procedure btnAlterarEmailClick(Sender: TObject);
+    procedure btnExcluirEmailClick(Sender: TObject);
+    procedure BitBtn14Click(Sender: TObject);
+    procedure BitBtn15Click(Sender: TObject);
+    procedure cbTipoEnderecoExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure actGravarExecute(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+    procedure dbgClienteDblClick(Sender: TObject);
+    procedure dbgClienteExit(Sender: TObject);
+    procedure dbeDadasEnderecoExit(Sender: TObject);
+    procedure dbeDadasTelefonesExit(Sender: TObject);
+    procedure dbeDadasEmailExit(Sender: TObject);
+    procedure actDeletarExecute(Sender: TObject);
+    procedure dbeRSocialKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dbeNFantasiaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dbeIdInternoExit(Sender: TObject);
+    procedure dbeRSocialExit(Sender: TObject);
+  private
+    FCodigo: Integer;
+    FIdInterno: Integer;
+    FRSocial: string;
+
+    procedure SetMascaraCNPJCPF;
+
+    function GetNomeTipoEndereco(AIdTipo: Integer): String;
+    procedure ValidarClienteInterno;
+  public
+    procedure ValidarCamposObrigatorios; override;
+    procedure TratarExceptionCampoObrigatorio(MensagemErro: String); override;
+    procedure PreenchimentoCamposDefaultNaInclusao; override;
+    procedure IniciarFields; override;
+    procedure SetNomeCidade;
+    procedure InsertEndereco;
+    procedure EditEndereco;
+    procedure ExcluirEndereco;
+    procedure InserirTelefone;
+    procedure EditTelefone;
+    procedure ExcluirTelefone;
+    procedure InsertEmail;
+    procedure EditEmail;
+    procedure ExcluirEmail;
+    procedure AtivarDesativarBotoesEndereco(AIncluir, AAlterar, AExcluir: Boolean);
+    procedure AtivarDesativarBotoesTelefone(AIncluir, AAlterar, AExcluir: Boolean);
+    procedure AtivarDesativarBotoesEmail(AIncluir, AAlterar, AExcluir: Boolean);
+    procedure VerificarSeExisteEnderecoDeEntregaCadastrado;
+    procedure Gravar; override;
+    procedure CarregarCdsTelefoneEmail;
+    procedure CarregarDadosCidade;
+
+    function IsExisteTelefone: Boolean;
+    function IsExisteEndereco: Boolean;
+    function IsExisteEmail: Boolean;
+
+    property Codigo: Integer read FCodigo write FCodigo;
+    property RSocial: string read FRSocial write FRSocial;
+  end;
+
+var
+  frmCad_Clientes: TfrmCad_Clientes;
+
+implementation
+
+uses sException;
+
+{$R *.dfm}
+
+{ TfrmCad_Clientes }
+
+procedure TfrmCad_Clientes.actAlterarExecute(Sender: TObject);
+begin
+
+  try
+    pgcDadosClientes.ActivePage := tshDados;
+
+    inherited;
+
+    Self.SetNomeCidade();
+    Self.SetMascaraCNPJCPF();
+
+    Self.FIdInterno := Dts.DataSet.FieldByName('pes_id_interno').AsInteger;
+
+    gbEndereco.Enabled := False;
+    gbTelefone.Enabled := False;
+    gbEmail.Enabled    := False;
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.actDeletarExecute(Sender: TObject);
+begin
+  inherited;
+
+  dbtTotalClientes.Caption := IntToStr(dm_Clientes.SomarCliente('C'));
+end;
+
+procedure TfrmCad_Clientes.actGravarExecute(Sender: TObject);
+begin
+  if Self.FAcao = acIncluir then
+  begin
+    Self.FCodigo := Self.FId;
+    if dm_Clientes.ValidarDescricao(Dts.DataSet.FieldByName('pes_rsocial').AsString) then
+    begin
+      raise Exception.Create('Razão Social já cadastrado. Verifique.');
+    end;
+  end;
+
+  if (Self.FAcao = acIncluir) or (Self.FIdInterno <> Dts.DataSet.FieldByName('pes_id_interno').AsInteger) then
+  begin
+    Self.ValidarClienteInterno();
+  end;
+
+  if Self.FAcao = acAlterar then
+    Self.FCodigo := Dts.DataSet.FieldByName('pes_id').AsInteger;
+
+  inherited;
+
+  Self.FIdInterno := 0;
+
+  dbtTotalClientes.Caption := IntToStr(dm_Clientes.SomarCliente('C'));
+end;
+
+procedure TfrmCad_Clientes.actImprimirExecute(Sender: TObject);
+begin
+//  inherited;
+//  dm_Clientes.dst_RelCliente.Close;
+//  dm_Clientes.dst_RelCliente.Open;
+//
+//  dm_Clientes.frxRelCliente.ShowReport();
+  TFuncoes.CriarForm('TfrmRel_Clientes');
+end;
+
+procedure TfrmCad_Clientes.actNovoExecute(Sender: TObject);
+begin
+  Self.edtValor.Clear;
+
+  try
+    pgcDadosClientes.ActivePage := tshDados;
+
+    inherited;
+
+    gbEndereco.Enabled := False;
+    gbTelefone.Enabled := False;
+    gbEmail.Enabled    := False;
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.AtivarDesativarBotoesEmail(AIncluir, AAlterar, AExcluir: Boolean);
+begin
+  btnIncluirEmail.Enabled := AIncluir;
+  btnAlterarEmail.Enabled := AAlterar;
+  btnExcluirEmail.Enabled := AExcluir;
+end;
+
+procedure TfrmCad_Clientes.AtivarDesativarBotoesEndereco(AIncluir, AAlterar, AExcluir: Boolean);
+begin
+  btnIncluirEndereco.Enabled := AIncluir;
+  btnEditEndereco.Enabled    := AAlterar;
+  btnExcluirEndereco.Enabled := AExcluir;
+end;
+
+procedure TfrmCad_Clientes.AtivarDesativarBotoesTelefone(AIncluir, AAlterar, AExcluir: Boolean);
+begin
+  btnIncluirTelefone.Enabled := AIncluir;
+  btnEditTelefone.Enabled    := AAlterar;
+  btnExcluirTelefone.Enabled := AExcluir;
+end;
+
+procedure TfrmCad_Clientes.BitBtn10Click(Sender: TObject);
+begin
+  inherited;
+  try
+    DtsEndereco.DataSet.Post();
+    gbEndereco.Enabled := False;
+    dbgEndereco.Enabled := True;
+    dbgEndereco.SetFocus;
+    Self.AtivarDesativarBotoesEndereco(True, True, True);
+
+    Self.VerificarSeExisteEnderecoDeEntregaCadastrado();
+  except
+    on E: Exception do
+    begin
+      TFuncoes.SetFocusCampoObrigatorio('GRUPO', E.Message, cbTipoEndereco);
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+
+    on E: ECampoObrigatorioError do
+    begin
+      TFuncoes.SetFocusCampoObrigatorio('ENTREGA', E.Message, cbTipoEndereco);
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.BitBtn11Click(Sender: TObject);
+begin
+  inherited;
+  try
+    DtsEndereco.DataSet.Cancel();
+    gbEndereco.Enabled := False;
+    dbgEndereco.SetFocus();
+    Self.AtivarDesativarBotoesEndereco(True, True, True);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.BitBtn12Click(Sender: TObject);
+begin
+  inherited;
+  try
+    DtsTelefone.DataSet.Post();
+    gbTelefone.Enabled := False;
+    dbgTelefone.Enabled := True;
+    dbgTelefone.SetFocus();
+    Self.AtivarDesativarBotoesTelefone(True, True, True);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.BitBtn13Click(Sender: TObject);
+begin
+  inherited;
+  try
+    DtsTelefone.DataSet.Cancel();
+    gbTelefone.Enabled := False;
+    dbgTelefone.SetFocus();
+    Self.AtivarDesativarBotoesTelefone(True, True, True);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.BitBtn14Click(Sender: TObject);
+begin
+  inherited;
+  try
+    DtsEmail.DataSet.Post();
+    gbEmail.Enabled := True;
+    dbgEmail.SetFocus();
+    Self.AtivarDesativarBotoesEmail(True, True, True);
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.BitBtn15Click(Sender: TObject);
+begin
+  inherited;
+  try
+    DtsEmail.DataSet.Cancel();
+    gbEmail.Enabled := True;
+    dbgEmail.SetFocus();
+    Self.AtivarDesativarBotoesEmail(True, True, True);
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.BitBtn4Click(Sender: TObject);
+begin
+  inherited;
+
+  dm_Clientes.frxClienteFidelidade.ShowReport();
+end;
+
+procedure TfrmCad_Clientes.btnIncluirEnderecoClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.InsertEndereco();
+    Self.AtivarDesativarBotoesEndereco(False, False, False);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnEditEnderecoClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.EditEndereco();
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnExcluirEnderecoClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.ExcluirEndereco();
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnIncluirTelefoneClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.InserirTelefone();
+    Self.AtivarDesativarBotoesTelefone(False, False, False);
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.CarregarCdsTelefoneEmail;
+begin
+
+end;
+
+procedure TfrmCad_Clientes.CarregarDadosCidade;
+var
+  VDm_CarregarDados: Tdm_CarregarDados;
+begin
+  VDm_CarregarDados := Tdm_CarregarDados.Create(nil);
+  try
+    if DtsEndereco.DataSet.FieldByName('pe_id_cidade').AsInteger > 0 then
+    begin
+      VDm_CarregarDados.CarregarCidade(DtsEndereco.DataSet.FieldByName('pe_id_cidade').AsInteger);
+      dbtDadosNmCidade.Caption := VDm_CarregarDados.dst_CarregarCidadeCID_NOME.AsString;
+      dbtDadosNmUF.Caption   := VDm_CarregarDados.dst_CarregarCidadeCID_ESTADO.AsString;
+    end;
+  finally
+    VDm_CarregarDados.dst_CarregarCidade.Close();
+    FreeAndNil(VDm_CarregarDados);
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnEditTelefoneClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.EditTelefone();
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnExcluirTelefoneClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.ExcluirTelefone();
+  except
+    on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnIncluirEmailClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.InsertEmail();
+    Self.AtivarDesativarBotoesEmail(False, False, False);
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnAlterarEmailClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.EditEmail();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.btnExcluirEmailClick(Sender: TObject);
+begin
+  inherited;
+  try
+    Self.ExcluirEmail();
+  except
+    on E: Exception do
+    begin
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.cbTipoEnderecoExit(Sender: TObject);
+begin
+  inherited;
+  DtsEndereco.DataSet.FieldByName('pe_nm_tipo').AsString :=
+    Self.GetNomeTipoEndereco(DtsEndereco.DataSet.FieldByName('pe_tipo').AsInteger);
+end;
+
+procedure TfrmCad_Clientes.cbxtipoPessoaExit(Sender: TObject);
+begin
+  inherited;
+
+  case cbxtipoPessoa.ItemIndex of
+    0: Dts.DataSet.FieldByName('pes_tp_pessoa').AsString := TConversor.ParaString(sEnumerados.tpFisico);
+    1: Dts.DataSet.FieldByName('pes_tp_pessoa').AsString := TConversor.ParaString(sEnumerados.tpJuridico);
+  end;
+
+  Self.SetMascaraCNPJCPF();
+end;
+
+procedure TfrmCad_Clientes.dbeDadasEmailExit(Sender: TObject);
+begin
+  inherited;
+
+  if (Trim(DtsEmail.DataSet.FieldByName('pem_email').AsString) <> EmptyStr)
+    and not dm_Clientes.IsExisteEmail() then
+  begin
+    DtsEmail.DataSet.FieldByName('pem_id_pessoa').AsInteger := Dts.DataSet.Fields[0].AsInteger;
+    DtsEmail.DataSet.FieldByName('pem_seq').AsInteger       := 1;
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbeDadasEnderecoExit(Sender: TObject);
+begin
+  inherited;
+
+  if not dm_Clientes.IsExisteEndereco
+    and (Trim(DtsEndereco.DataSet.FieldByName('pe_endereco').AsString) <> EmptyStr) then
+  begin
+    DtsEndereco.DataSet.FieldByName('pe_id_pessoa').AsInteger := Dts.DataSet.Fields[0].AsInteger;
+    DtsEndereco.DataSet.FieldByName('pe_tipo').AsInteger      := 1;
+    DtsEndereco.DataSet.FieldByName('pe_seq').AsInteger       := 1;
+    DtsEndereco.DataSet.FieldByName('pe_nm_tipo').AsString    := Self.GetNomeTipoEndereco(1);
+    DtsEndereco.DataSet.FieldByName('pe_id_cidade').AsInteger := 9;
+    Self.SetNomeCidade();
+    DtsEndereco.DataSet.FieldByName('pe_cep').AsString        := '36520000';
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbeDadasTelefonesExit(Sender: TObject);
+begin
+  inherited;
+
+  if (Trim(DtsTelefone.DataSet.FieldByName('pt_numero').AsString) <> EmptyStr)
+    and not dm_Clientes.IsExisteTelefone() then
+  begin
+    DtsTelefone.DataSet.FieldByName('pt_id_pessoa').AsInteger := Dts.DataSet.Fields[0].AsInteger;
+    DtsTelefone.DataSet.FieldByName('pt_tipo').AsInteger      := 1;
+    DtsTelefone.DataSet.FieldByName('pt_seq').AsInteger       := 1;
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbeIdCidadeExit(Sender: TObject);
+begin
+  inherited;
+  if Length(Trim(dbeIdCidade.Text)) > 0 then
+  begin
+    try
+      Self.SetNomeCidade();
+    except
+      on E: Exception do
+         TFuncoes.SetFocusCampoObrigatorio('CLIENTE', E.Message, dbeIdCidade);
+    end;
+  end
+  else
+  begin
+    dbtNmCidade.Caption := EmptyStr;
+    dbtEstado.Caption   := EmptyStr;
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbeIdCidadeKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if (Key = VK_F10) then
+  begin
+     frmPesquisar := TfrmPesquisar.Create(Application);
+    try
+      frmPesquisar.SqlDefault :=
+        ' select ' +
+        '    cidade.cid_id, ' +
+        '    cidade.cid_nome ' +
+        ' from cidade ' +
+        ' where ' +
+        '    cidade.cid_id = -1';
+
+      frmPesquisar.NomePesquisa := 'Pes_Cidade';
+      frmPesquisar.CamposNomeExibicao.Add('Id.');
+      frmPesquisar.CamposNomeExibicao.Add('Nome');
+
+      frmPesquisar.ShowModal();
+
+      if frmPesquisar.Id > 0 then
+        DtsEndereco.DataSet.FieldByName('pe_id_cidade').AsInteger := frmPesquisar.Id;
+    finally
+      FreeAndNil(frmPesquisar);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbeIdInternoExit(Sender: TObject);
+begin
+  Self.ValidarClienteInterno();
+end;
+
+procedure TfrmCad_Clientes.dbeNFantasiaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F12) then
+  begin
+    Self.dbeDadasEndereco.SetFocus;
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbeRSocialExit(Sender: TObject);
+begin
+  inherited;
+  Dts.DataSet.FieldByName('pes_fantasia').AsString := dbeRSocial.Text;
+  Self.FRSocial := dbeRSocial.Text;
+end;
+
+procedure TfrmCad_Clientes.dbeRSocialKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = VK_F12) then
+  begin
+    Self.dbeDadasEndereco.SetFocus;
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbgClienteDblClick(Sender: TObject);
+begin
+  inherited;
+
+  actAlterar.Execute;
+end;
+
+procedure TfrmCad_Clientes.dbgClienteDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_Clientes.dbgClienteExit(Sender: TObject);
+begin
+  inherited;
+
+  KeyPreview := True;
+end;
+
+procedure TfrmCad_Clientes.dbgEnderecoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_Clientes.dbgEnderecoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if Key = VK_F3 then
+  begin
+    Self.InsertEndereco();
+  end;
+
+  if Key = VK_F4 then
+  begin
+    Self.EditEndereco();
+  end;
+
+  if Key = VK_F5 then
+  begin
+    Self.ExcluirEndereco();
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbgTelefoneDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_Clientes.dbgTelefoneKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if Key = VK_F3 then
+  begin
+    Self.InserirTelefone();
+  end;
+
+  if Key = VK_F4 then
+  begin
+    Self.EditTelefone();
+  end;
+
+  if Key = VK_F5 then
+  begin
+    Self.ExcluirTelefone();
+  end;
+end;
+
+procedure TfrmCad_Clientes.dbgEmailDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  TFuncoes.ColorirGrid(Sender, Rect, DataCol, Column, State, $00FFE6E6);
+end;
+
+procedure TfrmCad_Clientes.dbgEmailKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+
+  if Key = VK_F3 then
+  begin
+    Self.InsertEmail();
+  end;
+
+  if Key = VK_F4 then
+  begin
+    Self.EditEmail();
+  end;
+
+  if Key = VK_F5 then
+  begin
+    Self.ExcluirEmail();
+  end;
+end;
+
+procedure TfrmCad_Clientes.EditEmail;
+begin
+  if not DtsEmail.DataSet.IsEmpty then
+  begin
+    DtsEmail.DataSet.Edit();
+    gbEmail.Enabled := True;
+    dbeEmail.SetFocus();
+  end;
+end;
+
+procedure TfrmCad_Clientes.EditEndereco;
+begin
+  if not DtsEndereco.DataSet.IsEmpty then
+  begin
+    DtsEndereco.DataSet.Edit();
+    gbEndereco.Enabled := True;
+    dbeEndereco.SetFocus();
+  end;
+end;
+
+procedure TfrmCad_Clientes.EditTelefone;
+begin
+  if not DtsTelefone.DataSet.IsEmpty then
+  begin
+    DtsTelefone.DataSet.Edit();
+    gbTelefone.Enabled := True;
+
+  end;
+end;
+
+procedure TfrmCad_Clientes.ExcluirEmail;
+begin
+  if not DtsEmail.DataSet.IsEmpty then
+  begin
+    if TFuncoes.SolicitarConfirmacao('Deseja Excluir o cadastro de email ?') then
+    begin
+      DtsEmail.DataSet.Delete();
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.ExcluirEndereco;
+begin
+  if not DtsEndereco.DataSet.IsEmpty then
+  begin
+    if TFuncoes.SolicitarConfirmacao('Deseja Excluir o cadastro de endereço ?') then
+    begin
+      DtsEndereco.DataSet.Delete();
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.ExcluirTelefone;
+begin
+  if not DtsTelefone.DataSet.IsEmpty then
+  begin
+    if TFuncoes.SolicitarConfirmacao('Deseja Excluir o cadastro de telefone ?') then
+    begin
+      DtsTelefone.DataSet.Delete();
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+
+  FreeAndNil(dm_Clientes);
+end;
+
+procedure TfrmCad_Clientes.FormCreate(Sender: TObject);
+begin
+  dm_Clientes := Tdm_Clientes.Create(nil);
+
+  inherited;
+
+  FCamposNomeExibicao.Add('Id.');
+  FCamposNomeExibicao.Add('Razão');
+  FCamposNomeExibicao.Add('Nome Fantasia');
+  FCamposNomeExibicao.Add('CNPJ/CPF');
+  FCamposNomeExibicao.Add('Id. Interno');
+  FCamposNomeExibicao.Add('Tipo');
+end;
+
+procedure TfrmCad_Clientes.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  //TClientDataSet(Dts_Clientes.DataSet).Params[1].AsInteger := EmpresaCorrente.Id;
+  dm_Clientes.dts_CreditoClienteFidelidade.ParamByName('pes_emp').AsInteger := EmpresaCorrente.Id;
+
+  if EmpresaCorrente.Parametro.ClienteFidelidade <> 1 then
+    tshClienteFidelidade.TabVisible := False;
+
+  dbtTotalClientes.Caption := IntToStr(dm_Clientes.SomarCliente('C'));
+
+  if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+  begin
+    Self.lblIdInterno.Visible     := True;
+    Self.dbeIdInterno.Visible     := True;
+    dbgCliente.Columns[1].Visible := True;
+    dbgCliente.Columns[0].Visible := False;
+    lblId.Visible := False;
+    dbtId.Visible := False;
+  end
+  else
+  begin
+    Self.lblIdInterno.Visible     := False;
+    Self.dbeIdInterno.Visible     := False;
+    dbgCliente.Columns[1].Visible := False;
+  end;
+end;
+
+function TfrmCad_Clientes.GetNomeTipoEndereco(AIdTipo: Integer): String;
+begin
+  case AIdTipo of
+    1: Result := 'Entrega';
+    2: Result := 'Outros';
+  end;
+end;
+
+procedure TfrmCad_Clientes.Gravar;
+begin
+  try
+    if FAcao <> sEnumerados.acVisualizar then
+    begin
+      Self.ValidarCamposObrigatorios();
+
+      ConexaoDBX.InicializaTransacaoBD();
+
+      if TClientDataSet(Dts.DataSet).ApplyUpdates(0) > 0 then
+        raise EOnReconcileError.Create(TTratamentoErro.GetMensagemErroApplyUpdate());
+
+      pgcAbasCadastro.ActivePage := tshConsultar;
+      cbxField.ItemIndex := TFuncoes.LerArquivoIniIndice(Name);
+      cbxField.SetFocus();
+      //edtValor.Clear();
+
+      ConexaoDBX.CommitTransacaoBD();
+
+      if FAcao in [acIncluir, acAlterar, acExcluir] then
+      begin
+        btnPesquisar.Click;
+      end;
+    end
+    else
+    begin
+      pgcAbasCadastro.ActivePage := tshConsultar;
+      cbxField.ItemIndex := TFuncoes.LerArquivoIniIndice(Name);
+      cbxField.SetFocus();
+      edtValor.Clear();
+    end;
+    TClientDataSet(DtsLocalizar.DataSet).GotoBookmark(Self.FRegistro);
+  except
+    on E: ECampoObrigatorioError do
+    begin
+      Self.TratarExceptionCampoObrigatorio(E.Message);
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+
+    on E: Exception do
+    begin
+      ConexaoDBX.RollbackTransacaoBD();
+
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+      Exit;
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.IniciarFields;
+begin
+  FNomeDoFormulario := 'Clientes';
+  FNomeTabela := 'PESSOA';
+  FComponenteFoco := cbxtipoPessoa;
+  FDbgCadastro := dbgCliente;
+
+  FSqlDefault :=
+    ' select ' +
+    '    cliente.CLI_ID_PESSOA, ' +
+    '    pessoa.pes_rsocial, ' +
+    '    pessoa.pes_fantasia, ' +
+    '    pessoa.pes_cnpj_cpf, ' +
+    '    pessoa.pes_id_interno, ' +
+    '    (case pessoa.pes_tp_pessoa ' +
+    '       when ''J'' then ''Jurídico'' ' +
+    '       when ''F'' then ''Física'' ' +
+    '    end) pes_tp_pessoa ' +
+    ' from cliente ' +
+    ' left join pessoa on (cliente.cli_id_pessoa = pessoa.pes_id) ' +
+    ' where ' +
+    '    cliente.cli_id_pessoa = -1';
+end;
+
+procedure TfrmCad_Clientes.InserirTelefone;
+var
+  VIdSeq : Integer;
+  VIdTipo: Integer;
+begin
+  if DtsTelefone.DataSet.IsEmpty then
+    VIdTipo := 1
+  else
+    VIdTipo := 5;
+
+  DtsTelefone.DataSet.Last;
+  VIdSeq := DtsTelefone.DataSet.FieldByName('pt_seq').AsInteger + 1;
+
+  DtsTelefone.DataSet.Append();
+  DtsTelefone.DataSet.FieldByName('pt_id_pessoa').AsInteger := Dts.DataSet.Fields[0].AsInteger;
+  DtsTelefone.DataSet.FieldByName('pt_tipo').AsInteger := VIdTipo;
+  DtsTelefone.DataSet.FieldByName('pt_seq').AsInteger  := VIdSeq;
+  gbTelefone.Enabled := True;
+end;
+
+procedure TfrmCad_Clientes.InsertEmail;
+var
+  VSeq: Integer;
+begin
+  DtsEmail.DataSet.Last();
+  VSeq := DtsEmail.DataSet.FieldByName('pem_seq').AsInteger + 1;
+
+  DtsEmail.DataSet.Append();
+  DtsEmail.DataSet.FieldByName('pem_id_pessoa').AsInteger := Dts.DataSet.Fields[0].AsInteger;
+  DtsEmail.DataSet.FieldByName('pem_seq').AsInteger := VSeq;
+  gbEmail.Enabled := True;
+  dbeEmail.SetFocus();
+end;
+
+procedure TfrmCad_Clientes.InsertEndereco;
+var
+  VIdSeq : Integer;
+  VIdTipo: Integer;
+begin
+  DtsEndereco.DataSet.Last;
+  VIdSeq := DtsEndereco.DataSet.FieldByName('pe_seq').AsInteger + 1;
+
+  if DtsEndereco.DataSet.IsEmpty then
+    VIdTipo := 1
+  else
+    VIdTipo := 2;
+
+  DtsEndereco.DataSet.Append();
+  DtsEndereco.DataSet.FieldByName('pe_id_pessoa').AsInteger := Dts.DataSet.Fields[0].AsInteger;
+  DtsEndereco.DataSet.FieldByName('pe_tipo').AsInteger      := VIdTipo;
+  DtsEndereco.DataSet.FieldByName('pe_seq').AsInteger       := VIdSeq;
+  DtsEndereco.DataSet.FieldByName('pe_nm_tipo').AsString    := Self.GetNomeTipoEndereco(VIdTipo);
+  DtsEndereco.DataSet.FieldByName('pe_id_cidade').AsInteger := 9;
+  Self.SetNomeCidade();
+  DtsEndereco.DataSet.FieldByName('pe_cep').AsString := '36520000';
+
+  gbEndereco.Enabled := True;
+  dbeEndereco.SetFocus();
+end;
+
+function TfrmCad_Clientes.IsExisteEmail: Boolean;
+begin
+  Result := not DtsEmail.DataSet.IsEmpty
+end;
+
+function TfrmCad_Clientes.IsExisteEndereco: Boolean;
+begin
+  Result := not DtsEndereco.DataSet.IsEmpty
+end;
+
+function TfrmCad_Clientes.IsExisteTelefone: Boolean;
+begin
+  Result := not DtsTelefone.DataSet.IsEmpty
+end;
+
+procedure TfrmCad_Clientes.PreenchimentoCamposDefaultNaInclusao;
+var
+  Aux: Integer;
+begin
+  Aux := FId;
+  FIdEmpresa := Null;
+
+  try
+    Dts.DataSet.FieldByName('pes_id').AsInteger := FPersistencia.GetId(FIdEmpresa, 0, Self.FNomeTabela);
+    Dts.DataSet.FieldByName('pes_id_interno').AsInteger := dm_clientes.GetIdInterno;
+    Dts.DataSet.FieldByName('pes_tp_pessoa').AsString := TConversor.ParaString(sEnumerados.tpFisico);
+    Dts.DataSet.FieldByName('pes_tp_cadastro').AsString := 'C';
+    FId := Dts.DataSet.FieldByName('pes_id').AsInteger;
+    Self.SetMascaraCNPJCPF();
+
+    Dts_Clientes.DataSet.Append();
+    Dts_Clientes.DataSet.FieldByName('cli_id_pessoa').AsInteger    := FId;
+    Dts_Clientes.DataSet.FieldByName('cli_dt_cadastro').AsDateTime := Date;
+    Dts_Clientes.DataSet.Post();
+  except
+    on E: Exception do
+    begin
+      FId := Aux;
+      TBuilderLogDialogo.Show(sEnumerados.ilogErro, LogErro.GetLog(), E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmCad_Clientes.SetMascaraCNPJCPF;
+begin
+  if not Dts.DataSet.IsEmpty then
+  begin
+    if Dts.DataSet.FieldByName('pes_tp_pessoa').AsString = TConversor.ParaString(sEnumerados.tpFisico) then
+      Dts.DataSet.FieldByName('pes_cnpj_cpf').EditMask := '999.999.999-99;0;_'
+    else
+      Dts.DataSet.FieldByName('pes_cnpj_cpf').EditMask := '99.999.999/9999-99;0;_';
+  end;
+end;
+
+procedure TfrmCad_Clientes.SetNomeCidade;
+var
+  VDm_CarregarDados: Tdm_CarregarDados;
+begin
+  VDm_CarregarDados := Tdm_CarregarDados.Create(nil);
+  try
+    if DtsEndereco.DataSet.FieldByName('pe_id_cidade').AsInteger > 0 then
+    begin
+      VDm_CarregarDados.CarregarCidade(StrToInt(dbeIdCidade.Text));
+      dbtNmCidade.Caption := VDm_CarregarDados.dst_CarregarCidadeCID_NOME.AsString;
+      dbtEstado.Caption   := VDm_CarregarDados.dst_CarregarCidadeCID_ESTADO.AsString;
+    end;
+  finally
+    VDm_CarregarDados.dst_CarregarCidade.Close();
+    FreeAndNil(VDm_CarregarDados);
+  end;
+end;
+
+
+procedure TfrmCad_Clientes.TratarExceptionCampoObrigatorio(
+  MensagemErro: String);
+begin
+  //TFuncoes.SetFocusCampoObrigatorio('GRUPO', MensagemErro, dbeGrupo);
+  TFuncoes.SetFocusCampoObrigatorio('SOCIAL', MensagemErro, dbeRSocial);
+
+  if EmpresaCorrente.Parametro.EditarIdCliente = 1 then
+    TFuncoes.SetFocusCampoObrigatorio('INTERNO', MensagemErro, dbeIdInterno);
+end;
+
+procedure TfrmCad_Clientes.ValidarCamposObrigatorios;
+begin
+  Self.VerificarSeExisteEnderecoDeEntregaCadastrado();
+
+  if Trim(Dts.DataSet.FieldByName('pes_rsocial').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "Razão Social" é de preenchimento Obrigatório.');
+
+  if Trim(Dts.DataSet.FieldByName('pes_id_interno').AsString) = EmptyStr then
+    raise ECampoObrigatorioError.Create('Campo "id. interno" é de preenchimento Obrigatório.');
+end;
+
+procedure TfrmCad_Clientes.ValidarClienteInterno;
+var
+  VDmCarregarDados: Tdm_CarregarDados;
+begin
+  inherited;
+
+  VDmCarregarDados := Tdm_CarregarDados.Create(nil);
+  try
+    if Dts.DataSet.FieldByName('pes_id_interno').AsInteger > 0 then
+    begin
+      if VDmCarregarDados.IsExisteClienteInterno(Dts.DataSet.FieldByName('pes_id_interno').AsInteger) then
+      begin
+        raise Exception.Create('Id. interno já cadastrado no cliente do id: ' + VDmCarregarDados.dst_CarregarClienteInternoPES_ID.AsString);
+      end;
+    end;
+  finally
+    FreeAndNil(VDmCarregarDados);
+  end;
+end;
+
+procedure TfrmCad_Clientes.VerificarSeExisteEnderecoDeEntregaCadastrado;
+var
+  VQtde: Integer;
+begin
+  VQtde := 0;
+
+  DtsEndereco.DataSet.First;
+  while not DtsEndereco.DataSet.Eof do
+  begin
+    if DtsEndereco.DataSet.FieldByName('pe_tipo').AsInteger = 1 then
+      VQtde := VQtde + 1;
+
+    DtsEndereco.DataSet.Next;
+  end;
+
+  if VQtde > 1 then
+    raise ECampoObrigatorioError.Create('Endereço Entrega já castrastro, por favor modificar.');
+end;
+
+initialization
+  RegisterClass(TfrmCad_Clientes);
+
+
+end.

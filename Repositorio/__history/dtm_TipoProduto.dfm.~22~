@@ -1,0 +1,128 @@
+object dm_TipoProduto: Tdm_TipoProduto
+  OldCreateOrder = False
+  Height = 150
+  Width = 364
+  object dst_Pesquisar: TSQLDataSet
+    CommandText = 
+      'select'#13#10'   tipo_produtos.tp_id_pk,'#13#10'   tipo_produtos.tp_nome'#13#10'fr' +
+      'om tipo_produtos'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = dm_Conexao.Conn
+    Left = 32
+    Top = 16
+    object dst_PesquisarTP_ID_PK: TIntegerField
+      FieldName = 'TP_ID_PK'
+      Required = True
+    end
+    object dst_PesquisarTP_NOME: TStringField
+      FieldName = 'TP_NOME'
+      Size = 30
+    end
+  end
+  object dsp_Pesquisar: TDataSetProvider
+    DataSet = dst_Pesquisar
+    Left = 136
+    Top = 16
+  end
+  object cds_Pesquisar: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dsp_Pesquisar'
+    Left = 264
+    Top = 16
+    object cds_PesquisarTP_ID_PK: TIntegerField
+      DisplayLabel = 'Id.'
+      FieldName = 'TP_ID_PK'
+      Required = True
+    end
+    object cds_PesquisarTP_NOME: TStringField
+      DisplayLabel = 'Nome'
+      FieldName = 'TP_NOME'
+      Size = 30
+    end
+  end
+  object dst_TipoProduto: TSQLDataSet
+    SchemaName = 'sysdba'
+    CommandText = 
+      'select * from tipo_produtos'#13#10'where'#13#10'   tipo_produtos.tp_id_pk = ' +
+      ':tp_id_pk'
+    DbxCommandType = 'Dbx.SQL'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'tp_id_pk'
+        ParamType = ptInput
+      end>
+    SQLConnection = dm_Conexao.Conn
+    Left = 32
+    Top = 80
+    object dst_TipoProdutoTP_ID_PK: TIntegerField
+      FieldName = 'TP_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object dst_TipoProdutoTP_EMPRESA: TIntegerField
+      FieldName = 'TP_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object dst_TipoProdutoTP_NOME: TStringField
+      FieldName = 'TP_NOME'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object dst_TipoProdutoTP_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'TP_DT_CADASTRO'
+      ProviderFlags = []
+    end
+    object dst_TipoProdutoTP_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'TP_DT_ALTERACAO'
+      ProviderFlags = []
+    end
+  end
+  object dsp_TipoProduto: TDataSetProvider
+    DataSet = dst_TipoProduto
+    ResolveToDataSet = True
+    Options = [poCascadeDeletes, poCascadeUpdates, poAllowMultiRecordUpdates, poAutoRefresh, poPropogateChanges, poUseQuoteChar]
+    UpdateMode = upWhereKeyOnly
+    Left = 136
+    Top = 80
+  end
+  object cds_TipoProduto: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'tp_id_pk'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dsp_TipoProduto'
+    OnReconcileError = cds_TipoProdutoReconcileError
+    Left = 264
+    Top = 80
+    object cds_TipoProdutoTP_ID_PK: TIntegerField
+      FieldName = 'TP_ID_PK'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cds_TipoProdutoTP_EMPRESA: TIntegerField
+      FieldName = 'TP_EMPRESA'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cds_TipoProdutoTP_NOME: TStringField
+      FieldName = 'TP_NOME'
+      ProviderFlags = [pfInUpdate]
+      Size = 30
+    end
+    object cds_TipoProdutoTP_DT_CADASTRO: TSQLTimeStampField
+      FieldName = 'TP_DT_CADASTRO'
+      ProviderFlags = []
+    end
+    object cds_TipoProdutoTP_DT_ALTERACAO: TSQLTimeStampField
+      FieldName = 'TP_DT_ALTERACAO'
+      ProviderFlags = []
+    end
+  end
+end

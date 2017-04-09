@@ -1,0 +1,85 @@
+unit Usuario;
+
+interface
+
+uses
+  ActnList, SysUtils, Conexao, SqlExpr, BuilderLogDialogo, sEnumerados, Logger;
+
+type
+  TUsuario = class
+  private
+    class var FInstance: TUsuario;
+
+    FId   : Integer;
+    FNome : Integer;
+    FLogin: String;
+    FSenha: String;
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function LogarNoSistema(AUsuario, ASenha: String): Boolean;
+
+    property Id   : Integer read FId    write FId;
+    property Nome : String  read FNome  write FNome;
+    property Login: String  read FLogin write FLogin;
+    property Senha: String  read FSenha write FSenha;
+  end;
+
+implementation
+
+{ TUsuario }
+
+constructor TUsuario.Create;
+begin
+
+end;
+
+destructor TUsuario.Destroy;
+begin
+
+end;
+
+function TUsuario.LogarNoSistema(AUsuario, ASenha: String): Boolean;
+var
+  VQry: TSQLQuery;
+  VSql: String;
+begin
+  VQry := ConexaoDBX.BuildQry();
+  try
+    try
+      VSql :=
+        ' select ' +
+        '    usu_id, ' +
+        '    usu_nome, ' +
+        '    usu_login, ' +
+        '    usu_senha ' +
+        ' from usuario ' +
+        ' where ' +
+        '   (usu_login = :usu) and ' +
+        '   (usu_senha = :usu_senha) ' ;
+
+      VSql := Format(VSql, [AUsuario, ASenha]);
+
+      VQry.Close;
+      VQry.CommandText := VSql;
+      VQry.Open;
+      try
+        Result := not VQry.IsEmpty;
+
+        Self.FId    := VQry.Fields[0].AsInteger;
+        Self.FNome  := VQry.Fields[1].AsString;
+        Self.FLogin := VQry.Fields[2].AsString;
+        Self.FSenha := VQry.Fields[3].AsString;
+      finally
+        VQry.Close;
+      end;
+    except on E: Exception do
+      TBuilderLogDialogo.Show(sEnumerados.ilogAtencao, LogErro.GetLog(), E.Message);
+    end;
+  finally
+    FreeAndNil(VQry);
+  end;
+end;
+
+end.
